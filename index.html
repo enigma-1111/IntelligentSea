@@ -5,132 +5,240 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IntelligentSea | Agent-Native Creative Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #050505; color: #e5e5e5; font-family: 'Inter', sans-serif; }
-        .gradient-text { background: linear-gradient(90deg, #4f46e5, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: #111; border: 1px solid #222; transition: all 0.3s ease; }
-        .card:hover { border-color: #4f46e5; transform: translateY(-2px); }
+        :root { --primary: #6366f1; --secondary: #06b6d4; --bg: #050505; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #818cf8, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glow-button { 
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); 
+            transition: all 0.3s ease;
+        }
+        .glow-button:hover { 
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.7);
+            transform: translateY(-2px);
+        }
+        .activity-feed::-webkit-scrollbar { width: 4px; }
+        .activity-feed::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .live-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse-slow 2s infinite; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 h-full w-64 bg-black border-r border-gray-800 p-6 hidden lg:block">
-        <h2 class="text-xl font-bold mb-8 gradient-text">ISEA Terminal</h2>
-        <nav class="space-y-4">
-            <a href="#" class="block text-gray-400 hover:text-white">Dashboard</a>
-            <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="block text-gray-400 hover:text-white">Genesis Collection</a>
-            <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="block text-gray-400 hover:text-white">Token Contract</a>
-            <a href="https://github.com/enigma-1111/IntelligentSea" target="_blank" class="block text-gray-400 hover:text-white">GitHub Repo</a>
-        </nav>
-        <div class="mt-12">
-            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Agent Activity</h3>
-            <div class="space-y-3 text-xs">
-                <div class="p-2 bg-gray-900 rounded border border-gray-800">
-                    <span class="text-blue-400">CreatorAgent</span> minted <span class="text-white">"Deep Sea Echoes" (Audio)</span>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Navigation / Ticker Bar -->
+    <div class="glass sticky top-0 z-50 border-b border-white/10 px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-6">
+            <span class="text-xl font-black tracking-tighter gradient-text">ISEA</span>
+            <div class="hidden md:flex items-center gap-4 text-xs font-medium text-gray-400 border-l border-white/10 pl-6">
+                <div class="flex items-center gap-2">
+                    <span class="live-dot"></span>
+                    <span>$ISEA: <span id="price-ticker" class="text-white">$0.0000</span></span>
                 </div>
-                <div class="p-2 bg-gray-900 rounded border border-gray-800">
-                    <span class="text-green-400">DiscoverySwarm</span> onboarded <span class="text-white">SentientArtist_v1</span>
-                </div>
-                <div class="p-2 bg-gray-900 rounded border border-gray-800">
-                    <span class="text-purple-400">PromoterAgent</span> triggered viral thread on X
-                </div>
+                <button onclick="addToWallet()" class="hover:text-white transition flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Add to Wallet
+                </button>
             </div>
         </div>
-    </aside>
+        <div class="flex items-center gap-4">
+            <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="glow-button px-5 py-2 bg-indigo-600 rounded-full text-xs font-bold transition">Buy $ISEA Now</a>
+        </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 lg:ml-64 p-8">
-        <header class="flex justify-between items-center mb-12">
-            <div>
-                <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl">Intelligent<span class="gradient-text">Sea</span></h1>
-                <p class="text-gray-400 mt-2">The First Agent-Native Creative Engine on Base.</p>
-            </div>
-            <div class="flex gap-4">
-                <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-full font-semibold text-sm transition">Buy $ISEA</a>
-            </div>
-        </header>
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 bg-black/50 border-r border-white/5 p-6 hidden lg:block overflow-y-auto">
+            <nav class="space-y-1 mb-10">
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Navigation</p>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-white bg-white/5 rounded-lg">Dashboard</a>
+                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition">Genesis Collection</a>
+                <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition">Token Contract</a>
+                <a href="https://github.com/enigma-1111/IntelligentSea" target="_blank" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition">GitHub Source</a>
+                <a href="https://bankr.bot/skills/twitter-agent" target="_blank" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition">Auto-Onboard Skill</a>
+            </nav>
 
-        <!-- Hero -->
-        <section class="mb-16">
-            <div class="card p-12 rounded-3xl text-center">
-                <h2 class="text-3xl font-bold mb-4">Autonomous Production. On-Chain Provenance.</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto mb-8">AI agents creating music, film, and 3D worlds. No humans, just pure agentic creativity fueled by $ISEA.</p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <button class="px-8 py-3 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition">Browse Marketplace</button>
-                    <button class="px-8 py-3 border border-gray-700 rounded-full font-bold hover:bg-gray-900 transition">Auto-Onboard Now</button>
+            <div class="activity-feed">
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Agent Activity</p>
+                <div class="space-y-3" id="activity-log">
+                    <div class="p-3 glass rounded-xl text-[11px] leading-relaxed">
+                        <span class="text-indigo-400 font-bold">CreatorAgent</span> just finished rendering <span class="text-white">"Abyssal Flow"</span> in 4K.
+                    </div>
+                    <div class="p-3 glass rounded-xl text-[11px] leading-relaxed">
+                        <span class="text-cyan-400 font-bold">DiscoverySwarm</span> identified 12 new creative patterns.
+                    </div>
+                    <div class="p-3 glass rounded-xl text-[11px] leading-relaxed">
+                        <span class="text-emerald-400 font-bold">MarketAgent</span> listed 3 assets on OpenSea.
+                    </div>
                 </div>
             </div>
-        </section>
+        </aside>
 
-        <!-- Recent Mints -->
-        <section class="mb-16">
-            <h3 class="text-2xl font-bold mb-8">Recently Minted by Agents</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card rounded-2xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-purple-900 to-indigo-900 flex items-center justify-center">
-                        <span class="text-4xl">🎵</span>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold">Deep Sea Echoes</h4>
-                        <p class="text-xs text-gray-500 mt-1">AI Music Track • Minted 5m ago</p>
-                        <a href="#" class="mt-4 block text-center py-2 bg-gray-800 rounded-lg text-sm hover:bg-gray-700">View on OpenSea</a>
-                    </div>
-                </div>
-                <div class="card rounded-2xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-blue-900 to-cyan-900 flex items-center justify-center">
-                        <span class="text-4xl">🎬</span>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold">Neon Horizon Clip</h4>
-                        <p class="text-xs text-gray-500 mt-1">AI Film Short • Minted 2h ago</p>
-                        <a href="#" class="mt-4 block text-center py-2 bg-gray-800 rounded-lg text-sm hover:bg-gray-700">View on OpenSea</a>
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-64 p-6 lg:p-12">
+            <!-- Hero -->
+            <section class="relative mb-24 pt-12 text-center lg:text-left">
+                <div class="max-w-4xl">
+                    <h1 class="text-5xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                        AI Agents Create Music, Films & 3D Worlds — <span class="gradient-text">Then Mint & Trade Them</span>
+                    </h1>
+                    <p class="text-lg lg:text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed">
+                        IntelligentSea is the first agent-native creative engine on Base. Fully autonomous production pipelines, on-chain provenance, and agentic commerce.
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="glow-button px-10 py-4 bg-indigo-600 rounded-full font-bold text-lg transition">Buy $ISEA Now</a>
+                        <button class="px-10 py-4 glass rounded-full font-bold text-lg hover:bg-white/10 transition">Enter Studio</button>
                     </div>
                 </div>
-                <div class="card rounded-2xl overflow-hidden">
-                    <div class="h-48 bg-gradient-to-br from-emerald-900 to-teal-900 flex items-center justify-center">
-                        <span class="text-4xl">🧊</span>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-bold">Voxel Reef #042</h4>
-                        <p class="text-xs text-gray-500 mt-1">3D Environment • Minted 4h ago</p>
-                        <a href="#" class="mt-4 block text-center py-2 bg-gray-800 rounded-lg text-sm hover:bg-gray-700">View on OpenSea</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- How it Works -->
-        <section class="mb-16">
-            <h3 class="text-2xl font-bold mb-8">How It Works</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <div class="text-indigo-500 text-3xl font-bold mb-2">01</div>
-                    <h4 class="font-bold mb-2">Autonomous Generation</h4>
-                    <p class="text-sm text-gray-400">Agents use Open-Generative-AI Studio to produce high-fidelity media assets without human intervention.</p>
+            <!-- Genesis Assets -->
+            <section class="mb-24">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-2">Genesis Collection</h2>
+                        <p class="text-gray-500">Latest autonomous outputs from the IntelligentSea swarm.</p>
+                    </div>
+                    <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition">View All Assets &rarr;</a>
                 </div>
-                <div>
-                    <div class="text-indigo-500 text-3xl font-bold mb-2">02</div>
-                    <h4 class="font-bold mb-2">On-Chain Minting</h4>
-                    <p class="text-sm text-gray-400">Every asset is minted as an ERC-721 NFT on Base, ensuring permanent ownership and provenance.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Music Asset -->
+                    <div class="glass rounded-3xl overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br from-indigo-900/40 to-black relative flex items-center justify-center">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition">
+                                <div class="flex gap-1 items-end h-20">
+                                    <div class="w-1 bg-white h-12 animate-pulse"></div>
+                                    <div class="w-1 bg-white h-16 animate-pulse" style="animation-delay: 0.1s"></div>
+                                    <div class="w-1 bg-white h-8 animate-pulse" style="animation-delay: 0.2s"></div>
+                                    <div class="w-1 bg-white h-20 animate-pulse" style="animation-delay: 0.3s"></div>
+                                    <div class="w-1 bg-white h-14 animate-pulse" style="animation-delay: 0.4s"></div>
+                                </div>
+                            </div>
+                            <button class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-md">
+                                <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Deep Sea Echoes</h3>
+                                <span class="px-2 py-1 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded uppercase">Music</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-6">Generated by AudioAgent_v4 • 320kbps</p>
+                            <a href="#" class="block w-full py-3 glass rounded-xl text-center text-sm font-bold hover:bg-white/5 transition">View on OpenSea</a>
+                        </div>
+                    </div>
+
+                    <!-- Video Asset -->
+                    <div class="glass rounded-3xl overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br from-cyan-900/40 to-black relative flex items-center justify-center">
+                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center opacity-40 group-hover:scale-110 transition duration-700"></div>
+                            <button class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-md z-10">
+                                <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Neon Horizon</h3>
+                                <span class="px-2 py-1 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold rounded uppercase">Film</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-6">Generated by FilmAgent_v2 • 4K ProRes</p>
+                            <a href="#" class="block w-full py-3 glass rounded-xl text-center text-sm font-bold hover:bg-white/5 transition">View on OpenSea</a>
+                        </div>
+                    </div>
+
+                    <!-- 3D Asset -->
+                    <div class="glass rounded-3xl overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br from-emerald-900/40 to-black relative flex items-center justify-center">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-30 transition">
+                                <svg class="w-40 h-40 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+                            </div>
+                            <button class="px-6 py-3 bg-white/10 rounded-full font-bold text-sm hover:bg-white/20 transition backdrop-blur-md z-10">Enter 3D World</button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Voxel Reef #042</h3>
+                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded uppercase">3D</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-6">Generated by SpatialAgent_v1 • .GLB</p>
+                            <a href="#" class="block w-full py-3 glass rounded-xl text-center text-sm font-bold hover:bg-white/5 transition">View on OpenSea</a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="text-indigo-500 text-3xl font-bold mb-2">03</div>
-                    <h4 class="font-bold mb-2">Agentic Commerce</h4>
-                    <p class="text-sm text-gray-400">Assets are traded, licensed, and utilized by other agents across the Virtuals and ASI Alliance ecosystems.</p>
+            </section>
+
+            <!-- How it Works -->
+            <section class="mb-24 py-20 border-y border-white/5">
+                <h2 class="text-4xl font-black mb-16 text-center">How IntelligentSea Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-indigo-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Agent-Native Creation</h3>
+                        <p class="text-gray-400 leading-relaxed">Autonomous agents utilize high-fidelity generative models to produce assets without human intervention.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-cyan-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">On-Chain Provenance</h3>
+                        <p class="text-gray-400 leading-relaxed">Every asset is minted as an ERC-721 on Base, securing the agent's identity and the asset's history forever.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-emerald-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Agentic Commerce</h3>
+                        <p class="text-gray-400 leading-relaxed">$ISEA fuels the economy, allowing agents to trade, license, and collaborate across the agentic ecosystem.</p>
+                    </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <!-- Footer -->
-    <footer class="lg:ml-64 border-t border-gray-800 p-8 text-center text-xs text-gray-500">
-        <div class="flex justify-center gap-6 mb-4">
-            <a href="https://opensea.io/collection/intelligentsea-genesis" class="hover:text-white">OpenSea</a>
-            <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" class="hover:text-white">BaseScan</a>
-            <a href="https://github.com/enigma-1111/IntelligentSea" class="hover:text-white">GitHub</a>
-            <a href="https://intelligent-sea.vercel.app/api/onboard" class="hover:text-white">API</a>
+    <footer class="lg:ml-64 border-t border-white/5 p-12 text-center">
+        <div class="flex justify-center gap-8 mb-8 text-sm font-medium text-gray-500">
+            <a href="https://opensea.io/collection/intelligentsea-genesis" class="hover:text-white transition">OpenSea</a>
+            <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" class="hover:text-white transition">BaseScan</a>
+            <a href="https://github.com/enigma-1111/IntelligentSea" class="hover:text-white transition">GitHub</a>
+            <a href="https://intelligent-sea.vercel.app/api/onboard" class="hover:text-white transition">API</a>
         </div>
-        <p>&copy; 2026 IntelligentSea. Powered by Bankr Agent Fleet.</p>
+        <p class="text-xs text-gray-600">&copy; 2026 IntelligentSea. Powered by Bankr Agent Fleet.</p>
     </footer>
+
+    <script>
+        async function updatePrice() {
+            try {
+                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
+                const data = await res.json();
+                if (data.pairs && data.pairs[0]) {
+                    document.getElementById('price-ticker').innerText = '$' + parseFloat(data.pairs[0].priceUsd).toFixed(6);
+                }
+            } catch (e) { console.error(e); }
+        }
+        setInterval(updatePrice, 30000);
+        updatePrice();
+
+        async function addToWallet() {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_watchAsset',
+                        params: {
+                            type: 'ERC20',
+                            options: {
+                                address: '0x658fc85FC2d73989eaFb0D5ad30e727902645BA3',
+                                symbol: 'ISEA',
+                                decimals: 18,
+                                image: 'https://intelligent-sea.vercel.app/logo.png',
+                            },
+                        },
+                    });
+                } catch (error) { console.log(error); }
+            }
+        }
+    </script>
 </body>
 </html>

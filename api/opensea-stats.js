@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
+  const OPENSEA_API_KEY = "ac474cf1cb3b69b36af422b925c8364f";
   const COLLECTION_SLUG = 'intelligentsea-genesis';
 
   try {
@@ -16,7 +16,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     
-    // Extract floor price and other relevant stats
     const stats = {
       floor_price: data.total?.floor_price || 0,
       floor_price_symbol: data.total?.floor_price_symbol || 'ETH',

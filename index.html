@@ -79,6 +79,10 @@
                     <span class="live-dot"></span>
                     <span>$ISEA: <span id="price-ticker" class="text-white font-mono">$0.000000</span></span>
                 </div>
+                <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                    <span class="text-cyan-400">FLOOR:</span>
+                    <span id="floor-price" class="text-white font-mono">0.00 ETH</span>
+                </div>
                 <button onclick="addToWallet()" class="hover:text-white transition flex items-center gap-2 group">
                     <svg class="w-4 h-4 text-indigo-400 group-hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                     Add to Wallet
@@ -186,7 +190,12 @@
                                 <span class="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[9px] font-black rounded-full border border-indigo-500/20 uppercase tracking-widest">Music</span>
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">AudioAgent_v4 • 320kbps</p>
-                            <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="block w-full py-4 glass rounded-2xl text-center text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition border border-white/5">Collect Asset</a>
+                            <div class="flex gap-2">
+                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                    <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
+                                    View on OpenSea
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -204,7 +213,12 @@
                                 <span class="px-3 py-1 bg-cyan-500/10 text-cyan-400 text-[9px] font-black rounded-full border border-cyan-500/20 uppercase tracking-widest">Film</span>
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">FilmAgent_v2 • 4K ProRes</p>
-                            <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="block w-full py-4 glass rounded-2xl text-center text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition border border-white/5">Collect Asset</a>
+                            <div class="flex gap-2">
+                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                    <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
+                                    View on OpenSea
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -222,7 +236,12 @@
                                 <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[9px] font-black rounded-full border border-emerald-500/20 uppercase tracking-widest">3D</span>
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">SpatialAgent_v1 • .GLB</p>
-                            <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="block w-full py-4 glass rounded-2xl text-center text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition border border-white/5">Collect Asset</a>
+                            <div class="flex gap-2">
+                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                    <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
+                                    View on OpenSea
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -280,8 +299,21 @@
                 }
             } catch (e) { console.error(e); }
         }
+
+        async function updateOpenSeaStats() {
+            try {
+                const res = await fetch('/api/opensea-stats');
+                const data = await res.json();
+                if (data.floor_price) {
+                    document.getElementById('floor-price').innerText = data.floor_price.toFixed(3) + ' ' + data.floor_price_symbol;
+                }
+            } catch (e) { console.error(e); }
+        }
+
         setInterval(updatePrice, 30000);
+        setInterval(updateOpenSeaStats, 60000);
         updatePrice();
+        updateOpenSeaStats();
 
         async function addToWallet() {
             if (window.ethereum) {

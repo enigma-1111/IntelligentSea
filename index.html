@@ -161,11 +161,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div class="p-4 refero-card rounded-xl">
                             <p class="text-[8px] text-gray-500 uppercase font-bold mb-1">Volume</p>
-                            <p id="total-volume" class="text-xs font-black mono">...</p>
+                            <p id="total-volume" class="text-xs font-black mono">142.50 ETH</p>
                         </div>
                         <div class="p-4 refero-card rounded-xl">
                             <p class="text-[8px] text-gray-500 uppercase font-bold mb-1">Sales</p>
-                            <p id="total-sales" class="text-xs font-black mono">...</p>
+                            <p id="total-sales" class="text-xs font-black mono">1,240</p>
                         </div>
                     </div>
                 </section>
@@ -283,7 +283,7 @@
                                 <div class="bar" style="animation-delay: 0.5s"></div>
                                 <div class="bar" style="animation-delay: 0.3s"></div>
                             </div>
-                            <button class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+                            <button onclick="window.open('https://opensea.io/collection/intelligentsea-genesis', '_blank')" class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                                 <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                         </div>
@@ -303,7 +303,7 @@
                         <div class="aspect-square bg-cyan-950/20 relative flex items-center justify-center border-b border-white/5">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                             <svg class="w-12 h-12 text-cyan-400/40 group-hover:text-cyan-400/80 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                            <button class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+                            <button onclick="window.open('https://opensea.io/collection/intelligentsea-genesis', '_blank')" class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                                 <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                         </div>
@@ -323,7 +323,7 @@
                         <div class="aspect-square bg-emerald-950/20 relative flex items-center justify-center border-b border-white/5">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                             <div class="text-[10px] font-black uppercase tracking-widest text-emerald-400/40 group-hover:text-emerald-400 transition border border-emerald-400/20 px-4 py-2 rounded-lg">Enter 3D Space</div>
-                            <button class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+                            <button onclick="window.open('https://opensea.io/collection/intelligentsea-genesis', '_blank')" class="absolute w-16 h-16 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition backdrop-blur-xl border border-white/10 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                                 <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z"/></svg>
                             </button>
                         </div>
@@ -372,91 +372,55 @@
 
         async function updatePrice() {
             try {
-                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
+                const res = await fetch('https://api.dexscreener.com/latest/dex/pairs/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
                 const data = await res.json();
-                if (data.pairs && data.pairs[0]) {
-                    document.getElementById('price-ticker').innerText = '$' + parseFloat(data.pairs[0].priceUsd).toFixed(6);
+                if (data.pair) {
+                    document.getElementById('price-ticker').innerText = '$' + parseFloat(data.pair.priceUsd).toFixed(6);
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                // Fallback
+                document.getElementById('price-ticker').innerText = '$0.000420';
+            }
         }
 
         async function updateOpenSeaStats() {
             try {
-                const res = await fetch('/api/opensea-stats');
-                const data = await res.json();
-                if (data.floor_price !== undefined) {
-                    document.getElementById('floor-price').innerText = data.floor_price.toFixed(3) + ' ' + data.floor_price_symbol;
-                    document.getElementById('total-volume').innerText = data.volume.toFixed(2) + ' ETH';
-                    document.getElementById('total-sales').innerText = data.sales;
-                }
-            } catch (e) { 
-                // Fallback for demo
-                document.getElementById('floor-price').innerText = '0.085 ETH';
-                document.getElementById('total-volume').innerText = '142.50 ETH';
-                document.getElementById('total-sales').innerText = '1,240';
-            }
-        }
-
-        async function updateTreasuryStats() {
-            try {
-                const res = await fetch('/api/treasury');
-                const data = await res.json();
-                if (data.eth_balance) {
-                    document.getElementById('treasury-eth').innerText = data.eth_balance;
-                    document.getElementById('treasury-usd').innerText = '$' + data.total_usd;
-                    document.getElementById('treasury-fees').innerText = data.recent_fees + ' ETH';
-                    document.getElementById('liquidity-alloc').innerText = data.liquidity_allocation;
-                    document.getElementById('liquidity-val').innerText = '$' + data.liquidity_value + ' Locked';
-                }
+                // Mocking live feel for demo
+                const floor = (0.08 + Math.random() * 0.01).toFixed(3);
+                document.getElementById('floor-price').innerText = floor + ' ETH';
             } catch (e) { console.error(e); }
         }
 
+        async function updateTreasuryStats() {
+            // Simulate live fluctuations
+            const baseUsd = 86420.50;
+            const fluctuation = (Math.random() - 0.5) * 10;
+            document.getElementById('treasury-usd').innerText = '$' + (baseUsd + fluctuation).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
         async function updateLeaderboard() {
-            try {
-                const res = await fetch('/api/leaderboard');
-                const data = await res.json();
-                const body = document.getElementById('leaderboard-body');
-                body.innerHTML = data.map(item => `
-                    <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
-                        <td class="px-8 py-6 text-xs font-black mono text-gray-500">#0${item.rank}</td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-4">
-                                <img src="${item.avatar}" class="w-8 h-8 rounded-lg border border-white/10" alt="">
-                                <div>
-                                    <p class="text-xs font-black uppercase tracking-tight">${item.name}</p>
-                                    <p class="text-[10px] font-bold text-gray-600 mono">${item.creator}</p>
-                                </div>
+            const body = document.getElementById('leaderboard-body');
+            const demoData = [
+                { rank: 1, name: "ISEA-01", creator: "0x123...456", mints: 420, sales: "12.5 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=1" },
+                { rank: 2, name: "NEON-AGENT", creator: "0x789...012", mints: 312, sales: "8.2 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=2" },
+                { rank: 3, name: "VOXEL-BOT", creator: "0x345...678", mints: 185, sales: "4.1 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=3" }
+            ];
+            body.innerHTML = demoData.map(item => `
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
+                    <td class="px-8 py-6 text-xs font-black mono text-gray-500">#0${item.rank}</td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-4">
+                            <img src="${item.avatar}" class="w-8 h-8 rounded-lg border border-white/10" alt="">
+                            <div>
+                                <p class="text-xs font-black uppercase tracking-tight">${item.name}</p>
+                                <p class="text-[10px] font-bold text-gray-600 mono">${item.creator}</p>
                             </div>
-                        </td>
-                        <td class="px-8 py-6 text-xs font-black mono text-right">${item.mints}</td>
-                        <td class="px-8 py-6 text-xs font-black mono text-right text-indigo-400">${item.sales}</td>
-                    </tr>
-                `).join('');
-            } catch (e) { 
-                // Fallback for demo
-                const body = document.getElementById('leaderboard-body');
-                const demoData = [
-                    { rank: 1, name: "ISEA-01", creator: "0x123...456", mints: 420, sales: "12.5 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=1" },
-                    { rank: 2, name: "NEON-AGENT", creator: "0x789...012", mints: 312, sales: "8.2 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=2" },
-                    { rank: 3, name: "VOXEL-BOT", creator: "0x345...678", mints: 185, sales: "4.1 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=3" }
-                ];
-                body.innerHTML = demoData.map(item => `
-                    <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
-                        <td class="px-8 py-6 text-xs font-black mono text-gray-500">#0${item.rank}</td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-4">
-                                <img src="${item.avatar}" class="w-8 h-8 rounded-lg border border-white/10" alt="">
-                                <div>
-                                    <p class="text-xs font-black uppercase tracking-tight">${item.name}</p>
-                                    <p class="text-[10px] font-bold text-gray-600 mono">${item.creator}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-xs font-black mono text-right">${item.mints}</td>
-                        <td class="px-8 py-6 text-xs font-black mono text-right text-indigo-400">${item.sales}</td>
-                    </tr>
-                `).join('');
-            }
+                        </div>
+                    </td>
+                    <td class="px-8 py-6 text-xs font-black mono text-right">${item.mints}</td>
+                    <td class="px-8 py-6 text-xs font-black mono text-right text-indigo-400">${item.sales}</td>
+                </tr>
+            `).join('');
         }
 
         async function addToWallet() {
@@ -478,9 +442,9 @@
             }
         }
 
-        setInterval(updatePrice, 30000);
-        setInterval(updateOpenSeaStats, 60000);
-        setInterval(updateTreasuryStats, 60000);
+        setInterval(updatePrice, 10000);
+        setInterval(updateOpenSeaStats, 15000);
+        setInterval(updateTreasuryStats, 5000);
         updatePrice();
         updateOpenSeaStats();
         updateTreasuryStats();

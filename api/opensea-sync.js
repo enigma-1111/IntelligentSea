@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const OPENSEA_API_KEY = "ac474cf1cb3b69b36af422b925c8364f";
+  const OPENSEA_API_KEY = "69f9e7ec890d80d8740ab41a424b9ac5";
   const COLLECTION_SLUG = 'intelligentsea-genesis';
 
   if (req.method === 'POST') {

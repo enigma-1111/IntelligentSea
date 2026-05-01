@@ -113,7 +113,7 @@
                 </a>
             </nav>
 
-            <div class="activity-feed">
+            <div class="activity-feed mb-12">
                 <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em] mb-6">OpenSea Stats</p>
                 <div class="space-y-4" id="opensea-stats">
                     <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-blue-500">
@@ -121,6 +121,18 @@
                     </div>
                     <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-purple-500">
                         <span class="text-purple-400 font-black uppercase tracking-tighter">Sales</span>: <span id="total-sales" class="text-white font-bold">...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-feed">
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em] mb-6">Treasury</p>
+                <div class="space-y-4" id="treasury-stats">
+                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-emerald-500">
+                        <span class="text-emerald-400 font-black uppercase tracking-tighter">ETH</span>: <span id="treasury-eth" class="text-white font-bold">...</span>
+                    </div>
+                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-indigo-500">
+                        <span class="text-indigo-400 font-black uppercase tracking-tighter">ISEA</span>: <span id="treasury-isea" class="text-white font-bold">...</span>
                     </div>
                 </div>
             </div>
@@ -173,7 +185,7 @@
                                     <div class="w-1.5 bg-indigo-400 h-16 animate-pulse" style="animation-delay: 0.4s"></div>
                                 </div>
                             </div>
-                            <button class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition backdrop-blur-2xl z-10 border border-white/10 group-hover:scale-110 duration-500">
+                            <button onclick="playMedia('music')" class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition backdrop-blur-2xl z-10 border border-white/10 group-hover:scale-110 duration-500">
                                 <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                         </div>
@@ -186,7 +198,7 @@
                             <div class="flex gap-2">
                                 <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/1" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
-                                    View on OpenSea
+                                    Listed on OpenSea
                                 </a>
                             </div>
                         </div>
@@ -196,7 +208,7 @@
                     <div class="glass rounded-[2rem] overflow-hidden group holographic neon-border">
                         <div class="aspect-square bg-gradient-to-br from-cyan-950 to-black relative flex items-center justify-center">
                             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center opacity-20 group-hover:opacity-40 group-hover:scale-110 transition duration-1000"></div>
-                            <button class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition backdrop-blur-2xl z-10 border border-white/10 group-hover:scale-110 duration-500">
+                            <button onclick="playMedia('video')" class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition backdrop-blur-2xl z-10 border border-white/10 group-hover:scale-110 duration-500">
                                 <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </button>
                         </div>
@@ -209,7 +221,7 @@
                             <div class="flex gap-2">
                                 <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/2" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
-                                    View on OpenSea
+                                    Listed on OpenSea
                                 </a>
                             </div>
                         </div>
@@ -232,7 +244,7 @@
                             <div class="flex gap-2">
                                 <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/3" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
-                                    View on OpenSea
+                                    Listed on OpenSea
                                 </a>
                             </div>
                         </div>
@@ -305,10 +317,29 @@
             } catch (e) { console.error(e); }
         }
 
+        async function updateTreasuryStats() {
+            try {
+                const res = await fetch('/api/treasury');
+                const data = await res.json();
+                if (data.eth_balance) {
+                    document.getElementById('treasury-eth').innerText = data.eth_balance + ' ETH';
+                    document.getElementById('treasury-isea').innerText = data.isea_balance;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function playMedia(type) {
+            console.log('Playing ' + type);
+            // In a real app, this would trigger an audio/video player
+            alert('Playing Genesis ' + type + ' asset...');
+        }
+
         setInterval(updatePrice, 30000);
         setInterval(updateOpenSeaStats, 60000);
+        setInterval(updateTreasuryStats, 60000);
         updatePrice();
         updateOpenSeaStats();
+        updateTreasuryStats();
 
         async function addToWallet() {
             if (window.ethereum) {

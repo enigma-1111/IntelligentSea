@@ -111,23 +111,16 @@
                     <svg class="w-4 h-4 group-hover:text-emerald-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     Token Contract
                 </a>
-                <a href="https://bankr.bot/skills/twitter-agent" target="_blank" class="flex items-center gap-4 px-4 py-3 text-sm font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-2xl transition group">
-                    <svg class="w-4 h-4 group-hover:text-orange-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    Auto-Onboard
-                </a>
             </nav>
 
             <div class="activity-feed">
-                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em] mb-6">Swarm Intelligence</p>
-                <div class="space-y-4" id="activity-log">
-                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-indigo-500">
-                        <span class="text-indigo-400 font-black uppercase tracking-tighter">CreatorAgent</span> rendered <span class="text-white font-bold">"Abyssal Flow"</span> in 8K.
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em] mb-6">OpenSea Stats</p>
+                <div class="space-y-4" id="opensea-stats">
+                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-blue-500">
+                        <span class="text-blue-400 font-black uppercase tracking-tighter">Volume</span>: <span id="total-volume" class="text-white font-bold">...</span>
                     </div>
-                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-cyan-500">
-                        <span class="text-cyan-400 font-black uppercase tracking-tighter">DiscoverySwarm</span> mapped <span class="text-white font-bold">12 new creative nodes</span>.
-                    </div>
-                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-emerald-500">
-                        <span class="text-emerald-400 font-black uppercase tracking-tighter">MarketAgent</span> executed <span class="text-white font-bold">3 on-chain listings</span>.
+                    <div class="p-4 glass rounded-2xl text-[11px] leading-relaxed border-l-2 border-purple-500">
+                        <span class="text-purple-400 font-black uppercase tracking-tighter">Sales</span>: <span id="total-sales" class="text-white font-bold">...</span>
                     </div>
                 </div>
             </div>
@@ -191,7 +184,7 @@
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">AudioAgent_v4 • 320kbps</p>
                             <div class="flex gap-2">
-                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/1" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
                                     View on OpenSea
                                 </a>
@@ -214,7 +207,7 @@
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">FilmAgent_v2 • 4K ProRes</p>
                             <div class="flex gap-2">
-                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/2" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
                                     View on OpenSea
                                 </a>
@@ -237,7 +230,7 @@
                             </div>
                             <p class="text-xs font-bold text-gray-600 mb-8 uppercase tracking-wider">SpatialAgent_v1 • .GLB</p>
                             <div class="flex gap-2">
-                                <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
+                                <a href="https://opensea.io/assets/base/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3/3" target="_blank" class="flex-1 py-4 glass rounded-2xl text-center text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/5 flex items-center justify-center gap-2">
                                     <img src="https://opensea.io/static/images/logos/opensea.svg" class="w-4 h-4" alt="OpenSea">
                                     View on OpenSea
                                 </a>
@@ -304,8 +297,10 @@
             try {
                 const res = await fetch('/api/opensea-stats');
                 const data = await res.json();
-                if (data.floor_price) {
+                if (data.floor_price !== undefined) {
                     document.getElementById('floor-price').innerText = data.floor_price.toFixed(3) + ' ' + data.floor_price_symbol;
+                    document.getElementById('total-volume').innerText = data.volume.toFixed(4) + ' ETH';
+                    document.getElementById('total-sales').innerText = data.sales;
                 }
             } catch (e) { console.error(e); }
         }

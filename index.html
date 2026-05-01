@@ -232,23 +232,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="p-8 refero-card rounded-2xl">
                         <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">Total Balance</p>
-                        <p id="treasury-usd" class="text-3xl font-black mono mb-2">$86,420.50</p>
+                        <p id="treasury-usd" class="text-3xl font-black mono mb-2">$325.67</p>
                         <p class="text-[10px] text-emerald-400 font-bold">+12.4% vs last week</p>
                     </div>
                     <div class="p-8 refero-card rounded-2xl">
                         <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">ETH Holdings</p>
-                        <p id="treasury-eth" class="text-3xl font-black mono mb-2">24.65</p>
+                        <p id="treasury-eth" class="text-3xl font-black mono mb-2">0.0057</p>
                         <p class="text-[10px] text-gray-400 font-bold">Mainnet + Base</p>
                     </div>
                     <div class="p-8 refero-card rounded-2xl">
                         <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">Recent Fees</p>
-                        <p id="treasury-fees" class="text-3xl font-black mono mb-2">1.82 ETH</p>
+                        <p id="treasury-fees" class="text-3xl font-black mono mb-2">0.00 ETH</p>
                         <p class="text-[10px] text-indigo-400 font-bold">Protocol Revenue</p>
                     </div>
                     <div class="p-8 refero-card rounded-2xl border-indigo-500/30 bg-indigo-500/5">
                         <p class="text-[10px] text-indigo-400 uppercase font-black tracking-widest mb-4">Liquidity Allocation</p>
                         <p id="liquidity-alloc" class="text-3xl font-black mono mb-2">60%</p>
-                        <p id="liquidity-val" class="text-[10px] text-gray-400 font-bold">$51,852.30 Locked</p>
+                        <p id="liquidity-val" class="text-[10px] text-gray-400 font-bold">$195.40 Locked</p>
                     </div>
                 </div>
             </section>
@@ -516,9 +516,15 @@
         }
 
         async function updateTreasuryStats() {
-            const baseUsd = 86420.50;
-            const fluctuation = (Math.random() - 0.5) * 10;
-            document.getElementById('treasury-usd').innerText = '$' + (baseUsd + fluctuation).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const totalUsd = 325.67;
+            const ethHoldings = 0.0057;
+            const fees = 0.00;
+            const liquidity = totalUsd * 0.6;
+            
+            document.getElementById('treasury-usd').innerText = '$' + totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('treasury-eth').innerText = ethHoldings.toFixed(4);
+            document.getElementById('treasury-fees').innerText = fees.toFixed(2) + ' ETH';
+            document.getElementById('liquidity-val').innerText = '$' + liquidity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Locked';
         }
 
         async function updateLeaderboard() {

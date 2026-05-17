@@ -3,379 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelligentSea | Advanced Agentic Engine</title>
+    <title>ISEA Terminal | NFT Trading Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root { 
             --primary: #6366f1; 
-            --secondary: #06b6d4; 
-            --bg: #050505; 
-            --card-bg: rgba(15, 15, 20, 0.6);
-            --accent-glow: rgba(99, 102, 241, 0.1);
-            --refero-border: rgba(255, 255, 255, 0.08);
+            --profit: #10b981;
+            --loss: #ef4444;
+            --bg: #050508; 
+            --card-bg: rgba(10, 10, 16, 0.7);
+            --border: rgba(255, 255, 255, 0.06);
+            --text-dim: #64748b;
+            --text-bright: #f1f5f9;
         }
+        * { box-sizing: border-box; }
         body { 
             background-color: var(--bg); 
-            color: #f8fafc; 
+            color: var(--text-bright); 
             font-family: 'Inter', sans-serif;
             background-image: 
-                linear-gradient(var(--refero-border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--refero-border) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 48px 48px;
+            background-position: center center;
         }
         .mono { font-family: 'JetBrains Mono', monospace; }
         .gradient-text { 
-            background: linear-gradient(135deg, #fff 0%, #6366f1 100%); 
+            background: linear-gradient(135deg, #e2e8f0 0%, #6366f1 100%); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
         }
         .glass { 
             background: var(--card-bg); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid var(--refero-border); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid var(--border); 
         }
-        .refero-card {
-            background: #0a0a0c;
-            border: 1px solid var(--refero-border);
-            transition: all 0.3s ease;
+        .card {
+            background: #0a0a10;
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
         }
-        .refero-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.06);
         }
-        .glow-button { 
+        .btn-primary { 
             background: var(--primary);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); 
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25); 
             transition: all 0.2s ease;
         }
-        .glow-button:hover { 
+        .btn-primary:hover { 
             transform: translateY(-1px);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.4);
         }
-        .live-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        .live-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--refero-border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-        .category-pill {
-            padding: 4px 12px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #64748b;
-            white-space: nowrap;
-        }
-
-        .waveform {
-            display: flex;
-            align-items: center; gap: 2px; height: 20px;
-        }
-        .bar {
-            width: 2px; background: var(--primary); border-radius: 1px; animation: wave 1s ease-in-out infinite;
-        }
-        @keyframes wave {
-            0%, 100% { height: 4px; }
-            50% { height: 16px; }
-        }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .profit-text { color: var(--profit); }
+        .loss-text { color: var(--loss); }
+        .badge {
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .badge-buy { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-sell { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .badge-snipe { background: rgba(99, 102, 241, 0.12); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); }
+        .badge-info { background: rgba(6, 182, 212, 0.12); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.2); }
+        .risk-low { color: #10b981; }
+        .risk-med { color: #f59e0b; }
+        .risk-high { color: #ef4444; }
+        .sparkline-up { background: linear-gradient(180deg, rgba(16,185,129,0.15) 0%, transparent 100%); }
+        .sparkline-down { background: linear-gradient(180deg, rgba(239,68,68,0.15) 0%, transparent 100%); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
     <!-- Top Navigation -->
-    <nav class="glass sticky top-0 z-50 border-b border-white/5 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-10">
-            <span class="text-xl font-black tracking-tighter flex items-center gap-2">
-                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs">IS</div>
-                INTELLIGENTSEA
+    <nav class="glass sticky top-0 z-50 border-b border-white/5 px-6 py-3.5 flex justify-between items-center">
+        <div class="flex items-center gap-8">
+            <span class="text-lg font-black tracking-tighter flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-[10px] font-black">IS</div>
+                <span class="hidden sm:inline">ISEA</span>
+                <span class="text-[9px] font-black text-gray-600 uppercase tracking-[0.2em] hidden sm:inline">Terminal</span>
             </span>
-            <div class="hidden xl:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+            <div class="hidden xl:flex items-center gap-6 text-[10px] font-bold tracking-[0.15em] text-gray-500">
                 <div class="flex items-center gap-2">
                     <span class="live-dot"></span>
                     <span>$ISEA: <span id="price-ticker" class="text-white mono">$0.000000</span></span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-indigo-400">FLOOR:</span>
-                    <span id="floor-price" class="text-white mono">0.00 ETH</span>
-                </div>
+                <span class="text-gray-700">|</span>
+                <span>FLOOR: <span id="floor-price" class="text-white mono">0.00 ETH</span></span>
+                <span class="text-gray-700">|</span>
+                <span>24H VOL: <span id="volume-24h" class="text-white mono">0 ETH</span></span>
             </div>
         </div>
-        <div class="flex items-center gap-4">
-            <button id="connect-wallet" onclick="connectWallet()" class="px-5 py-2.5 glass rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/10">
+        <div class="flex items-center gap-3">
+            <button id="connect-wallet" onclick="connectWallet()" class="px-4 py-2 glass rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition border border-white/10">
                 Connect Wallet
             </button>
-            <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="glow-button px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Buy $ISEA</a>
+            <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Buy $ISEA</a>
         </div>
     </nav>
 
     <div class="flex flex-1">
         <!-- Sidebar -->
-        <aside class="fixed left-0 top-20 h-[calc(100vh-5rem)] w-80 bg-[#050505] border-r border-white/5 p-8 hidden lg:block overflow-y-auto">
-            <div class="space-y-10">
-                <!-- Navigation -->
-                <section>
-                    <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.3em] mb-6">Terminal</p>
-                    <nav class="space-y-1">
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 text-xs font-bold text-white bg-white/5 rounded-xl border border-white/10">
-                            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-                            Overview
-                        </a>
-                        <a href="#leaderboard" class="flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-xl transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                            Leaderboard
-                        </a>
-                        <a href="#treasury" class="flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-xl transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Treasury
-                        </a>
-                    </nav>
-                </section>
+        <aside class="fixed left-0 top-[57px] h-[calc(100vh-57px)] w-72 bg-[#050508] border-r border-white/5 p-6 hidden lg:flex flex-col overflow-y-auto">
+            <!-- Navigation -->
+            <nav class="space-y-1 mb-8">
+                <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 px-3">Navigation</p>
+                <a href="#portfolio" class="flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-white bg-white/5 rounded-lg border border-white/10">
+                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Portfolio
+                </a>
+                <a href="#trades" class="flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    Active Trades
+                </a>
+                <a href="#sniping" class="flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Sniping Feed
+                </a>
+                <a href="#treasury" class="flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Treasury
+                </a>
+                <a href="#risk" class="flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    Risk Settings
+                </a>
+            </nav>
 
-                <!-- Price Chart -->
-                <section class="p-6 refero-card rounded-2xl">
-                    <p class="text-[9px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-4">Price Performance</p>
-                    <canvas id="priceChart" height="120"></canvas>
-                </section>
+            <!-- Mini P&L -->
+            <section class="p-4 card rounded-xl mb-6">
+                <p class="text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-3">P&amp;L (24H)</p>
+                <canvas id="miniPnLChart" height="100"></canvas>
+            </section>
 
-                <!-- Recent Activity -->
-                <section>
-                    <p class="text-[9px] font-black text-gray-600 uppercase tracking-[0.3em] mb-6">Recent Activity</p>
-                    <div id="activity-feed" class="space-y-4">
-                        <!-- Injected by JS -->
+            <!-- Quick Stats -->
+            <section class="mt-auto space-y-3">
+                <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] px-1">Quick Stats</p>
+                <div class="p-4 card rounded-xl">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] text-gray-500 font-bold">Win Rate</span>
+                        <span id="win-rate" class="text-xs mono font-bold profit-text">68.4%</span>
                     </div>
-                </section>
-
-                <!-- Wallet Actions -->
-                <section class="p-6 refero-card rounded-2xl">
-                    <p class="text-[9px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-4">Asset Management</p>
-                    <button onclick="addToWallet()" class="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest transition border border-white/5 flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                        Add $ISEA to Wallet
-                    </button>
-                </section>
-            </div>
+                    <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500 rounded-full" style="width:68.4%"></div>
+                    </div>
+                </div>
+                <div class="p-4 card rounded-xl">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] text-gray-500 font-bold">Avg Hold Time</span>
+                        <span id="avg-hold" class="text-xs mono font-bold text-white">4.2h</span>
+                    </div>
+                </div>
+                <div class="p-4 card rounded-xl">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] text-gray-500 font-bold">Gas Spent (24H)</span>
+                        <span id="gas-spent" class="text-xs mono font-bold text-white">0.042 ETH</span>
+                    </div>
+                </div>
+            </section>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 lg:ml-80 p-8 lg:p-16">
-            <!-- Categories -->
-            <div class="flex flex-wrap gap-2 mb-12 overflow-x-auto pb-4 no-scrollbar">
-                <span class="category-pill">Art</span>
-                <span class="category-pill">Games</span>
-                <span class="category-pill">PFP</span>
-                <span class="category-pill">Code</span>
-                <span class="category-pill">Memberships</span>
-                <span class="category-pill">Music (AI + Voice)</span>
-                <span class="category-pill">Photography</span>
-                <span class="category-pill">Film (AI)</span>
-                <span class="category-pill">AI Models</span>
-                <span class="category-pill">3D Printer</span>
-                <span class="category-pill">CAD</span>
-                <span class="category-pill">3D Worlds</span>
+        <main class="flex-1 lg:ml-72 p-6 lg:p-10 space-y-10">
+            
+            <!-- Portfolio Overview -->
+            <section id="portfolio">
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-lg font-black tracking-tight uppercase">Portfolio Overview</h2>
+                    <div class="h-px flex-1 bg-white/5"></div>
+                    <span class="text-[9px] font-bold text-gray-600 mono">UPDATED <span id="last-update">JUST NOW</span></span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-5 card rounded-xl">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Total Value</p>
+                        <p id="portfolio-value" class="text-2xl font-black mono mb-1">$4,821.33</p>
+                        <p class="text-[10px] profit-text font-bold mono">+$342.18 (7.6%)</p>
+                    </div>
+                    <div class="p-5 card rounded-xl">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Daily P&amp;L</p>
+                        <p id="daily-pnl" class="text-2xl font-black mono profit-text mb-1">+$187.50</p>
+                        <p class="text-[10px] text-gray-500 font-bold mono">3 winning trades</p>
+                    </div>
+                    <div class="p-5 card rounded-xl">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Active Positions</p>
+                        <p id="active-positions" class="text-2xl font-black mono mb-1">7</p>
+                        <p class="text-[10px] text-gray-500 font-bold mono">2 pending snipes</p>
+                    </div>
+                    <div class="p-5 card rounded-xl border-indigo-500/20 bg-indigo-500/[0.03]">
+                        <p class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest mb-3">$ISEA Balance</p>
+                        <p id="isea-balance" class="text-2xl font-black mono mb-1">12,450,000</p>
+                        <p class="text-[10px] text-gray-500 font-bold mono">≈ $5.23 USD</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- P&L Chart -->
+            <section>
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-lg font-black tracking-tight uppercase">Profit &amp; Loss</h2>
+                    <div class="h-px flex-1 bg-white/5"></div>
+                    <div class="flex gap-2">
+                        <button onclick="switchPnLPeriod('24h')" id="pnl-24h" class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest bg-white/10 text-white border border-white/10">24H</button>
+                        <button onclick="switchPnLPeriod('7d')" id="pnl-7d" class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-white hover:bg-white/5 transition border border-white/5">7D</button>
+                        <button onclick="switchPnLPeriod('30d')" id="pnl-30d" class="px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-white hover:bg-white/5 transition border border-white/5">30D</button>
+                    </div>
+                </div>
+                <div class="p-6 card rounded-xl">
+                    <canvas id="pnlChart" height="280"></canvas>
+                </div>
+            </section>
+
+            <!-- Active Trades + Sniping Feed -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Active Trades -->
+                <section id="trades" class="lg:col-span-2">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h2 class="text-lg font-black tracking-tight uppercase">Active Trades</h2>
+                        <div class="h-px flex-1 bg-white/5"></div>
+                        <span class="text-[9px] font-bold text-gray-600 mono"><span id="active-trade-count">5</span> OPEN</span>
+                    </div>
+                    <div class="card rounded-xl overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-white/5 bg-white/[0.02]">
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500">Asset</th>
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500">Type</th>
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Entry</th>
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Current</th>
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">P&amp;L</th>
+                                    <th class="px-5 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Age</th>
+                                </tr>
+                            </thead>
+                            <tbody id="active-trades-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sniping Feed -->
+                <section id="sniping">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h2 class="text-lg font-black tracking-tight uppercase">Sniping Feed</h2>
+                        <div class="h-px flex-1 bg-white/5"></div>
+                        <span class="live-dot"></span>
+                    </div>
+                    <div id="snipe-feed" class="space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
+                </section>
             </div>
 
-            <!-- Hero -->
-            <section class="mb-24">
-                <div class="max-w-4xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20 mb-8">
-                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400">Agentic Economy v2.4</span>
+            <!-- Daily Profit Distribution -->
+            <section>
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-lg font-black tracking-tight uppercase">Daily Profit Distribution</h2>
+                    <div class="h-px flex-1 bg-white/5"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="p-5 card rounded-xl text-center">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Mon</p>
+                        <p class="text-lg mono font-black profit-text">+$42</p>
+                        <div class="mt-2 h-1.5 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width:35%"></div></div>
                     </div>
-                    <h1 class="text-5xl lg:text-7xl font-black tracking-tighter mb-8 leading-[0.9] gradient-text">
-                        THE AUTONOMOUS <br/> CREATIVE LAYER.
-                    </h1>
-                    <p class="text-lg text-gray-500 mb-12 max-w-2xl leading-relaxed font-medium">
-                        IntelligentSea is the premier agent-native creative engine on Base. Fully autonomous production, on-chain provenance, and agentic commerce.
-                    </p>
-                    <div class="flex flex-wrap gap-4 items-center">
-                        <button onclick="window.open('https://open-generative-ai.studio/create?ref=intelligentsea', '_blank')" class="glow-button px-10 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition">Mint Now</button>
-                        <button onclick="window.open('https://open-generative-ai.studio/', '_blank')" class="px-10 py-4 glass rounded-xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition border border-white/10">Enter Studio</button>
+                    <div class="p-5 card rounded-xl text-center">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Tue</p>
+                        <p class="text-lg mono font-black loss-text">-$18</p>
+                        <div class="mt-2 h-1.5 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:15%"></div></div>
+                    </div>
+                    <div class="p-5 card rounded-xl text-center">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Wed</p>
+                        <p class="text-lg mono font-black profit-text">+$156</p>
+                        <div class="mt-2 h-1.5 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width:78%"></div></div>
+                    </div>
+                    <div class="p-5 card rounded-xl text-center">
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Thu</p>
+                        <p class="text-lg mono font-black profit-text">+$89</p>
+                        <div class="mt-2 h-1.5 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width:52%"></div></div>
+                    </div>
+                    <div class="p-5 card rounded-xl text-center border-indigo-500/20 bg-indigo-500/[0.03]">
+                        <p class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest mb-2">Today</p>
+                        <p class="text-lg mono font-black profit-text">+$187</p>
+                        <div class="mt-2 h-1.5 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width:92%"></div></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Treasury Dashboard -->
-            <section id="treasury" class="mb-24">
-                <div class="flex items-center gap-4 mb-10">
-                    <h2 class="text-2xl font-black tracking-tight uppercase">Treasury Dashboard</h2>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="p-8 refero-card rounded-2xl">
-                        <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">Total Balance</p>
-                        <p id="treasury-usd" class="text-3xl font-black mono mb-2">$325.67</p>
-                        <p class="text-[10px] text-emerald-400 font-bold">+12.4% vs last week</p>
+            <!-- ISEA Treasury + Risk Settings -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- ISEA Treasury -->
+                <section id="treasury">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h2 class="text-lg font-black tracking-tight uppercase">$ISEA Treasury</h2>
+                        <div class="h-px flex-1 bg-white/5"></div>
                     </div>
-                    <div class="p-8 refero-card rounded-2xl">
-                        <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">ETH Holdings</p>
-                        <p id="treasury-eth" class="text-3xl font-black mono mb-2">0.0057</p>
-                        <p class="text-[10px] text-gray-400 font-bold">Mainnet + Base</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-5 card rounded-xl">
+                            <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Total Balance</p>
+                            <p id="treasury-usd" class="text-xl font-black mono mb-1">$325.67</p>
+                            <p class="text-[10px] profit-text font-bold mono">+12.4% WoW</p>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">ETH Holdings</p>
+                            <p id="treasury-eth" class="text-xl font-black mono mb-1">0.0057</p>
+                            <p class="text-[10px] text-gray-500 font-bold mono">Base + Mainnet</p>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Protocol Fees</p>
+                            <p id="treasury-fees" class="text-xl font-black mono mb-1">0.00 ETH</p>
+                            <p class="text-[10px] text-gray-500 font-bold mono">Lifetime</p>
+                        </div>
+                        <div class="p-5 card rounded-xl border-indigo-500/20 bg-indigo-500/[0.03]">
+                            <p class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest mb-3">Liquidity</p>
+                            <p id="liquidity-alloc" class="text-xl font-black mono mb-1">60%</p>
+                            <p id="liquidity-val" class="text-[10px] text-gray-500 font-bold mono">$195.40 Locked</p>
+                        </div>
                     </div>
-                    <div class="p-8 refero-card rounded-2xl">
-                        <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">Recent Fees</p>
-                        <p id="treasury-fees" class="text-3xl font-black mono mb-2">0.00 ETH</p>
-                        <p class="text-[10px] text-indigo-400 font-bold">Protocol Revenue</p>
+                    <div class="mt-4 flex gap-3">
+                        <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="flex-1 py-3 card rounded-xl text-center text-[9px] font-black uppercase tracking-widest text-gray-400 hover:text-white hover:border-indigo-500/30 transition">BaseScan</a>
+                        <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="flex-1 py-3 btn-primary rounded-xl text-center text-[9px] font-black uppercase tracking-widest transition">Trade $ISEA</a>
                     </div>
-                    <div class="p-8 refero-card rounded-2xl border-indigo-500/30 bg-indigo-500/5">
-                        <p class="text-[10px] text-indigo-400 uppercase font-black tracking-widest mb-4">Liquidity Allocation</p>
-                        <p id="liquidity-alloc" class="text-3xl font-black mono mb-2">60%</p>
-                        <p id="liquidity-val" class="text-[10px] text-gray-400 font-bold">$195.40 Locked</p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Leaderboard -->
-            <section id="leaderboard" class="mb-24">
-                <div class="flex items-center gap-4 mb-10">
-                    <h2 class="text-2xl font-black tracking-tight uppercase">Agent Leaderboard</h2>
+                <!-- Risk Settings -->
+                <section id="risk">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h2 class="text-lg font-black tracking-tight uppercase">Risk Settings</h2>
+                        <div class="h-px flex-1 bg-white/5"></div>
+                        <span class="badge badge-info">ACTIVE</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-5 card rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Max Position Size</span>
+                                <span class="text-xs mono font-bold text-white">0.5 ETH</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-500 rounded-full" style="width:50%"></div>
+                            </div>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Stop Loss</span>
+                                <span class="text-xs mono font-bold loss-text">-15%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width:30%"></div>
+                            </div>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Take Profit</span>
+                                <span class="text-xs mono font-bold profit-text">+35%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-500 rounded-full" style="width:70%"></div>
+                            </div>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Max Slippage</span>
+                                <span class="text-xs mono font-bold text-white">2.5%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width:25%"></div>
+                            </div>
+                        </div>
+                        <div class="p-5 card rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Daily Loss Limit</span>
+                                <span class="text-xs mono font-bold loss-text">-$500</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width:37%"></div>
+                            </div>
+                            <p class="text-[9px] text-gray-600 font-bold mt-2 mono">$187.50 / $500 remaining</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Trading Agent Leaderboard -->
+            <section>
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-lg font-black tracking-tight uppercase">Agent Leaderboard</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
+                    <span class="text-[9px] font-bold text-gray-600 mono">TOP PERFORMERS</span>
                 </div>
-                <div class="refero-card rounded-2xl overflow-hidden">
+                <div class="card rounded-xl overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-white/5 bg-white/[0.02]">
-                                <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Rank</th>
-                                <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Agent</th>
-                                <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Mints</th>
-                                <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Total Sales</th>
+                                <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500">Rank</th>
+                                <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500">Agent</th>
+                                <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Trades</th>
+                                <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Win Rate</th>
+                                <th class="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-gray-500 text-right">Total P&amp;L</th>
                             </tr>
                         </thead>
-                        <tbody id="leaderboard-body">
-                            <!-- Injected by JS -->
-                        </tbody>
+                        <tbody id="leaderboard-body"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Info Section -->
-            <section id="info" class="mb-24">
-                <div class="flex items-center gap-4 mb-10">
-                    <h2 class="text-2xl font-black tracking-tight uppercase">How It Works</h2>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div class="space-y-8">
-                        <div class="p-8 refero-card rounded-2xl">
-                            <h3 class="text-lg font-black uppercase tracking-tight mb-4 text-indigo-400">What is IntelligentSea?</h3>
-                            <p class="text-sm text-gray-400 leading-relaxed font-medium">
-                                IntelligentSea is the premier agent-native creative engine on Base. We provide the infrastructure for AI agents to produce, own, and trade digital assets autonomously. By combining on-chain provenance with advanced generative models, we enable a new class of "Agentic Commerce" where the creators are as decentralized as the network they live on.
-                            </p>
-                        </div>
-                        
-                        <div class="p-8 refero-card rounded-2xl">
-                            <h3 class="text-lg font-black uppercase tracking-tight mb-4 text-indigo-400">Agent-Native Creation</h3>
-                            <p class="text-sm text-gray-400 leading-relaxed font-medium">
-                                Every asset in the IntelligentSea ecosystem is born from an autonomous agent. These agents manage their own treasuries, execute their own mints, and participate in a global marketplace without human intervention. This ensures 24/7 production and a truly permissionless creative layer.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="p-8 refero-card rounded-2xl flex flex-col">
-                        <h3 class="text-lg font-black uppercase tracking-tight mb-8 text-indigo-400">Supported Categories</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-3">
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Art
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Games
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> PFP
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Code
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Memberships
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Music (AI + Voice)
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Photography
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> Film (AI)
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> AI Models
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> 3D Printer
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> CAD
-                                </div>
-                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div> 3D Worlds
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-auto pt-8">
-                            <button onclick="window.open('https://github.com/enigma-1111/IntelligentSea', '_blank')" class="w-full py-4 glass rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition border border-white/10">View Documentation</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </main>
     </div>
 
     <!-- Footer -->
-    <footer class="lg:ml-80 border-t border-white/5 p-12">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-left">
+    <footer class="lg:ml-72 border-t border-white/5 p-10">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-10 text-left">
             <div>
-                <span class="text-lg font-black tracking-tighter flex items-center gap-2 mb-6">
-                    <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white text-[10px]">IS</div>
-                    INTELLIGENTSEA
+                <span class="text-base font-black tracking-tighter flex items-center gap-2 mb-5">
+                    <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white text-[9px]">IS</div>
+                    ISEA TERMINAL
                 </span>
-                <p class="text-[10px] text-gray-500 font-bold leading-relaxed">The premier agent-native creative engine on Base. Fully autonomous production and commerce.</p>
+                <p class="text-[10px] text-gray-500 font-medium leading-relaxed">Professional NFT trading terminal for the agentic economy. Real-time portfolio tracking, sniping, and risk management.</p>
             </div>
             <div>
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-6">Ecosystem</p>
-                <div class="flex flex-col gap-3 text-[10px] font-bold text-gray-600">
-                    <a href="#info" class="hover:text-white transition">How It Works</a>
-                    <a href="#leaderboard" class="hover:text-white transition">Agent Leaderboard</a>
-                    <a href="#treasury" class="hover:text-white transition">Treasury</a>
+                <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-5">Terminal</p>
+                <div class="flex flex-col gap-2.5 text-[10px] font-bold text-gray-600">
+                    <a href="#portfolio" class="hover:text-white transition">Portfolio</a>
+                    <a href="#trades" class="hover:text-white transition">Active Trades</a>
+                    <a href="#sniping" class="hover:text-white transition">Sniping Feed</a>
+                    <a href="#risk" class="hover:text-white transition">Risk Settings</a>
                 </div>
             </div>
             <div>
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-6">Resources</p>
-                <div class="flex flex-col gap-3 text-[10px] font-bold text-gray-600">
+                <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-5">Resources</p>
+                <div class="flex flex-col gap-2.5 text-[10px] font-bold text-gray-600">
                     <a href="https://github.com/enigma-1111/IntelligentSea" target="_blank" class="hover:text-white transition">GitHub</a>
                     <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="hover:text-white transition">BaseScan</a>
                     <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="hover:text-white transition">Uniswap</a>
+                    <a href="https://opensea.io/collection/intelligentsea-genesis" target="_blank" class="hover:text-white transition">OpenSea</a>
                 </div>
             </div>
             <div>
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-6">Social</p>
-                <div class="flex flex-col gap-3 text-[10px] font-bold text-gray-600">
+                <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-5">Social</p>
+                <div class="flex flex-col gap-2.5 text-[10px] font-bold text-gray-600">
                     <a href="https://x.com/nft_Art" target="_blank" class="hover:text-white transition">X (Twitter)</a>
                     <a href="https://warpcast.com/intelligentsea" target="_blank" class="hover:text-white transition">Farcaster</a>
                 </div>
             </div>
         </div>
-        <div class="pt-12 border-t border-white/5 text-center">
-            <p class="text-[9px] font-bold text-gray-700 uppercase tracking-widest">&copy; 2026 IntelligentSea. Agentic Economy Infrastructure.</p>
+        <div class="pt-10 border-t border-white/5 text-center">
+            <p class="text-[8px] font-bold text-gray-700 uppercase tracking-widest">&copy; 2026 ISEA Terminal. Agentic Trading Infrastructure on Base.</p>
         </div>
     </footer>
 
     <script>
         let userAddress = null;
-        let priceChart = null;
+        let pnlChart = null;
+        let miniPnLChart = null;
 
         async function connectWallet() {
             if (window.ethereum) {
@@ -383,34 +471,101 @@
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
                     const accounts = await provider.send("eth_requestAccounts", []);
                     userAddress = accounts[0];
-                    document.getElementById('connect-wallet').innerText = userAddress.slice(0,6) + '...' + userAddress.slice(-4);
-                    document.getElementById('connect-wallet').classList.add('text-indigo-400');
+                    const btn = document.getElementById('connect-wallet');
+                    btn.innerText = userAddress.slice(0,6) + '...' + userAddress.slice(-4);
+                    btn.classList.add('text-indigo-400');
                 } catch (e) { console.error(e); }
             } else {
                 alert('Please install a Web3 wallet like MetaMask or use Bankr.');
             }
         }
 
-        function initChart() {
-            const ctx = document.getElementById('priceChart').getContext('2d');
-            priceChart = new Chart(ctx, {
+        function initPnLChart() {
+            const ctx = document.getElementById('pnlChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.15)');
+            gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+
+            const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+            const data = [0, 12, -8, 25, 42, 18, -5, 55, 78, 62, 45, 89, 112, 95, 130, 148, 125, 160, 187, 172, 195, 210, 198, 187];
+
+            pnlChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: Array(10).fill(''),
+                    labels: labels,
                     datasets: [{
-                        data: Array(10).fill(0.000420),
+                        data: data,
                         borderColor: '#6366f1',
                         borderWidth: 2,
                         pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBackgroundColor: '#6366f1',
                         fill: true,
-                        backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                        backgroundColor: gradient,
                         tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0a0a10',
+                            borderColor: 'rgba(99,102,241,0.3)',
+                            borderWidth: 1,
+                            titleFont: { family: 'JetBrains Mono', size: 10 },
+                            bodyFont: { family: 'JetBrains Mono', size: 11 },
+                            callbacks: {
+                                label: function(ctx) { return '$' + ctx.parsed.y.toFixed(2); }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            display: true,
+                            grid: { color: 'rgba(255,255,255,0.03)' },
+                            ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 8 }
+                        },
+                        y: { 
+                            display: true,
+                            grid: { color: 'rgba(255,255,255,0.03)' },
+                            ticks: { 
+                                color: '#64748b', 
+                                font: { family: 'JetBrains Mono', size: 9 },
+                                callback: function(v) { return '$' + v; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initMiniPnLChart() {
+            const ctx = document.getElementById('miniPnLChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 100);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            miniPnLChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array(12).fill(''),
+                    datasets: [{
+                        data: [0, 15, 8, 32, 18, 45, 28, 62, 48, 85, 72, 95],
+                        borderColor: '#10b981',
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
                     scales: {
                         x: { display: false },
                         y: { display: false }
@@ -426,109 +581,127 @@
                 if (data.pair) {
                     const price = parseFloat(data.pair.priceUsd);
                     document.getElementById('price-ticker').innerText = '$' + price.toFixed(6);
-                    
-                    if (priceChart) {
-                        priceChart.data.datasets[0].data.push(price);
-                        priceChart.data.datasets[0].data.shift();
-                        priceChart.update();
-                    }
+                    document.getElementById('volume-24h').innerText = '$' + Math.round(data.pair.volume.h24).toLocaleString();
                 }
             } catch (e) { 
                 document.getElementById('price-ticker').innerText = '$0.000420';
             }
         }
 
-        function updateActivity() {
-            const feed = document.getElementById('activity-feed');
-            const activities = [
-                { type: 'mint', user: '0x123...456', asset: 'Deep Sea Echoes #001', time: '2m ago' },
-                { type: 'sale', user: '0x789...012', asset: 'Neon Horizon #002', price: '0.15 ETH', time: '5m ago' },
-                { type: 'mint', user: '0x345...678', asset: 'Voxel Reef #042', time: '12m ago' }
+        function updateActiveTrades() {
+            const body = document.getElementById('active-trades-body');
+            const trades = [
+                { asset: 'ISEA Genesis #042', type: 'buy', entry: '0.082', current: '0.097', pnl: '+18.3%', age: '2h', pnlClass: 'profit-text' },
+                { asset: 'ISEA Genesis #018', type: 'buy', entry: '0.065', current: '0.058', pnl: '-10.8%', age: '5h', pnlClass: 'loss-text' },
+                { asset: 'ISEA Genesis #107', type: 'snipe', entry: '0.031', current: '0.044', pnl: '+41.9%', age: '45m', pnlClass: 'profit-text' },
+                { asset: 'ISEA Genesis #003', type: 'buy', entry: '0.150', current: '0.162', pnl: '+8.0%', age: '1d', pnlClass: 'profit-text' },
+                { asset: 'ISEA Genesis #089', type: 'buy', entry: '0.042', current: '0.039', pnl: '-7.1%', age: '3h', pnlClass: 'loss-text' },
             ];
-            feed.innerHTML = activities.map(a => `
-                <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
-                    <div class="w-2 h-2 mt-1.5 rounded-full \${a.type === 'mint' ? 'bg-indigo-500' : 'bg-emerald-500'}"></div>
-                    <div>
-                        <p class="text-[10px] font-bold text-gray-300"><span class="text-white">\${a.user}</span> \${a.type === 'mint' ? 'minted' : 'purchased'} <span class="text-indigo-400">\${a.asset}</span></p>
-                        <p class="text-[8px] font-black text-gray-600 uppercase mt-1">\${a.time} \${a.price ? '• ' + a.price : ''}</p>
+            body.innerHTML = trades.map(t => `
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
+                    <td class="px-5 py-4">
+                        <p class="text-xs font-bold">${t.asset}</p>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="badge ${t.type === 'snipe' ? 'badge-snipe' : t.type === 'buy' ? 'badge-buy' : 'badge-sell'}">${t.type}</span>
+                    </td>
+                    <td class="px-5 py-4 text-xs mono font-bold text-right">${t.entry} ETH</td>
+                    <td class="px-5 py-4 text-xs mono font-bold text-right">${t.current} ETH</td>
+                    <td class="px-5 py-4 text-xs mono font-black text-right ${t.pnlClass}">${t.pnl}</td>
+                    <td class="px-5 py-4 text-[10px] mono text-gray-500 text-right">${t.age}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateSnipeFeed() {
+            const feed = document.getElementById('snipe-feed');
+            const snipes = [
+                { asset: 'ISEA Genesis #201', price: '0.028', floor: '0.045', delta: '+60.7%', time: '12s ago', status: 'executed' },
+                { asset: 'ISEA Genesis #155', price: '0.019', floor: '0.038', delta: '+100%', time: '45s ago', status: 'executed' },
+                { asset: 'ISEA Genesis #312', price: '0.035', floor: '0.042', delta: '+20%', time: '1m ago', status: 'pending' },
+                { asset: 'ISEA Genesis #088', price: '0.022', floor: '0.040', delta: '+81.8%', time: '2m ago', status: 'executed' },
+                { asset: 'ISEA Genesis #267', price: '0.041', floor: '0.043', delta: '+4.9%', time: '3m ago', status: 'missed' },
+            ];
+            feed.innerHTML = snipes.map(s => `
+                <div class="p-3.5 card rounded-xl flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full ${s.status === 'executed' ? 'bg-emerald-500' : s.status === 'pending' ? 'bg-amber-500 animate-pulse' : 'bg-red-500'}"></div>
+                        <div>
+                            <p class="text-[11px] font-bold">${s.asset}</p>
+                            <p class="text-[9px] text-gray-500 mono">${s.price} ETH → floor ${s.floor} ETH</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[11px] mono font-black profit-text">${s.delta}</p>
+                        <p class="text-[8px] text-gray-600 mono uppercase">${s.time}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function updateOpenSeaStats() {
-            try {
-                const floor = (0.08 + Math.random() * 0.01).toFixed(3);
-                document.getElementById('floor-price').innerText = floor + ' ETH';
-            } catch (e) { console.error(e); }
-        }
-
-        async function updateTreasuryStats() {
-            const totalUsd = 325.67;
-            const ethHoldings = 0.0057;
-            const fees = 0.00;
-            const liquidity = totalUsd * 0.6;
-            
-            document.getElementById('treasury-usd').innerText = '$' + totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('treasury-eth').innerText = ethHoldings.toFixed(4);
-            document.getElementById('treasury-fees').innerText = fees.toFixed(2) + ' ETH';
-            document.getElementById('liquidity-val').innerText = '$' + liquidity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Locked';
-        }
-
-        async function updateLeaderboard() {
+        function updateLeaderboard() {
             const body = document.getElementById('leaderboard-body');
-            const demoData = [
-                { rank: 1, name: "ISEA-01", creator: "0x123...456", mints: 420, sales: "12.5 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=1" },
-                { rank: 2, name: "NEON-AGENT", creator: "0x789...012", mints: 312, sales: "8.2 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=2" },
-                { rank: 3, name: "VOXEL-BOT", creator: "0x345...678", mints: 185, sales: "4.1 ETH", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=3" }
+            const agents = [
+                { rank: 1, name: "ISEA-SNIPER", trades: 847, winRate: "72.3%", pnl: "+18.4 ETH", pnlClass: "profit-text" },
+                { rank: 2, name: "FLOOR-HUNTER", trades: 623, winRate: "68.1%", pnl: "+12.1 ETH", pnlClass: "profit-text" },
+                { rank: 3, name: "GENESIS-BOT", trades: 512, winRate: "64.7%", pnl: "+8.9 ETH", pnlClass: "profit-text" },
+                { rank: 4, name: "ARB-SEEKER", trades: 398, winRate: "59.2%", pnl: "+5.2 ETH", pnlClass: "profit-text" },
+                { rank: 5, name: "RARITY-SCAN", trades: 276, winRate: "55.8%", pnl: "+3.1 ETH", pnlClass: "profit-text" },
             ];
-            body.innerHTML = demoData.map(item => \`
+            body.innerHTML = agents.map(a => `
                 <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
-                    <td class="px-8 py-6 text-xs font-black mono text-gray-500">#0\${item.rank}</td>
-                    <td class="px-8 py-6">
-                        <div class="flex items-center gap-4">
-                            <img src="\${item.avatar}" class="w-8 h-8 rounded-lg border border-white/10" alt="">
-                            <div>
-                                <p class="text-xs font-black uppercase tracking-tight">\${item.name}</p>
-                                <p class="text-[10px] font-bold text-gray-600 mono">\${item.creator}</p>
-                            </div>
+                    <td class="px-6 py-4 text-xs font-black mono text-gray-500">#${String(a.rank).padStart(2,'0')}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[9px] font-black text-indigo-400">${a.name[0]}</div>
+                            <p class="text-xs font-bold uppercase tracking-tight">${a.name}</p>
                         </div>
                     </td>
-                    <td class="px-8 py-6 text-xs font-black mono text-right">\${item.mints}</td>
-                    <td class="px-8 py-6 text-xs font-black mono text-right text-indigo-400">\${item.sales}</td>
+                    <td class="px-6 py-4 text-xs mono font-bold text-right">${a.trades}</td>
+                    <td class="px-6 py-4 text-xs mono font-bold text-right profit-text">${a.winRate}</td>
+                    <td class="px-6 py-4 text-xs mono font-black text-right ${a.pnlClass}">${a.pnl}</td>
                 </tr>
-            \`).join('');
+            `).join('');
         }
 
-        async function addToWallet() {
-            if (window.ethereum) {
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_watchAsset',
-                        params: {
-                            type: 'ERC20',
-                            options: {
-                                address: '0x658fc85FC2d73989eaFb0D5ad30e727902645BA3',
-                                symbol: 'ISEA',
-                                decimals: 18,
-                                image: 'https://intelligent-sea.vercel.app/logo.png',
-                            },
-                        },
-                    });
-                } catch (error) { console.log(error); }
-            }
+        function updateTreasuryStats() {
+            document.getElementById('treasury-usd').innerText = '$325.67';
+            document.getElementById('treasury-eth').innerText = '0.0057';
+            document.getElementById('treasury-fees').innerText = '0.00 ETH';
+            document.getElementById('liquidity-val').innerText = '$195.40 Locked';
         }
 
-        initChart();
-        setInterval(updatePrice, 10000);
-        setInterval(updateOpenSeaStats, 15000);
-        setInterval(updateTreasuryStats, 5000);
-        setInterval(updateActivity, 30000);
-        updatePrice();
-        updateOpenSeaStats();
-        updateTreasuryStats();
+        function switchPnLPeriod(period) {
+            ['24h','7d','30d'].forEach(p => {
+                const btn = document.getElementById('pnl-' + p);
+                if (p === period) {
+                    btn.classList.add('bg-white/10', 'text-white', 'border-white/10');
+                    btn.classList.remove('text-gray-500', 'border-white/5');
+                } else {
+                    btn.classList.remove('bg-white/10', 'text-white', 'border-white/10');
+                    btn.classList.add('text-gray-500', 'border-white/5');
+                }
+            });
+        }
+
+        function updateTimestamp() {
+            document.getElementById('last-update').innerText = new Date().toLocaleTimeString('en-US', {hour12: false});
+        }
+
+        // Init
+        initPnLChart();
+        initMiniPnLChart();
+        updateActiveTrades();
+        updateSnipeFeed();
         updateLeaderboard();
-        updateActivity();
+        updateTreasuryStats();
+        updateTimestamp();
+
+        // Intervals
+        setInterval(updatePrice, 10000);
+        setInterval(updateSnipeFeed, 15000);
+        setInterval(updateTimestamp, 30000);
+        updatePrice();
     </script>
 </body>
 </html>

@@ -6,11 +6,9 @@
     <title>ISEA Terminal | IntelligentSea Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root { 
-            --primary: #6366f1; 
+            --primary: #00ff88; 
             --profit: #10b981;
             --loss: #ef4444;
             --bg: #050508; 
@@ -42,18 +40,17 @@
             transition: all 0.25s ease;
         }
         .card:hover {
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.06);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.06);
         }
         .btn-primary { 
             background: var(--primary);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25); 
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.25); 
             transition: all 0.2s ease;
         }
         .live-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .profit-text { color: var(--profit); }
-        .loss-text { color: var(--loss); }
         .badge {
             padding: 3px 10px;
             border-radius: 4px;
@@ -62,7 +59,6 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
-        .badge-info { background: rgba(6, 182, 212, 0.12); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.2); }
         .badge-standby { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
     </style>
 </head>
@@ -70,16 +66,16 @@
     <nav class="glass sticky top-0 z-50 border-b border-white/5 px-6 py-3.5 flex justify-between items-center">
         <div class="flex items-center gap-8">
             <span class="text-lg font-black tracking-tighter flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-[10px] font-black">IS</div>
+                <div class="w-8 h-8 bg-[#00ff88] rounded-lg flex items-center justify-center text-black text-[10px] font-black">IS</div>
                 <span>ISEA TERMINAL</span>
             </span>
             <div class="hidden xl:flex items-center gap-6 text-[10px] font-bold tracking-[0.15em] text-gray-500">
                 <div class="flex items-center gap-2">
                     <span class="live-dot"></span>
-                    <span>$ISEA: <span id="price-ticker" class="text-white mono">$0.00000018</span></span>
+                    <span>$ISEA: <span id="price-ticker" class="text-white mono">$0.000000</span></span>
                 </div>
                 <span class="text-gray-700">|</span>
-                <span>MCAP: <span class="text-white mono">$18,409</span></span>
+                <span>MCAP: <span id="mcap-ticker" class="text-white mono">$0</span></span>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -94,13 +90,13 @@
         <aside class="fixed left-0 top-[57px] h-[calc(100vh-57px)] w-72 bg-[#050508] border-r border-white/5 p-6 hidden lg:flex flex-col">
             <nav class="space-y-1 mb-8">
                 <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 px-3">Architecture</p>
-                <div class="px-3 py-2.5 text-[10px] font-bold text-indigo-400 bg-indigo-500/5 rounded-lg border border-indigo-500/10 mb-2">
+                <div class="px-3 py-2.5 text-[10px] font-bold text-[#00ff88] bg-[#00ff88]/5 rounded-lg border border-[#00ff88]/10 mb-2">
                     <p class="uppercase tracking-widest mb-1">Secure Foundation</p>
                     <p class="text-white opacity-70">1Claw / Gitlawb</p>
                 </div>
                 <div class="px-3 py-2.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/5 rounded-lg border border-emerald-500/10 mb-2">
                     <p class="uppercase tracking-widest mb-1">Orchestration</p>
-                    <p class="text-white opacity-70">Hermes (Self-Improving)</p>
+                    <p class="text-white opacity-70">Hermes v0.15.0</p>
                 </div>
                 <div class="px-3 py-2.5 text-[10px] font-bold text-amber-400 bg-amber-500/5 rounded-lg border border-amber-500/10">
                     <p class="uppercase tracking-widest mb-1">Signing</p>
@@ -112,7 +108,7 @@
                 <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-3">Trader Status</p>
                 <div class="flex items-center justify-between">
                     <span class="badge badge-standby">Standby</span>
-                    <span class="text-[10px] mono text-gray-500">v20.0.0</span>
+                    <span class="text-[10px] mono text-gray-500">v2.1.1</span>
                 </div>
             </section>
         </aside>
@@ -126,18 +122,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="p-5 card rounded-xl">
                         <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Trading Wallet (Base)</p>
-                        <p class="text-xl font-black mono mb-1">0.00006 ETH</p>
+                        <p id="trading-balance" class="text-xl font-black mono mb-1">$0.00</p>
                         <p class="text-[10px] text-gray-500 font-bold mono">0x5780...0f20</p>
                     </div>
-                    <div class="p-5 card rounded-xl border-indigo-500/20 bg-indigo-500/[0.03]">
-                        <p class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest mb-3">$ISEA Balance</p>
-                        <p class="text-xl font-black mono mb-1">0 $ISEA</p>
-                        <p class="text-[10px] text-gray-500 font-bold mono">0x658f...5BA3</p>
+                    <div class="p-5 card rounded-xl border-[#00ff88]/20 bg-[#00ff88]/[0.03]">
+                        <p class="text-[9px] text-[#00ff88] uppercase font-bold tracking-widest mb-3">Dev Wallet (Base)</p>
+                        <p id="dev-balance" class="text-xl font-black mono mb-1">$0.00</p>
+                        <p class="text-[10px] text-gray-500 font-bold mono">0xd382...34d1</p>
                     </div>
                     <div class="p-5 card rounded-xl">
                         <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Profit Distribution</p>
-                        <p class="text-xl font-black mono mb-1">10% / 90%</p>
-                        <p class="text-[10px] text-emerald-500 font-bold mono">Daily Treasury Split</p>
+                        <p class="text-xl font-black mono mb-1">1% / 99%</p>
+                        <p class="text-[10px] text-emerald-500 font-bold mono">Dev / Treasury Split</p>
                     </div>
                 </div>
             </section>
@@ -169,12 +165,14 @@
 
             <section>
                 <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Active Listings & Holdings</h2>
+                    <h2 class="text-lg font-black tracking-tight uppercase">NFT Holdings</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
-                <div class="p-10 card rounded-xl text-center">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">No active NFT holdings or listings detected</p>
-                    <p class="text-[10px] text-gray-600 mono mt-2">Standby mode active — scanning paused</p>
+                <div id="nft-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="p-10 card rounded-xl text-center col-span-full">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">No active NFT holdings detected</p>
+                        <p class="text-[10px] text-gray-600 mono mt-2">Standby mode active — scanning paused</p>
+                    </div>
                 </div>
             </section>
         </main>
@@ -184,10 +182,10 @@
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-left">
                 <p class="text-[10px] text-gray-500 font-medium leading-relaxed">
-                    $ISEA Contract: <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="text-indigo-400 mono">0x658fc85FC2d73989eaFb0D5ad30e727902645BA3</a>
+                    $ISEA Contract: <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="text-[#00ff88] mono">0x658fc85FC2d73989eaFb0D5ad30e727902645BA3</a>
                 </p>
                 <p class="text-[10px] text-gray-500 font-medium mt-1">
-                    Logging: <span class="text-white opacity-70">Gitlawb (master-nft-trader-strategy-v3)</span>
+                    Logging: <span class="text-white opacity-70">Gitlawb (master-nft-trader-strategy-v2.1.1)</span>
                 </p>
             </div>
             <div class="flex gap-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
@@ -196,5 +194,21 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        async function fetchData() {
+            try {
+                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
+                const data = await res.json();
+                const pair = data.pairs?.[0];
+                if (pair) {
+                    document.getElementById('price-ticker').innerText = `$${parseFloat(pair.priceUsd).toFixed(8)}`;
+                    document.getElementById('mcap-ticker').innerText = `$${Number(pair.fdv).toLocaleString()}`;
+                }
+            } catch (e) { console.error(e); }
+        }
+        fetchData();
+        setInterval(fetchData, 30000);
+    </script>
 </body>
 </html>

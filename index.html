@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISEA Terminal | IntelligentSea Dashboard</title>
+    <title>IntelligentSea Terminal v10 | Base Only</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -60,6 +60,7 @@
             letter-spacing: 0.08em;
         }
         .badge-standby { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-locked { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
@@ -67,18 +68,19 @@
         <div class="flex items-center gap-8">
             <span class="text-lg font-black tracking-tighter flex items-center gap-2.5">
                 <div class="w-8 h-8 bg-[#00ff88] rounded-lg flex items-center justify-center text-black text-[10px] font-black">IS</div>
-                <span>ISEA TERMINAL</span>
+                <span>ISEA TERMINAL <span class="text-[10px] text-gray-500 ml-2">v10</span></span>
             </span>
             <div class="hidden xl:flex items-center gap-6 text-[10px] font-bold tracking-[0.15em] text-gray-500">
                 <div class="flex items-center gap-2">
                     <span class="live-dot"></span>
-                    <span>$ISEA: <span id="price-ticker" class="text-white mono">$0.000000</span></span>
+                    <span>$ISEA (AERODROME): <span id="price-ticker" class="text-white mono">$0.000000</span></span>
                 </div>
                 <span class="text-gray-700">|</span>
-                <span>MCAP: <span id="mcap-ticker" class="text-white mono">$0</span></span>
+                <span>LIQUIDITY: <span id="liq-ticker" class="text-white mono">$0</span></span>
             </div>
         </div>
         <div class="flex items-center gap-3">
+            <div class="badge badge-locked">Base Network Lock</div>
             <div class="px-4 py-2 glass rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">
                 0x5780...0f20
             </div>
@@ -92,15 +94,15 @@
                 <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 px-3">Architecture</p>
                 <div class="px-3 py-2.5 text-[10px] font-bold text-[#00ff88] bg-[#00ff88]/5 rounded-lg border border-[#00ff88]/10 mb-2">
                     <p class="uppercase tracking-widest mb-1">Secure Foundation</p>
-                    <p class="text-white opacity-70">1Claw / Gitlawb</p>
+                    <p class="text-white opacity-70">Base Only / Gitlawb</p>
                 </div>
                 <div class="px-3 py-2.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/5 rounded-lg border border-emerald-500/10 mb-2">
                     <p class="uppercase tracking-widest mb-1">Orchestration</p>
-                    <p class="text-white opacity-70">Hermes v0.15.0</p>
+                    <p class="text-white opacity-70">Hermes v0.16.0 (Base)</p>
                 </div>
                 <div class="px-3 py-2.5 text-[10px] font-bold text-amber-400 bg-amber-500/5 rounded-lg border border-amber-500/10">
                     <p class="uppercase tracking-widest mb-1">Signing</p>
-                    <p class="text-white opacity-70">Intent-Based / Vaulted</p>
+                    <p class="text-white opacity-70">Direct Execution Only</p>
                 </div>
             </nav>
 
@@ -108,7 +110,7 @@
                 <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-3">Trader Status</p>
                 <div class="flex items-center justify-between">
                     <span class="badge badge-standby">Standby</span>
-                    <span class="text-[10px] mono text-gray-500">v2.1.1</span>
+                    <span class="text-[10px] mono text-gray-500">v10.0.0</span>
                 </div>
             </section>
         </aside>
@@ -126,7 +128,7 @@
                         <p class="text-[10px] text-gray-500 font-bold mono">0x5780...0f20</p>
                     </div>
                     <div class="p-5 card rounded-xl border-[#00ff88]/20 bg-[#00ff88]/[0.03]">
-                        <p class="text-[9px] text-[#00ff88] uppercase font-bold tracking-widest mb-3">Dev Wallet (Base)</p>
+                        <p class="text-[9px] text-[#00ff88] uppercase font-bold tracking-widest mb-3">Treasury (Base)</p>
                         <p id="dev-balance" class="text-xl font-black mono mb-1">$0.00</p>
                         <p class="text-[10px] text-gray-500 font-bold mono">0xd382...34d1</p>
                     </div>
@@ -140,7 +142,7 @@
 
             <section>
                 <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Risk Rules Summary</h2>
+                    <h2 class="text-lg font-black tracking-tight uppercase">Base Risk Rules</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -153,8 +155,8 @@
                         <p class="text-lg mono font-black text-white">15%</p>
                     </div>
                     <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Max Positions</p>
-                        <p class="text-lg mono font-black text-white">20</p>
+                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Base Sniping</p>
+                        <p class="text-lg mono font-black text-white">Active</p>
                     </div>
                     <div class="p-5 card rounded-xl">
                         <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Position Cap</p>
@@ -165,12 +167,12 @@
 
             <section>
                 <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">NFT Holdings</h2>
+                    <h2 class="text-lg font-black tracking-tight uppercase">Base NFT Holdings</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
                 <div id="nft-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     <div class="p-10 card rounded-xl text-center col-span-full">
-                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">No active NFT holdings detected</p>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">No Base NFT holdings detected</p>
                         <p class="text-[10px] text-gray-600 mono mt-2">Standby mode active — scanning paused</p>
                     </div>
                 </div>
@@ -185,7 +187,7 @@
                     $ISEA Contract: <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="text-[#00ff88] mono">0x658fc85FC2d73989eaFb0D5ad30e727902645BA3</a>
                 </p>
                 <p class="text-[10px] text-gray-500 font-medium mt-1">
-                    Logging: <span class="text-white opacity-70">Gitlawb (master-nft-trader-strategy-v2.1.1)</span>
+                    Logging: <span class="text-white opacity-70">Gitlawb (base-nft-strategies)</span>
                 </p>
             </div>
             <div class="flex gap-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
@@ -200,10 +202,10 @@
             try {
                 const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
                 const data = await res.json();
-                const pair = data.pairs?.[0];
+                const pair = data.pairs?.find(p => p.dexId === 'aerodrome');
                 if (pair) {
                     document.getElementById('price-ticker').innerText = `$${parseFloat(pair.priceUsd).toFixed(8)}`;
-                    document.getElementById('mcap-ticker').innerText = `$${Number(pair.fdv).toLocaleString()}`;
+                    document.getElementById('liq-ticker').innerText = `$${Number(pair.liquidity?.usd || 0).toLocaleString()}`;
                 }
             } catch (e) { console.error(e); }
         }

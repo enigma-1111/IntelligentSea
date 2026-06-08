@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelligentSea Terminal v10 | Base Only</title>
+    <title>IntelligentSea Terminal v11 | Base Only</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -59,8 +59,8 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
-        .badge-standby { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
-        .badge-locked { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
+        .badge-active { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
+        .badge-locked { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
@@ -68,7 +68,7 @@
         <div class="flex items-center gap-8">
             <span class="text-lg font-black tracking-tighter flex items-center gap-2.5">
                 <div class="w-8 h-8 bg-[#00ff88] rounded-lg flex items-center justify-center text-black text-[10px] font-black">IS</div>
-                <span>ISEA TERMINAL <span class="text-[10px] text-gray-500 ml-2">v10</span></span>
+                <span>ISEA TERMINAL <span class="text-[10px] text-gray-500 ml-2">v11</span></span>
             </span>
             <div class="hidden xl:flex items-center gap-6 text-[10px] font-bold tracking-[0.15em] text-gray-500">
                 <div class="flex items-center gap-2">
@@ -84,7 +84,7 @@
             <div class="px-4 py-2 glass rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">
                 0x5780...0f20
             </div>
-            <a href="https://app.uniswap.org/swap?outputCurrency=0x658fc85FC2d73989eaFb0D5ad30e727902645BA3&chain=base" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Trade $ISEA</a>
+            <a href="https://app.uniswap.org/swap?outputCurrency=0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3&chain=base" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Trade $ISEA</a>
         </div>
     </nav>
 
@@ -109,8 +109,8 @@
             <section class="p-4 card rounded-xl mt-auto">
                 <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-3">Trader Status</p>
                 <div class="flex items-center justify-between">
-                    <span class="badge badge-standby">Standby</span>
-                    <span class="text-[10px] mono text-gray-500">v10.0.0</span>
+                    <span class="badge badge-active">Active</span>
+                    <span class="text-[10px] mono text-gray-500">v11.0.0</span>
                 </div>
             </section>
         </aside>
@@ -160,7 +160,7 @@
                     </div>
                     <div class="p-5 card rounded-xl">
                         <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Position Cap</p>
-                        <p class="text-lg mono font-black text-white">5%</p>
+                        <p class="text-lg mono font-black text-white">$2-3 Max</p>
                     </div>
                 </div>
             </section>
@@ -171,9 +171,9 @@
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
                 <div id="nft-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    <div class="p-10 card rounded-xl text-center col-span-full">
-                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">No Base NFT holdings detected</p>
-                        <p class="text-[10px] text-gray-600 mono mt-2">Standby mode active — scanning paused</p>
+                    <!-- NFTs will be injected here -->
+                    <div class="p-5 card rounded-xl text-center col-span-full">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Loading Base NFT holdings...</p>
                     </div>
                 </div>
             </section>
@@ -184,7 +184,7 @@
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-left">
                 <p class="text-[10px] text-gray-500 font-medium leading-relaxed">
-                    $ISEA Contract: <a href="https://basescan.org/token/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3" target="_blank" class="text-[#00ff88] mono">0x658fc85FC2d73989eaFb0D5ad30e727902645BA3</a>
+                    $ISEA Contract: <a href="https://basescan.org/token/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3" target="_blank" class="text-[#00ff88] mono">0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3</a>
                 </p>
                 <p class="text-[10px] text-gray-500 font-medium mt-1">
                     Logging: <span class="text-white opacity-70">Gitlawb (base-nft-strategies)</span>
@@ -200,7 +200,7 @@
     <script>
         async function fetchData() {
             try {
-                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x658fc85FC2d73989eaFb0D5ad30e727902645BA3');
+                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3');
                 const data = await res.json();
                 const pair = data.pairs?.find(p => p.dexId === 'aerodrome');
                 if (pair) {

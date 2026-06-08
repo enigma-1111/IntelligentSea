@@ -82,7 +82,7 @@
         <div class="flex items-center gap-3">
             <div class="badge badge-locked">Base Network Lock</div>
             <div class="px-4 py-2 glass rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">
-                0x5780...0f20
+                <a href="https://basescan.org/address/0x5780e697aaed5639edd231c98908b0f18fac0f20" target="_blank" class="hover:text-[#00ff88]">0x5780...0f20</a>
             </div>
             <a href="https://app.uniswap.org/swap?outputCurrency=0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3&chain=base" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Trade $ISEA</a>
         </div>
@@ -142,39 +142,39 @@
 
             <section>
                 <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Base Risk Rules</h2>
+                    <h2 class="text-lg font-black tracking-tight uppercase">Featured Position</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Max Drawdown</p>
-                        <p class="text-lg mono font-black text-white">10%</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card rounded-xl overflow-hidden flex flex-col md:flex-row">
+                        <div class="w-full md:w-48 aspect-square bg-black">
+                            <img src="https://basepaint.xyz/api/art/image/323.png" class="w-full h-full object-cover" alt="BasePaint #323">
+                        </div>
+                        <div class="p-6 flex flex-col justify-center">
+                            <p class="text-[10px] text-[#00ff88] font-black uppercase tracking-widest mb-1">High Conviction</p>
+                            <h3 class="text-xl font-black mb-4">BasePaint Day #323</h3>
+                            <div class="flex gap-3">
+                                <a href="https://opensea.io/assets/base/0xba5e05cb26b17c3097bd88529b58e316393f213f/323" target="_blank" class="btn-primary px-4 py-2 rounded text-[9px] font-black uppercase tracking-widest">View on OpenSea</a>
+                                <a href="https://basepaint.xyz/paint/323" target="_blank" class="glass px-4 py-2 rounded text-[9px] font-black uppercase tracking-widest border border-white/10">BasePaint.xyz</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Stop Loss</p>
-                        <p class="text-lg mono font-black text-white">15%</p>
-                    </div>
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Base Sniping</p>
-                        <p class="text-lg mono font-black text-white">Active</p>
-                    </div>
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-2">Position Cap</p>
-                        <p class="text-lg mono font-black text-white">$2-3 Max</p>
+                    <div class="card rounded-xl p-6 flex flex-col justify-center">
+                        <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">$ISEA Price Action</p>
+                        <div class="h-32 w-full bg-black/50 rounded-lg overflow-hidden">
+                            <iframe src="https://dexscreener.com/base/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;"></iframe>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <section>
                 <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Base NFT Holdings</h2>
+                    <h2 class="text-lg font-black tracking-tight uppercase">Base NFT Inventory</h2>
                     <div class="h-px flex-1 bg-white/5"></div>
                 </div>
                 <div id="nft-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     <!-- NFTs will be injected here -->
-                    <div class="p-5 card rounded-xl text-center col-span-full">
-                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Loading Base NFT holdings...</p>
-                    </div>
                 </div>
             </section>
         </main>
@@ -202,7 +202,7 @@
             try {
                 const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3');
                 const data = await res.json();
-                const pair = data.pairs?.find(p => p.dexId === 'aerodrome');
+                const pair = data.pairs?.find(p => p.chainId === 'base' && p.dexId === 'aerodrome') || data.pairs?.[0];
                 if (pair) {
                     document.getElementById('price-ticker').innerText = `$${parseFloat(pair.priceUsd).toFixed(8)}`;
                     document.getElementById('liq-ticker').innerText = `$${Number(pair.liquidity?.usd || 0).toLocaleString()}`;

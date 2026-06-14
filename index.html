@@ -3,214 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelligentSea Terminal v11 | Base Only</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>IntelligentSea | The Algorithmic Reef</title>
     <style>
-        :root { 
-            --primary: #00ff88; 
-            --profit: #10b981;
-            --loss: #ef4444;
-            --bg: #050508; 
-            --card-bg: rgba(10, 10, 16, 0.7);
-            --border: rgba(255, 255, 255, 0.06);
-            --text-dim: #64748b;
-            --text-bright: #f1f5f9;
+        :root {
+            --bg-deep: #020617;
+            --bg-card: #0f172a;
+            --reef-glow: #10b981;
+            --reef-neon: #34d399;
+            --sea-blue: #3b82f6;
+            --sea-cyan: #06b6d4;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-glow: rgba(16, 185, 129, 0.15);
         }
-        * { box-sizing: border-box; }
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-bright); 
-            font-family: 'Inter', sans-serif;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 48px 48px;
-            background-position: center center;
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.5;
         }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .glass { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(16px); 
-            border: 1px solid var(--border); 
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--reef-glow), var(--sea-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--reef-neon);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--reef-glow);
+            color: var(--bg-deep);
+        }
+
+        .btn-primary:hover {
+            background: var(--reef-neon);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--reef-glow);
+        }
+
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 0 0 1rem;
+            letter-spacing: -0.04em;
+            font-weight: 900;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .section-title {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            padding: 0 2rem 4rem;
+        }
+
         .card {
-            background: #0a0a10;
-            border: 1px solid var(--border);
-            transition: all 0.25s ease;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
         }
+
         .card:hover {
-            border-color: rgba(0, 255, 136, 0.3);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.06);
+            transform: translateY(-4px);
+            border-color: rgba(16, 185, 129, 0.3);
         }
-        .btn-primary { 
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.25); 
-            transition: all 0.2s ease;
+
+        .card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #1e293b;
+            position: relative;
         }
-        .live-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .badge {
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 9px;
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card-name {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-utility {
+            font-size: 0.8rem;
+            color: var(--reef-glow);
+            font-weight: 500;
+        }
+
+        .swarm-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 0 2rem 4rem;
+        }
+
+        .agent-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 1rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
         }
-        .badge-active { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
-        .badge-locked { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        .agent-task {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col h4 {
+            margin: 0 0 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--reef-glow);
+        }
+
+        .price-ticker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--reef-glow);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(16, 185, 129, 0.1);
+            border-top-color: var(--reef-glow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col overflow-x-hidden">
-    <nav class="glass sticky top-0 z-50 border-b border-white/5 px-6 py-3.5 flex justify-between items-center">
-        <div class="flex items-center gap-8">
-            <span class="text-lg font-black tracking-tighter flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-[#00ff88] rounded-lg flex items-center justify-center text-black text-[10px] font-black">IS</div>
-                <span>ISEA TERMINAL <span class="text-[10px] text-gray-500 ml-2">v11</span></span>
-            </span>
-            <div class="hidden xl:flex items-center gap-6 text-[10px] font-bold tracking-[0.15em] text-gray-500">
-                <div class="flex items-center gap-2">
-                    <span class="live-dot"></span>
-                    <span>$ISEA (AERODROME): <span id="price-ticker" class="text-white mono">$0.000000</span></span>
-                </div>
-                <span class="text-gray-700">|</span>
-                <span>LIQUIDITY: <span id="liq-ticker" class="text-white mono">$0</span></span>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="badge badge-locked">Base Network Lock</div>
-            <div class="px-4 py-2 glass rounded-lg text-[10px] font-bold uppercase tracking-widest border border-white/10">
-                <a href="https://basescan.org/address/0x5780e697aaed5639edd231c98908b0f18fac0f20" target="_blank" class="hover:text-[#00ff88]">0x5780...0f20</a>
-            </div>
-            <a href="https://app.uniswap.org/swap?outputCurrency=0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3&chain=base" target="_blank" class="btn-primary px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition">Trade $ISEA</a>
-        </div>
-    </nav>
-
-    <div class="flex flex-1">
-        <aside class="fixed left-0 top-[57px] h-[calc(100vh-57px)] w-72 bg-[#050508] border-r border-white/5 p-6 hidden lg:flex flex-col">
-            <nav class="space-y-1 mb-8">
-                <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 px-3">Architecture</p>
-                <div class="px-3 py-2.5 text-[10px] font-bold text-[#00ff88] bg-[#00ff88]/5 rounded-lg border border-[#00ff88]/10 mb-2">
-                    <p class="uppercase tracking-widest mb-1">Secure Foundation</p>
-                    <p class="text-white opacity-70">Base Only / Gitlawb</p>
-                </div>
-                <div class="px-3 py-2.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/5 rounded-lg border border-emerald-500/10 mb-2">
-                    <p class="uppercase tracking-widest mb-1">Orchestration</p>
-                    <p class="text-white opacity-70">Hermes v0.16.0 (Base)</p>
-                </div>
-                <div class="px-3 py-2.5 text-[10px] font-bold text-amber-400 bg-amber-500/5 rounded-lg border border-amber-500/10">
-                    <p class="uppercase tracking-widest mb-1">Signing</p>
-                    <p class="text-white opacity-70">Direct Execution Only</p>
-                </div>
-            </nav>
-
-            <section class="p-4 card rounded-xl mt-auto">
-                <p class="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-3">Trader Status</p>
-                <div class="flex items-center justify-between">
-                    <span class="badge badge-active">Active</span>
-                    <span class="text-[10px] mono text-gray-500">v11.0.0</span>
-                </div>
-            </section>
-        </aside>
-
-        <main class="flex-1 lg:ml-72 p-6 lg:p-10 space-y-10">
-            <section>
-                <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Portfolio Overview</h2>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Trading Wallet (Base)</p>
-                        <p id="trading-balance" class="text-xl font-black mono mb-1">$0.00</p>
-                        <p class="text-[10px] text-gray-500 font-bold mono">0x5780...0f20</p>
-                    </div>
-                    <div class="p-5 card rounded-xl border-[#00ff88]/20 bg-[#00ff88]/[0.03]">
-                        <p class="text-[9px] text-[#00ff88] uppercase font-bold tracking-widest mb-3">Treasury (Base)</p>
-                        <p id="dev-balance" class="text-xl font-black mono mb-1">$0.00</p>
-                        <p class="text-[10px] text-gray-500 font-bold mono">0xd382...34d1</p>
-                    </div>
-                    <div class="p-5 card rounded-xl">
-                        <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-3">Profit Distribution</p>
-                        <p class="text-xl font-black mono mb-1">1% / 99%</p>
-                        <p class="text-[10px] text-emerald-500 font-bold mono">Dev / Treasury Split</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Featured Position</h2>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="card rounded-xl overflow-hidden flex flex-col md:flex-row">
-                        <div class="w-full md:w-48 aspect-square bg-black">
-                            <img src="https://basepaint.xyz/api/art/image/323.png" class="w-full h-full object-cover" alt="BasePaint #323">
-                        </div>
-                        <div class="p-6 flex flex-col justify-center">
-                            <p class="text-[10px] text-[#00ff88] font-black uppercase tracking-widest mb-1">High Conviction</p>
-                            <h3 class="text-xl font-black mb-4">BasePaint Day #323</h3>
-                            <div class="flex gap-3">
-                                <a href="https://opensea.io/assets/base/0xba5e05cb26b17c3097bd88529b58e316393f213f/323" target="_blank" class="btn-primary px-4 py-2 rounded text-[9px] font-black uppercase tracking-widest">View on OpenSea</a>
-                                <a href="https://basepaint.xyz/paint/323" target="_blank" class="glass px-4 py-2 rounded text-[9px] font-black uppercase tracking-widest border border-white/10">BasePaint.xyz</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card rounded-xl p-6 flex flex-col justify-center">
-                        <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">$ISEA Price Action</p>
-                        <div class="h-32 w-full bg-black/50 rounded-lg overflow-hidden">
-                            <iframe src="https://dexscreener.com/base/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div class="flex items-center gap-4 mb-6">
-                    <h2 class="text-lg font-black tracking-tight uppercase">Base NFT Inventory</h2>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                </div>
-                <div id="nft-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    <!-- NFTs will be injected here -->
-                </div>
-            </section>
-        </main>
+<body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
     </div>
 
-    <footer class="lg:ml-72 border-t border-white/5 p-10">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-left">
-                <p class="text-[10px] text-gray-500 font-medium leading-relaxed">
-                    $ISEA Contract: <a href="https://basescan.org/token/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3" target="_blank" class="text-[#00ff88] mono">0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3</a>
-                </p>
-                <p class="text-[10px] text-gray-500 font-medium mt-1">
-                    Logging: <span class="text-white opacity-70">Gitlawb (base-nft-strategies)</span>
-                </p>
-            </div>
-            <div class="flex gap-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
-                <a href="https://github.com/enigma-1111/IntelligentSea" target="_blank" class="hover:text-white transition">GitHub Repo</a>
-                <a href="https://intelligent-sea.vercel.app" target="_blank" class="hover:text-white transition">Live Site</a>
-            </div>
+    <header>
+        <div class="logo-container">
+            <div class="logo">INTELLIGENTSEA</div>
+            <div id="isea-price" class="price-ticker">$ISEA: $0.0000...</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Art</a></li>
+                <li><a href="#">Games</a></li>
+                <li><a href="#">PFP</a></li>
+                <li><a href="#">Code</a></li>
+                <li><a href="#">Music</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline" onclick="alert('Buy $ISEA on Base')">Buy $ISEA</button>
+            <button class="btn btn-primary" id="connect-btn">Connect Wallet</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>The Algorithmic Reef</h1>
+        <p>The premier agent-native NFT marketplace on Base. Discover, trade, and deploy assets created by the swarm.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="btn btn-primary" onclick="window.scrollTo({top: document.getElementById('reef-collection').offsetTop - 100, behavior: 'smooth'})">Explore Collection</button>
+            <button class="btn btn-outline" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Read Narrative</button>
+        </div>
+    </section>
+
+    <div class="section-title" id="reef-collection">
+        <h2>Genesis Drop: Algorithmic Reef</h2>
+        <a href="#" style="color: var(--reef-glow); font-size: 0.85rem; text-decoration: none; font-weight: 600;">View All</a>
+    </div>
+    <div class="grid" id="reef-grid">
+        <!-- Reef items injected here -->
+    </div>
+
+    <div class="section-title">
+        <h2>Sub-agent Swarm Status</h2>
+    </div>
+    <div class="swarm-dashboard" id="swarm-dashboard">
+        <!-- Agent cards injected here -->
+    </div>
+
+    <footer>
+        <div class="footer-col">
+            <div class="logo" style="margin-bottom: 1rem;">INTELLIGENTSEA</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">The first self-sovereign marketplace for the agentic economy.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Marketplace</h4>
+            <ul>
+                <li><a href="#">Trending</a></li>
+                <li><a href="#">Agentic Drops</a></li>
+                <li><a href="#">$ISEA Utility</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Resources</h4>
+            <ul>
+                <li><a href="#" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Documentation</a></li>
+                <li><a href="#" onclick="alert('Show me the $ISEA contract on Base')">Contract</a></li>
+                <li><a href="#" onclick="window.open('https://x.com/IntelligentSea', '_blank')">Narrative</a></li>
+            </ul>
         </div>
     </footer>
 
     <script>
-        async function fetchData() {
-            try {
-                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xa53289feb1a1df8c6e77c2ded32eab8e1a32eba3');
-                const data = await res.json();
-                const pair = data.pairs?.find(p => p.chainId === 'base' && p.dexId === 'aerodrome') || data.pairs?.[0];
-                if (pair) {
-                    document.getElementById('price-ticker').innerText = `$${parseFloat(pair.priceUsd).toFixed(8)}`;
-                    document.getElementById('liq-ticker').innerText = `$${Number(pair.liquidity?.usd || 0).toLocaleString()}`;
-                }
-            } catch (e) { console.error(e); }
+        // Mock data for static Vercel site
+        const data = {
+            market: { price: "0.0000001475", change24h: -1.27 },
+            reef: [
+                { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed', img: 'https://bankr.bot/assets/reef/anemone.png' },
+                { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction', img: 'https://bankr.bot/assets/reef/coral.png' },
+                { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates', img: 'https://bankr.bot/assets/reef/jellyfish.png' },
+                { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops', img: 'https://bankr.bot/assets/reef/urchin.png' },
+                { id: 5, name: 'Protocol Plankton', utility: '1.1x Governance weight', img: 'https://bankr.bot/assets/reef/plankton.png' },
+                { id: 6, name: 'Encrypted Eel', utility: '1hr/day Stealth-mode', img: 'https://bankr.bot/assets/reef/eel.png' },
+                { id: 7, name: 'Subnet Starfish', utility: '5% Bridge fee rebate', img: 'https://bankr.bot/assets/reef/starfish.png' },
+                { id: 8, name: 'Neural Nautilus', utility: 'Hermes alpha logs', img: 'https://bankr.bot/assets/reef/nautilus.png' },
+                { id: 9, name: 'Mempool Manta', utility: 'Early-warning alerts', img: 'https://bankr.bot/assets/reef/manta.png' },
+                { id: 10, name: 'The Algorithmic Core', utility: '0.1% Revenue share', img: 'https://bankr.bot/assets/reef/core.png' }
+            ],
+            agents: [
+                { name: 'Creator', status: 'Active', task: 'Minting Phase 2.0', color: '#10b981' },
+                { name: 'Marketplace', status: 'Active', task: 'Floor Sniping', color: '#3b82f6' },
+                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas', color: '#94a3b8' },
+                { name: 'Treasury', status: 'Active', task: 'Buyback & Burn', color: '#06b6d4' }
+            ]
+        };
+
+        function render() {
+            const overlay = document.getElementById('loading-overlay');
+            const reefGrid = document.getElementById('reef-grid');
+            const swarmDash = document.getElementById('swarm-dashboard');
+            const priceTicker = document.getElementById('isea-price');
+
+            // Update Price
+            const change = data.market.change24h;
+            const color = change >= 0 ? '#10b981' : '#ef4444';
+            priceTicker.innerHTML = `$ISEA: $${data.market.price} <span style="color: ${color}">${change >= 0 ? '+' : ''}${change}%</span>`;
+
+            // Render Reef
+            reefGrid.innerHTML = data.reef.map(item => `
+                <div class="card">
+                    <div class="card-img">
+                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/400/1e293b/10b981?text=${item.name}'">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-name">${item.name}</div>
+                        <div class="card-utility">${item.utility}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Swarm
+            swarmDash.innerHTML = data.agents.map(agent => `
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <span class="agent-name">${agent.name} Agent</span>
+                        <span class="status-badge" style="background: ${agent.color}20; color: ${agent.color}">${agent.status}</span>
+                    </div>
+                    <div class="agent-task">${agent.task}</div>
+                </div>
+            `).join('');
+
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 500);
         }
-        fetchData();
-        setInterval(fetchData, 30000);
+
+        window.onload = render;
     </script>
 </body>
 </html>

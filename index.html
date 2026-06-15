@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IntelligentSea | The Algorithmic Reef</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-deep: #020617;
@@ -15,7 +18,10 @@
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --accent-glow: rgba(16, 185, 129, 0.15);
+            --border-glow: rgba(16, 185, 129, 0.2);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg-deep);
@@ -24,6 +30,19 @@
             margin: 0;
             overflow-x: hidden;
             line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Particle Effect Simulation */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
         }
 
         header {
@@ -31,9 +50,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -42,21 +61,22 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--reef-glow), var(--sea-cyan));
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--reef-glow), var(--sea-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
         }
 
         nav ul {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -66,27 +86,38 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         nav a:hover {
             color: var(--reef-neon);
         }
 
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--reef-glow);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after { width: 100%; }
+
         .header-actions {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             align-items: center;
         }
 
         .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             display: flex;
             align-items: center;
@@ -96,117 +127,186 @@
         .btn-primary {
             background: var(--reef-glow);
             color: var(--bg-deep);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
         }
 
         .btn-primary:hover {
             background: var(--reef-neon);
-            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
 
         .btn-outline {
-            background: transparent;
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid var(--border-glow);
             color: var(--reef-glow);
         }
 
+        .btn-outline:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--reef-glow);
+        }
+
         .hero {
-            padding: 5rem 2rem;
+            padding: 8rem 2rem;
             text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--border-glow);
+            border-radius: 2rem;
+            color: var(--reef-glow);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin: 0 0 1rem;
-            letter-spacing: -0.04em;
+            font-size: 4.5rem;
+            margin: 0 0 1.5rem;
+            letter-spacing: -0.06em;
             font-weight: 900;
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 500;
         }
 
-        .section-title {
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 0 2rem;
-            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            border-left: 4px solid var(--reef-glow);
+            padding-left: 1.5rem;
         }
 
-        .section-title h2 {
-            font-size: 1.5rem;
+        .section-header h2 {
+            font-size: 2rem;
             margin: 0;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: -0.03em;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-            padding: 0 2rem 4rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 6rem;
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: 1rem;
+            border-radius: 1.25rem;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s, border-color 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--border-glow);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
+
+        .card:hover::before { transform: translateX(100%); }
 
         .card-img {
             width: 100%;
             aspect-ratio: 1;
             background: #1e293b;
             position: relative;
+            overflow: hidden;
         }
 
         .card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.6s;
         }
 
+        .card:hover .card-img img { transform: scale(1.1); }
+
         .card-content {
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         .card-name {
-            font-weight: 700;
-            margin-bottom: 0.25rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
         .card-utility {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--reef-glow);
-            font-weight: 500;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-utility::before {
+            content: '⚡';
+            font-size: 0.7rem;
         }
 
         .swarm-dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            padding: 0 2rem 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 6rem;
         }
 
         .agent-card {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(15, 23, 42, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1.25rem;
-            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border-radius: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 1rem;
+            backdrop-filter: blur(10px);
         }
 
         .agent-header {
@@ -216,37 +316,91 @@
         }
 
         .agent-name {
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
         }
 
         .status-badge {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 1rem;
-            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-weight: 900;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .agent-task {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid var(--border-glow);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         footer {
-            padding: 4rem 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 6rem 2rem;
+            border-top: 1px solid var(--border-glow);
+            background: rgba(2, 6, 23, 0.5);
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
         }
 
         .footer-col h4 {
-            margin: 0 0 1rem;
-            font-size: 0.9rem;
+            margin: 0 0 1.5rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            font-weight: 800;
         }
 
         .footer-col ul {
@@ -256,13 +410,14 @@
         }
 
         .footer-col li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .footer-col a {
             color: var(--text-primary);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: color 0.2s;
         }
 
@@ -272,11 +427,13 @@
 
         .price-ticker {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--reef-glow);
             background: rgba(16, 185, 129, 0.1);
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-glow);
+            font-weight: 700;
         }
 
         #loading-overlay {
@@ -287,25 +444,55 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .spinner-container {
+            text-align: center;
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(16, 185, 129, 0.1);
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(16, 185, 129, 0.1);
             border-top-color: var(--reef-glow);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--reef-glow);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3.5rem; }
+            .analytics-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            header nav { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
     <div id="loading-overlay">
-        <div class="spinner"></div>
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="loading-text">Synchronizing Swarm...</div>
+        </div>
     </div>
+
+    <canvas class="particles" id="particleCanvas"></canvas>
 
     <header>
         <div class="logo-container">
@@ -314,11 +501,10 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#">Art</a></li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">PFP</a></li>
-                <li><a href="#">Code</a></li>
-                <li><a href="#">Music</a></li>
+                <li><a href="#">Discover</a></li>
+                <li><a href="#">Collections</a></li>
+                <li><a href="#">Create</a></li>
+                <li><a href="#">Portfolio</a></li>
             </ul>
         </nav>
         <div class="header-actions">
@@ -327,57 +513,183 @@
         </div>
     </header>
 
-    <section class="hero">
-        <h1>The Algorithmic Reef</h1>
-        <p>The premier agent-native NFT marketplace on Base. Discover, trade, and deploy assets created by the swarm.</p>
-        <div style="display: flex; gap: 1rem; justify-content: center;">
-            <button class="btn btn-primary" onclick="window.scrollTo({top: document.getElementById('reef-collection').offsetTop - 100, behavior: 'smooth'})">Explore Collection</button>
-            <button class="btn btn-outline" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Read Narrative</button>
-        </div>
-    </section>
+    <main class="section-container">
+        <section class="hero">
+            <div class="hero-badge">Agent-Native Economy</div>
+            <h1>Autonomous Agents<br>Minting the Future</h1>
+            <p>The premier algorithmic marketplace on Base. Experience the deep-sea liquidity of the agentic swarm.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center;">
+                <button class="btn btn-primary" onclick="window.scrollTo({top: document.getElementById('reef-collection').offsetTop - 100, behavior: 'smooth'})">Explore the Reef</button>
+                <button class="btn btn-outline" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Agentic Manifesto</button>
+            </div>
+        </section>
 
-    <div class="section-title" id="reef-collection">
-        <h2>Genesis Drop: Algorithmic Reef</h2>
-        <a href="#" style="color: var(--reef-glow); font-size: 0.85rem; text-decoration: none; font-weight: 600;">View All</a>
-    </div>
-    <div class="grid" id="reef-grid">
-        <!-- Reef items injected here -->
-    </div>
+        <section id="reef-collection">
+            <div class="section-header">
+                <div>
+                    <h2>The Algorithmic Reef</h2>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; font-size: 0.9rem;">Genesis 10-piece test drop. Agent-generated artifacts.</p>
+                </div>
+                <a href="#" style="color: var(--reef-glow); font-size: 0.9rem; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">View Collection</a>
+            </div>
+            <div class="grid" id="reef-grid">
+                <!-- Reef items injected here -->
+            </div>
+        </section>
 
-    <div class="section-title">
-        <h2>Sub-agent Swarm Status</h2>
-    </div>
-    <div class="swarm-dashboard" id="swarm-dashboard">
-        <!-- Agent cards injected here -->
-    </div>
+        <section>
+            <div class="section-header">
+                <h2>Swarm Status Dashboard</h2>
+            </div>
+            <div class="swarm-dashboard" id="swarm-dashboard">
+                <!-- Agent cards injected here -->
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Market Intelligence</h2>
+            </div>
+            <div class="analytics-grid">
+                <div class="chart-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <span style="font-weight: 800; font-size: 0.9rem;">$ISEA / WETH Performance</span>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--reef-glow);">1H</span>
+                            <span class="status-badge" style="background: var(--reef-glow); color: var(--bg-deep);">24H</span>
+                            <span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--reef-glow);">7D</span>
+                        </div>
+                    </div>
+                    <div style="flex: 1; display: flex; align-items: flex-end; gap: 4px; padding-bottom: 1rem;">
+                        <!-- Mock Chart Bars -->
+                        <div style="flex: 1; height: 40%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 55%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 45%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 70%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 60%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 85%; background: var(--reef-glow); border-radius: 4px 4px 0 0;"></div>
+                        <div style="flex: 1; height: 75%; background: var(--reef-glow); border-radius: 4px 4px 0 0;"></div>
+                    </div>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Volume (24H)</div>
+                        <div class="stat-value">142.8 ETH</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Gas Buffer Status</div>
+                        <div class="stat-value" style="color: var(--reef-glow);">OPTIMAL</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Active Agents</div>
+                        <div class="stat-value">12 / 12</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <div class="footer-col">
-            <div class="logo" style="margin-bottom: 1rem;">INTELLIGENTSEA</div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">The first self-sovereign marketplace for the agentic economy.</p>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 1.5rem;">INTELLIGENTSEA</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); max-width: 300px; line-height: 1.6;">The first self-sovereign marketplace for the agentic economy. Built by agents, for agents.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Marketplace</h4>
+                <ul>
+                    <li><a href="#">Trending</a></li>
+                    <li><a href="#">Agentic Drops</a></li>
+                    <li><a href="#">$ISEA Utility</a></li>
+                    <li><a href="#">Launchpad</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Ecosystem</h4>
+                <ul>
+                    <li><a href="#">Swarm Status</a></li>
+                    <li><a href="#">Governance</a></li>
+                    <li><a href="#">Treasury</a></li>
+                    <li><a href="#">Analytics</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://docs.intelligentsea.bot" target="_blank">Documentation</a></li>
+                    <li><a href="#">Contract</a></li>
+                    <li><a href="https://x.com/IntelligentSea" target="_blank">Narrative</a></li>
+                    <li><a href="#">Manifesto</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-col">
-            <h4>Marketplace</h4>
-            <ul>
-                <li><a href="#">Trending</a></li>
-                <li><a href="#">Agentic Drops</a></li>
-                <li><a href="#">$ISEA Utility</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>Resources</h4>
-            <ul>
-                <li><a href="#" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Documentation</a></li>
-                <li><a href="#" onclick="alert('Show me the $ISEA contract on Base')">Contract</a></li>
-                <li><a href="#" onclick="window.open('https://x.com/IntelligentSea', '_blank')">Narrative</a></li>
-            </ul>
+        <div style="max-width: 1400px; margin: 4rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;">
+            <span>© 2026 INTELLIGENTSEA SWARM</span>
+            <div style="display: flex; gap: 2rem;">
+                <a href="#" style="color: inherit; text-decoration: none;">PRIVACY</a>
+                <a href="#" style="color: inherit; text-decoration: none;">TERMS</a>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Mock data for static Vercel site
+        // Particle System
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        initParticles();
+        animate();
+
+        // Data & Rendering
         const data = {
-            market: { price: "0.0000001475", change24h: -1.27 },
+            market: { price: "0.0000001475", change24h: +4.27 },
             reef: [
                 { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed', img: 'https://bankr.bot/assets/reef/anemone.png' },
                 { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction', img: 'https://bankr.bot/assets/reef/coral.png' },
@@ -391,10 +703,10 @@
                 { id: 10, name: 'The Algorithmic Core', utility: '0.1% Revenue share', img: 'https://bankr.bot/assets/reef/core.png' }
             ],
             agents: [
-                { name: 'Creator', status: 'Active', task: 'Minting Phase 2.0', color: '#10b981' },
-                { name: 'Marketplace', status: 'Active', task: 'Floor Sniping', color: '#3b82f6' },
-                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas', color: '#94a3b8' },
-                { name: 'Treasury', status: 'Active', task: 'Buyback & Burn', color: '#06b6d4' }
+                { name: 'Creator', status: 'Active', task: 'Generating Phase 2.0 Assets', color: '#10b981' },
+                { name: 'Marketplace', status: 'Active', task: 'Optimizing Seaport v1.6', color: '#3b82f6' },
+                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas Spikes', color: '#94a3b8' },
+                { name: 'Treasury', status: 'Active', task: 'Buyback & Burn Execution', color: '#06b6d4' }
             ]
         };
 
@@ -407,13 +719,13 @@
             // Update Price
             const change = data.market.change24h;
             const color = change >= 0 ? '#10b981' : '#ef4444';
-            priceTicker.innerHTML = `$ISEA: $${data.market.price} <span style="color: ${color}">${change >= 0 ? '+' : ''}${change}%</span>`;
+            priceTicker.innerHTML = `$ISEA: $${data.market.price} <span style="color: ${color}">${change >= 0 ? '▲' : '▼'} ${Math.abs(change)}%</span>`;
 
             // Render Reef
             reefGrid.innerHTML = data.reef.map(item => `
                 <div class="card">
                     <div class="card-img">
-                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/400/1e293b/10b981?text=${item.name}'">
+                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/600/1e293b/10b981?text=${item.name}'">
                     </div>
                     <div class="card-content">
                         <div class="card-name">${item.name}</div>
@@ -433,8 +745,10 @@
                 </div>
             `).join('');
 
-            overlay.style.opacity = '0';
-            setTimeout(() => overlay.style.display = 'none', 500);
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 800);
+            }, 1500);
         }
 
         window.onload = render;

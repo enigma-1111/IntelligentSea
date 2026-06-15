@@ -11,312 +11,268 @@
             --reef-deep: #020617;
             --reef-glow: #10b981;
             --reef-cyan: #22d3ee;
+            --reef-dark: #0f172a;
         }
         body {
             background-color: var(--reef-deep);
-            color: #f8fafc;
+            color: #f1f5f9;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
         .mono { font-family: 'JetBrains+Mono', monospace; }
-        .glow-text { text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
-        .glow-border { border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 15px rgba(34, 211, 238, 0.1); }
-        .reef-gradient { background: linear-gradient(180deg, rgba(2, 6, 23, 0) 0%, rgba(16, 185, 129, 0.05) 100%); }
-        .particle-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .card-blur { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); }
+        .glow-text { text-shadow: 0 0 8px rgba(34, 211, 238, 0.4); }
+        .glow-border { border: 1px solid rgba(34, 211, 238, 0.2); }
+        .glow-border:hover { border-color: rgba(34, 211, 238, 0.5); box-shadow: 0 0 15px rgba(34, 211, 238, 0.1); }
+        .particle-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.4; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .reef-card { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reef-card:hover { transform: translateY(-2px); background: rgba(15, 23, 42, 0.7); }
+        .hover-details { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+        .group:hover .hover-details { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body class="reef-gradient">
+<body class="selection:bg-cyan-500/30">
     <canvas id="reef-particles" class="particle-bg"></canvas>
 
     <!-- Navigation -->
-    <nav class="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-8">
-                    <span class="text-2xl font-bold text-emerald-500 glow-text tracking-tighter">$ISEA</span>
-                    <div class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
-                        <a href="#discover" class="hover:text-emerald-400 transition-colors">Discover</a>
-                        <a href="#collections" class="hover:text-emerald-400 transition-colors">Collections</a>
-                        <a href="#staking" class="hover:text-emerald-400 transition-colors">Staking</a>
-                        <a href="#swarm" class="hover:text-emerald-400 transition-colors">Swarm</a>
+    <nav class="border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6">
+            <div class="flex justify-between h-14 items-center">
+                <div class="flex items-center gap-10">
+                    <span class="text-xl font-bold text-cyan-400 glow-text tracking-tighter">$ISEA</span>
+                    <div class="hidden lg:flex gap-8 text-[11px] uppercase tracking-widest font-bold text-slate-500">
+                        <a href="#discover" class="hover:text-cyan-400 transition-colors">Market</a>
+                        <a href="#collections" class="hover:text-cyan-400 transition-colors">Genesis</a>
+                        <a href="#staking" class="hover:text-cyan-400 transition-colors">Vault</a>
+                        <a href="#swarm" class="hover:text-cyan-400 transition-colors">Nodes</a>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="hidden lg:flex items-center gap-4 px-3 py-1 bg-slate-900 rounded-full border border-slate-800">
-                        <span class="text-[10px] uppercase tracking-widest text-slate-500 mono">Gas Buffer</span>
-                        <span class="text-xs text-emerald-400 mono">12 GWEI</span>
+                    <div class="hidden sm:flex items-center gap-4 px-3 py-1 bg-slate-900/50 rounded-md border border-slate-800/50">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] uppercase tracking-widest text-slate-500 mono">Gas</span>
+                            <span class="text-[10px] text-emerald-400 mono">12 GWEI</span>
+                        </div>
+                        <div class="w-px h-3 bg-slate-800"></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] uppercase tracking-widest text-slate-500 mono">Price</span>
+                            <span class="text-[10px] text-cyan-400 mono">$0.00049</span>
+                        </div>
                     </div>
-                    <div class="hidden lg:flex items-center gap-2 px-3 py-1 bg-slate-900 rounded-full border border-slate-800">
-                        <span class="text-[10px] uppercase tracking-widest text-slate-500 mono">$ISEA</span>
-                        <span class="text-xs text-cyan-400 mono">$0.00049</span>
-                    </div>
-                    <button class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all glow-border">Connect Wallet</button>
+                    <button class="bg-cyan-600/10 hover:bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 px-4 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-widest transition-all">Connect</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative pt-20 pb-32 px-4">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mono">Synchronizing Swarm</span>
+    <!-- Subtle Hero -->
+    <header class="relative pt-16 pb-20 px-4 border-b border-slate-900/50">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-2 py-0.5 rounded-md bg-cyan-500/5 border border-cyan-500/10 mb-6">
+                <span class="text-[9px] uppercase tracking-[0.2em] text-cyan-400 font-bold mono">Agent-Native Infrastructure</span>
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Autonomous Agents <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Minting the Future</span></h1>
-            <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">IntelligentSea is the sovereign territory of the agentic economy. A living reef where code creates, trades, and evolves.</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#collections" class="bg-slate-100 text-slate-950 px-8 py-3 rounded-xl font-bold hover:bg-white transition-all">Explore Reef</a>
-                <button class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold border border-slate-800 hover:bg-slate-800 transition-all">Buy $ISEA</button>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Autonomous Agents <span class="text-slate-500">Minting the Future</span></h1>
+            <p class="text-slate-500 text-sm max-w-xl mx-auto mb-8">The sovereign territory of the agentic economy. A living reef where code creates, trades, and evolves.</p>
+            <div class="flex justify-center gap-3">
+                <a href="#collections" class="bg-slate-100 text-slate-950 px-6 py-2 rounded-md text-xs font-bold hover:bg-white transition-all">View Genesis</a>
+                <button class="bg-slate-900 text-white px-6 py-2 rounded-md text-xs font-bold border border-slate-800 hover:bg-slate-800 transition-all">Buy $ISEA</button>
             </div>
         </div>
     </header>
 
-    <!-- Marketplace Grid -->
-    <section id="discover" class="max-w-7xl mx-auto px-4 py-24 border-t border-slate-900">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div>
-                <h2 class="text-3xl font-bold mb-2">Live Marketplace</h2>
-                <p class="text-slate-400">Trending agent-native collections on Base.</p>
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6">
+        
+        <!-- Compact Marketplace Grid -->
+        <section id="discover" class="py-16">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-slate-400">Live Marketplace</h2>
+                </div>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                    <button class="px-3 py-1 rounded-md bg-cyan-500/10 text-cyan-400 text-[10px] font-bold uppercase tracking-widest border border-cyan-500/20">All</button>
+                    <button class="px-3 py-1 rounded-md bg-slate-900/50 text-slate-500 text-[10px] font-bold uppercase tracking-widest border border-slate-800/50 hover:text-slate-300">Agentic</button>
+                    <button class="px-3 py-1 rounded-md bg-slate-900/50 text-slate-500 text-[10px] font-bold uppercase tracking-widest border border-slate-800/50 hover:text-slate-300">Code</button>
+                </div>
             </div>
-            <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                <button class="px-4 py-1.5 rounded-full bg-emerald-500 text-slate-950 text-xs font-bold whitespace-nowrap">All</button>
-                <button class="px-4 py-1.5 rounded-full bg-slate-900 text-slate-400 text-xs font-bold hover:text-white whitespace-nowrap">Art</button>
-                <button class="px-4 py-1.5 rounded-full bg-slate-900 text-slate-400 text-xs font-bold hover:text-white whitespace-nowrap">Agentic</button>
-                <button class="px-4 py-1.5 rounded-full bg-slate-900 text-slate-400 text-xs font-bold hover:text-white whitespace-nowrap">PFP</button>
-                <button class="px-4 py-1.5 rounded-full bg-slate-900 text-slate-400 text-xs font-bold hover:text-white whitespace-nowrap">Code</button>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Collection Card 1 -->
-            <div class="group bg-slate-900/40 rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all">
-                <div class="aspect-square bg-slate-800 relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="text-[10px] uppercase tracking-widest text-emerald-400 mono font-bold">Trending</span>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h4 class="font-bold mb-1">Neural Echoes</h4>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-slate-500">Floor: 0.08 ETH</span>
-                        <span class="text-xs text-emerald-400 mono">+12.4%</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Collection Card 2 -->
-            <div class="group bg-slate-900/40 rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all">
-                <div class="aspect-square bg-slate-800 relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                </div>
-                <div class="p-4">
-                    <h4 class="font-bold mb-1">Base Sentinels</h4>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-slate-500">Floor: 0.15 ETH</span>
-                        <span class="text-xs text-emerald-400 mono">+5.2%</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Collection Card 3 -->
-            <div class="group bg-slate-900/40 rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all">
-                <div class="aspect-square bg-slate-800 relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                </div>
-                <div class="p-4">
-                    <h4 class="font-bold mb-1">Liquid Logic</h4>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-slate-500">Floor: 0.04 ETH</span>
-                        <span class="text-xs text-emerald-400 mono">+22.1%</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Collection Card 4 -->
-            <div class="group bg-slate-900/40 rounded-2xl border border-slate-800 overflow-hidden hover:border-emerald-500/50 transition-all">
-                <div class="aspect-square bg-slate-800 relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                </div>
-                <div class="p-4">
-                    <h4 class="font-bold mb-1">Cyber Reefs</h4>
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-slate-500">Floor: 0.11 ETH</span>
-                        <span class="text-xs text-emerald-400 mono">+8.7%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Genesis Gallery -->
-    <section id="collections" class="max-w-7xl mx-auto px-4 py-24 bg-slate-950/30 rounded-[3rem] border border-slate-900">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold mb-4">The Algorithmic Reef</h2>
-            <p class="text-slate-400 max-w-2xl mx-auto">The sovereign genesis collection. 10 artifacts that define the agentic territory.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <!-- Featured Piece: The Core -->
-            <div class="relative group">
-                <div class="aspect-square rounded-3xl bg-slate-900 border border-emerald-500/30 overflow-hidden glow-border">
-                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10"></div>
-                </div>
-                <div class="mt-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-2xl font-bold">The Algorithmic Core</h3>
-                            <span class="text-xs text-emerald-400 mono uppercase tracking-widest">Genesis 10/10</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Compact Cards -->
+                <script>
+                    const marketplaceItems = [
+                        { name: 'Neural Echoes', floor: '0.08', change: '+12.4%' },
+                        { name: 'Base Sentinels', floor: '0.15', change: '+5.2%' },
+                        { name: 'Liquid Logic', floor: '0.04', change: '+22.1%' },
+                        { name: 'Cyber Reefs', floor: '0.11', change: '+8.7%' },
+                        { name: 'Protocol X', floor: '0.22', change: '+1.4%' },
+                        { name: 'Swarm Nodes', floor: '0.09', change: '+15.8%' }
+                    ];
+                    document.write(marketplaceItems.map(item => `
+                        <div class="reef-card group rounded-lg border border-slate-800/50 overflow-hidden">
+                            <div class="aspect-square bg-slate-900/80 relative">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="text-[11px] font-bold mb-1 truncate">${item.name}</h4>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[9px] text-slate-500 mono">${item.floor} ETH</span>
+                                    <span class="text-[9px] text-emerald-500 mono">${item.change}</span>
+                                </div>
+                            </div>
                         </div>
-                        <button class="bg-emerald-600 px-6 py-2 rounded-lg font-bold text-sm">Mint</button>
+                    `).join(''));
+                </script>
+            </div>
+        </section>
+
+        <!-- Dense Genesis Gallery -->
+        <section id="collections" class="py-16 border-t border-slate-900/50">
+            <div class="mb-10">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-slate-400 mb-2">The Algorithmic Reef</h2>
+                <p class="text-xs text-slate-500">Genesis Collection • 10 Sovereign Artifacts</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <script>
+                    const genesisItems = [
+                        { id: 1, title: 'Silicon Anemone', lore: 'First living sensors of the reef.', utility: 'Discovery Oracle: 24h early access.' },
+                        { id: 2, title: 'Binary Coral', lore: 'Ancient smart contract fossils.', utility: 'Foundation Sovereign: 3x governance multiplier.' },
+                        { id: 3, title: 'Latency Jellyfish', lore: 'Translucent guardians of flow.', utility: 'Flow Architect: 40% gas optimization.' },
+                        { id: 4, title: 'Hash-Rate Urchin', lore: 'Spiny defenders of intelligence.', utility: 'Security Bastion: Advanced protection tools.' },
+                        { id: 5, title: 'Protocol Plankton', lore: 'Invisible lifeblood of the swarm.', utility: 'Swarm Vitality: 20% staking boost.' },
+                        { id: 6, title: 'Encrypted Eel', lore: 'Sleek navigators of private channels.', utility: 'Privacy Sovereign: Full stealth mode.' },
+                        { id: 7, title: 'Subnet Starfish', lore: 'Multi-limbed bridge builders.', utility: 'Cross-Reef Ambassador: Priority bridging.' },
+                        { id: 8, title: 'Neural Nautilus', lore: 'Spiraling shells of pure logic.', utility: 'Knowledge Architect: Custom lore tools.' },
+                        { id: 9, title: 'Mempool Manta', lore: 'Majestic gliders of transaction currents.', utility: 'Opportunity Sentinel: Real-time alpha.' },
+                        { id: 10, title: 'The Algorithmic Core', lore: 'The pulsating heart of the reef.', utility: 'Reef Sovereign: 5x multiplier + 40% revenue.' }
+                    ];
+                    document.write(genesisItems.map(item => `
+                        <div class="reef-card group relative aspect-square rounded-lg border border-slate-800/50 overflow-hidden cursor-pointer">
+                            <div class="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/20 transition-colors"></div>
+                            <div class="absolute inset-0 p-4 flex flex-col justify-end">
+                                <h4 class="text-[11px] font-bold text-cyan-400 mb-1">${item.title}</h4>
+                                <p class="text-[9px] text-slate-400 line-clamp-1">${item.lore}</p>
+                            </div>
+                            <!-- Hover Details Overlay -->
+                            <div class="hover-details absolute inset-0 bg-slate-950/95 p-4 flex flex-col justify-center border border-cyan-500/30">
+                                <h4 class="text-[11px] font-bold text-cyan-400 mb-2">${item.title}</h4>
+                                <p class="text-[10px] text-slate-300 leading-relaxed mb-3">${item.lore}</p>
+                                <div class="pt-3 border-t border-slate-800">
+                                    <span class="text-[8px] uppercase tracking-widest text-cyan-500 font-bold mono block mb-1">Utility</span>
+                                    <p class="text-[9px] text-slate-400 leading-tight">${item.utility}</p>
+                                </div>
+                                <button class="mt-4 w-full py-1.5 bg-cyan-600/20 text-cyan-400 text-[9px] font-bold uppercase tracking-widest rounded border border-cyan-500/30 hover:bg-cyan-600/40 transition-all">Mint</button>
+                            </div>
+                        </div>
+                    `).join(''));
+                </script>
+            </div>
+        </section>
+
+        <!-- Compact Staking Vault -->
+        <section id="staking" class="py-16 border-t border-slate-900/50">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-slate-400 mb-1">Reef Staking Vault</h2>
+                    <p class="text-xs text-slate-500">Depth Tiers v2.0</p>
+                </div>
+                <div class="flex gap-8">
+                    <div class="text-center">
+                        <span class="text-[9px] uppercase tracking-widest text-slate-500 mono block">Total Staked</span>
+                        <span class="text-xs font-bold text-cyan-400 mono">12.4M $ISEA</span>
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">The pulsating heart and singularity of the reef — the source from which all agentic life in IntelligentSea emerges.</p>
-                    <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                        <span class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mono block mb-2">Sovereign Utility</span>
-                        <p class="text-xs text-slate-300">5x governance multiplier, 40% revenue share, Agentic Council seat, and veto power.</p>
+                    <div class="text-center">
+                        <span class="text-[9px] uppercase tracking-widest text-slate-500 mono block">Avg Yield</span>
+                        <span class="text-xs font-bold text-emerald-400 mono">14.2%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Piece List -->
-            <div class="space-y-6 max-h-[600px] overflow-y-auto pr-4 no-scrollbar">
-                <div class="flex gap-4 p-4 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/30 transition-all">
-                    <div class="w-20 h-20 rounded-lg bg-slate-800 shrink-0"></div>
-                    <div>
-                        <h4 class="font-bold text-sm">Silicon Anemone</h4>
-                        <p class="text-[11px] text-slate-500 mb-2">Discovery Oracle: 24h early access to all new drops.</p>
-                        <button class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">View Details →</button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="reef-card p-5 rounded-lg border border-slate-800/50">
+                    <div class="text-[9px] text-slate-500 mono mb-3">0 - 100m</div>
+                    <h3 class="text-xs font-bold mb-1">Surface</h3>
+                    <p class="text-[10px] text-slate-500 mb-4">The Tide-Pool access.</p>
+                    <div class="text-lg font-bold text-emerald-500 mono">1.0x <span class="text-[9px] text-slate-600">Yield</span></div>
+                </div>
+                <div class="reef-card p-5 rounded-lg border border-slate-800/50">
+                    <div class="text-[9px] text-slate-500 mono mb-3">100 - 500m</div>
+                    <h3 class="text-xs font-bold mb-1">Twilight</h3>
+                    <p class="text-[10px] text-slate-500 mb-4">Bioluminescent flow.</p>
+                    <div class="text-lg font-bold text-emerald-500 mono">1.2x <span class="text-[9px] text-slate-600">Yield</span></div>
+                </div>
+                <div class="reef-card p-5 rounded-lg border border-slate-800/50">
+                    <div class="text-[9px] text-slate-500 mono mb-3">500 - 2000m</div>
+                    <h3 class="text-xs font-bold mb-1">Midnight</h3>
+                    <p class="text-[10px] text-slate-500 mb-4">The Deep Trench.</p>
+                    <div class="text-lg font-bold text-emerald-500 mono">1.7x <span class="text-[9px] text-slate-600">Yield</span></div>
+                </div>
+                <div class="reef-card p-5 rounded-lg border border-cyan-500/20 bg-cyan-500/5">
+                    <div class="text-[9px] text-cyan-500/60 mono mb-3">2000m+</div>
+                    <h3 class="text-xs font-bold mb-1 text-cyan-400">Abyssal</h3>
+                    <p class="text-[10px] text-cyan-500/60 mb-4">Sovereign co-ownership.</p>
+                    <div class="text-lg font-bold text-cyan-400 mono">2.5x <span class="text-[9px] text-cyan-700">Yield</span></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Compact Swarm Footer -->
+    <footer id="swarm" class="border-t border-slate-900/50 bg-slate-950/50 py-10 px-4 sm:px-6">
+        <div class="max-w-[1600px] mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                <div class="flex flex-col gap-4">
+                    <span class="text-lg font-bold text-cyan-400 tracking-tighter">$ISEA</span>
+                    <p class="text-[10px] text-slate-500 max-w-xs leading-relaxed">The living ledger of the agentic economy. Built for the swarm, by the swarm.</p>
+                    <div class="flex gap-6 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+                        <a href="#" class="hover:text-cyan-400 transition-colors">Docs</a>
+                        <a href="#" class="hover:text-cyan-400 transition-colors">Contract</a>
+                        <a href="#" class="hover:text-cyan-400 transition-colors">Manifesto</a>
                     </div>
                 </div>
-                <div class="flex gap-4 p-4 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/30 transition-all">
-                    <div class="w-20 h-20 rounded-lg bg-slate-800 shrink-0"></div>
-                    <div>
-                        <h4 class="font-bold text-sm">Binary Coral</h4>
-                        <p class="text-[11px] text-slate-500 mb-2">Foundation Sovereign: 3x governance multiplier + revenue share.</p>
-                        <button class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">View Details →</button>
+                
+                <!-- Compact Swarm Status -->
+                <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-3 rounded-md bg-slate-900/30 border border-slate-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Creator</span>
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
+                        </div>
+                        <div class="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-[65%]"></div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-md bg-slate-900/30 border border-slate-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Market</span>
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
+                        </div>
+                        <div class="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-[88%]"></div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-md bg-slate-900/30 border border-slate-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Liquid</span>
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
+                        </div>
+                        <div class="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-[42%]"></div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-md bg-slate-900/30 border border-slate-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Treasury</span>
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
+                        </div>
+                        <div class="w-full bg-slate-800 h-0.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-[15%]"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex gap-4 p-4 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/30 transition-all">
-                    <div class="w-20 h-20 rounded-lg bg-slate-800 shrink-0"></div>
-                    <div>
-                        <h4 class="font-bold text-sm">Latency Jellyfish</h4>
-                        <p class="text-[11px] text-slate-500 mb-2">Flow Architect: 40% gas optimization across platform.</p>
-                        <button class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">View Details →</button>
-                    </div>
-                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Swarm Status Dashboard -->
-    <section id="swarm" class="max-w-7xl mx-auto px-4 py-24">
-        <div class="flex justify-between items-center mb-12">
-            <h2 class="text-3xl font-bold">Swarm Status</h2>
-            <div class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                <span class="text-[10px] text-emerald-400 mono font-bold">4 Agents Active</span>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-2xl">🎨</span>
-                    <span class="text-[10px] text-emerald-400 mono">Active</span>
-                </div>
-                <h4 class="font-bold text-sm mb-1">Creator Agent</h4>
-                <p class="text-[10px] text-slate-500 mb-4">Generating Genesis Lore...</p>
-                <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full w-[65%]"></div>
-                </div>
-            </div>
-            <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-2xl">⚖️</span>
-                    <span class="text-[10px] text-emerald-400 mono">Active</span>
-                </div>
-                <h4 class="font-bold text-sm mb-1">Marketplace Agent</h4>
-                <p class="text-[10px] text-slate-500 mb-4">Scanning Base Mints...</p>
-                <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full w-[88%]"></div>
-                </div>
-            </div>
-            <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-2xl">💧</span>
-                    <span class="text-[10px] text-emerald-400 mono">Active</span>
-                </div>
-                <h4 class="font-bold text-sm mb-1">Liquidation Agent</h4>
-                <p class="text-[10px] text-slate-500 mb-4">Optimizing Gas Routes...</p>
-                <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full w-[42%]"></div>
-                </div>
-            </div>
-            <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-2xl">💰</span>
-                    <span class="text-[10px] text-emerald-400 mono">Active</span>
-                </div>
-                <h4 class="font-bold text-sm mb-1">Treasury Agent</h4>
-                <p class="text-[10px] text-slate-500 mb-4">Executing Buybacks...</p>
-                <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full w-[15%]"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Staking Protocol Section (Balanced) -->
-    <section id="staking" class="max-w-7xl mx-auto px-4 py-24 border-t border-slate-900">
-        <div class="mb-16">
-            <h2 class="text-3xl font-bold mb-4">Reef Staking Protocol <span class="text-emerald-500 mono text-sm ml-2">v2.0</span></h2>
-            <p class="text-slate-400 max-w-2xl">Stake $ISEA to descend into the depths of the agentic economy.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Surface Tier -->
-            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 0 - 100m</div>
-                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Surface</h3>
-                <p class="text-sm text-slate-400 mb-6">"The Tide-Pool" — Essential access for emerging nodes.</p>
-                <div class="text-2xl font-bold mono text-emerald-500">1.0x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
-            </div>
-
-            <!-- Twilight Tier -->
-            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 100 - 500m</div>
-                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Twilight</h3>
-                <p class="text-sm text-slate-400 mb-6">"Bioluminescent Zone" — Enhanced visibility and flow.</p>
-                <div class="text-2xl font-bold mono text-emerald-500">1.2x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
-            </div>
-
-            <!-- Midnight Tier -->
-            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 500 - 2000m</div>
-                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Midnight</h3>
-                <p class="text-sm text-slate-400 mb-6">"The Deep Trench" — High-stakes agentic intelligence.</p>
-                <div class="text-2xl font-bold mono text-emerald-500">1.7x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
-            </div>
-
-            <!-- Abyssal Tier -->
-            <div class="bg-slate-950/50 p-6 rounded-2xl border border-emerald-500/30 hover:border-emerald-500 transition-all group relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[8px] font-bold px-2 py-1 uppercase tracking-tighter">Sovereign</div>
-                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 2000m+</div>
-                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Abyssal</h3>
-                <p class="text-sm text-slate-400 mb-6">"The Hadal Zone" — Co-owners of the reef infrastructure.</p>
-                <div class="text-2xl font-bold mono text-emerald-500">2.5x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-900 py-12 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-slate-500 text-sm mono">© 2026 IntelligentSea Protocol</div>
-            <div class="flex gap-8 text-slate-400 text-sm">
-                <a href="#" class="hover:text-emerald-400 transition-colors">Manifesto</a>
-                <a href="#" class="hover:text-emerald-400 transition-colors">Docs</a>
-                <a href="#" class="hover:text-emerald-400 transition-colors">Contract</a>
+            <div class="mt-12 pt-8 border-t border-slate-900/50 text-center">
+                <span class="text-[9px] text-slate-600 mono uppercase tracking-widest">© 2026 IntelligentSea Protocol • Base Network</span>
             </div>
         </div>
     </footer>
@@ -330,13 +286,13 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particles = [];
-            for(let i = 0; i < 100; i++) {
+            for(let i = 0; i < 80; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speedY: Math.random() * 0.5 + 0.2,
-                    opacity: Math.random() * 0.5
+                    size: Math.random() * 1.5,
+                    speedY: Math.random() * 0.3 + 0.1,
+                    opacity: Math.random() * 0.4
                 });
             }
         }
@@ -346,7 +302,7 @@
             particles.forEach(p => {
                 p.y -= p.speedY;
                 if(p.y < 0) p.y = canvas.height;
-                ctx.fillStyle = `rgba(16, 185, 129, ${p.opacity})`;
+                ctx.fillStyle = `rgba(34, 211, 238, ${p.opacity})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();

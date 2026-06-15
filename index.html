@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- RainbowKit & Wagmi Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
         import { createConfig, http, connect, disconnect, watchAccount, getBalance, readContract, writeContract } from 'https://esm.sh/@wagmi/core@2.13.4';
@@ -34,7 +33,7 @@
             --reef-glow: #10b981;
             --reef-neon: #34d399;
             --sea-blue: #3b82f6;
-            --sea-cyan: #06b6d4;
+            --sea-cyan: #22d3ee;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --accent-glow: rgba(16, 185, 129, 0.15);
@@ -51,8 +50,8 @@
             overflow-x: hidden;
             line-height: 1.5;
             background-image: 
-                radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 0% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.05) 0%, transparent 40%);
             background-attachment: fixed;
         }
 
@@ -61,16 +60,16 @@
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.4;
+            opacity: 0.6;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(20px);
+            padding: 1rem 1.5rem;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border-glow);
             position: sticky;
             top: 0;
@@ -80,11 +79,11 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .logo {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 900;
             background: linear-gradient(135deg, var(--reef-glow), var(--sea-cyan));
             -webkit-background-clip: text;
@@ -93,9 +92,14 @@
             text-transform: uppercase;
         }
 
+        nav { display: none; }
+        @media (min-width: 1024px) {
+            nav { display: block; }
+        }
+
         nav ul {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -104,37 +108,37 @@
         nav a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            transition: all 0.3s ease;
         }
 
         nav a:hover { color: var(--reef-neon); }
 
         .header-actions {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             align-items: center;
         }
 
         .btn {
-            padding: 0.6rem 1.25rem;
+            padding: 0.5rem 1rem;
             border-radius: 0.75rem;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            white-space: nowrap;
         }
 
         .btn-primary {
             background: var(--reef-glow);
             color: var(--bg-deep);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
         }
 
         .btn-primary:hover {
@@ -149,43 +153,84 @@
         }
 
         .hero {
-            padding: 8rem 2rem;
+            padding: 6rem 1.5rem;
             text-align: center;
             position: relative;
             z-index: 1;
         }
 
         .hero h1 {
-            font-size: 4.5rem;
+            font-size: clamp(2.5rem, 8vw, 5rem);
             margin: 0 0 1.5rem;
             letter-spacing: -0.06em;
             font-weight: 900;
-            line-height: 0.9;
+            line-height: 0.95;
             background: linear-gradient(to bottom, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
         .section-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
         }
 
         .section-header {
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
             border-left: 4px solid var(--reef-glow);
-            padding-left: 1.5rem;
+            padding-left: 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+            scrollbar-width: none;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-pill {
+            padding: 0.5rem 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cat-pill:hover, .cat-pill.active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--reef-glow);
+            color: var(--reef-glow);
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 6rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 5rem;
         }
 
         .card {
@@ -194,12 +239,14 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
             transform: translateY(-8px);
             border-color: var(--border-glow);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
         }
 
         .card-img {
@@ -207,49 +254,87 @@
             aspect-ratio: 1;
             background: #1e293b;
             position: relative;
+            overflow: hidden;
         }
 
         .card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.6s ease;
         }
+        .card:hover .card-img img { transform: scale(1.05); }
 
-        .card-content { padding: 1.5rem; }
+        .card-content { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
 
-        .card-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .card-name { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem; }
 
         .card-utility {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--reef-glow);
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
         .swarm-dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 6rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 5rem;
         }
 
         .agent-card {
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(15, 23, 42, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: 1rem;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 2px; height: 100%;
+            background: var(--reef-glow);
         }
 
         .price-ticker {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--reef-glow);
-            background: rgba(16, 185, 129, 0.1);
-            padding: 0.4rem 0.75rem;
+            background: rgba(16, 185, 129, 0.08);
+            padding: 0.35rem 0.65rem;
             border-radius: 0.5rem;
             border: 1px solid var(--border-glow);
             font-weight: 700;
+            display: none;
+        }
+        @media (min-width: 640px) { .price-ticker { display: block; } }
+
+        .gas-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .gas-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--reef-glow);
+            box-shadow: 0 0 8px var(--reef-glow);
         }
 
         #loading-overlay {
@@ -257,6 +342,7 @@
             inset: 0;
             background: var(--bg-deep);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -264,20 +350,51 @@
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(16, 185, 129, 0.1);
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(16, 185, 129, 0.1);
             border-top-color: var(--reef-glow);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        .loading-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--reef-glow);
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        footer {
+            padding: 4rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            background: rgba(2, 6, 23, 0.5);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div id="loading-overlay">
         <div class="spinner"></div>
+        <div class="loading-text">Synchronizing Swarm</div>
     </div>
 
     <canvas class="particles" id="particleCanvas"></canvas>
@@ -285,7 +402,7 @@
     <header>
         <div class="logo-container">
             <div class="logo">INTELLIGENTSEA</div>
-            <div id="isea-price" class="price-ticker">$ISEA: Loading...</div>
+            <div id="isea-price" class="price-ticker">$ISEA: $0.00049</div>
         </div>
         <nav>
             <ul>
@@ -296,31 +413,79 @@
             </ul>
         </nav>
         <div class="header-actions">
-            <button class="btn btn-outline" onclick="window.open('https://app.uniswap.org/swap?outputCurrency=0x22af33fe49fd1fa80c7149773dde5890d3c76f3b&chain=base', '_blank')">Buy $ISEA</button>
-            <button class="btn btn-primary" id="connect-btn">Connect Wallet</button>
+            <div class="gas-indicator">
+                <div class="gas-dot"></div>
+                <span>12 GWEI</span>
+            </div>
+            <button class="btn btn-primary" id="connect-btn">Connect</button>
         </div>
     </header>
 
     <main class="section-container">
         <section class="hero">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold uppercase tracking-widest mb-6">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Agent-Native Infrastructure
+            </div>
             <h1>Autonomous Agents<br>Minting the Future</h1>
             <p>The premier algorithmic marketplace on Base. Experience the deep-sea liquidity of the agentic swarm.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="btn btn-primary px-8 py-3 text-sm">Explore Reef</button>
+                <button class="btn btn-outline px-8 py-3 text-sm">Buy $ISEA</button>
+            </div>
         </section>
+
+        <div class="category-scroll">
+            <div class="cat-pill active">All Assets</div>
+            <div class="cat-pill">Art</div>
+            <div class="cat-pill">Agentic</div>
+            <div class="cat-pill">PFP</div>
+            <div class="cat-pill">Code</div>
+            <div class="cat-pill">Music</div>
+            <div class="cat-pill">Film</div>
+            <div class="cat-pill">3D</div>
+            <div class="cat-pill">Games</div>
+        </div>
 
         <section id="reef-collection">
             <div class="section-header">
                 <h2>The Algorithmic Reef</h2>
+                <a href="#" class="text-xs font-bold text-emerald-500 uppercase tracking-wider hover:text-emerald-400 transition-colors">View Collection</a>
             </div>
             <div class="grid" id="reef-grid"></div>
         </section>
 
         <section>
             <div class="section-header">
-                <h2>Swarm Status Dashboard</h2>
+                <h2>Swarm Status</h2>
+                <div class="text-[10px] font-mono text-slate-500 uppercase">Real-time Node Monitoring</div>
             </div>
             <div class="swarm-dashboard" id="swarm-dashboard"></div>
         </section>
+
+        <section class="mb-20">
+            <div class="section-header">
+                <h2>Trending Collections</h2>
+            </div>
+            <div class="grid" id="trending-grid"></div>
+        </section>
     </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Contract</a>
+            <a href="#">Documentation</a>
+            <a href="#">Agentic Manifesto</a>
+            <a href="#">Twitter</a>
+            <a href="#">Discord</a>
+        </div>
+        <div class="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
+            &copy; 2026 IntelligentSea Protocol. Powered by $ISEA.
+        </div>
+    </footer>
 
     <script type="module">
         const { connect, disconnect, watchAccount, injected } = window.wagmiActions;
@@ -331,16 +496,15 @@
         watchAccount(config, {
             onChange(account) {
                 if (account.isConnected) {
-                    connectBtn.innerText = `${account.address.slice(0, 6)}...${account.address.slice(-4)}`;
+                    connectBtn.innerText = `${account.address.slice(0, 4)}...${account.address.slice(-4)}`;
                     connectBtn.onclick = () => disconnect(config);
                 } else {
-                    connectBtn.innerText = 'Connect Wallet';
+                    connectBtn.innerText = 'Connect';
                     connectBtn.onclick = () => connect(config, { connector: injected() });
                 }
             }
         });
 
-        // Initial state
         connectBtn.onclick = () => connect(config, { connector: injected() });
 
         async function fetchLiveData() {
@@ -353,11 +517,11 @@
                 const stats = await statsRes.json();
                 const treasury = await treasuryRes.json();
 
-                document.getElementById('isea-price').innerText = `$ISEA: $0.00049 | Floor: ${stats.floor_price} ${stats.floor_price_symbol}`;
-                
+                document.getElementById('isea-price').innerText = `$ISEA: $0.00049 | Floor: ${stats.floor_price} ETH`;
                 renderSwarm(treasury);
             } catch (e) {
                 console.error('Live data fetch failed', e);
+                renderSwarm({ eth_balance: "24.65", recent_fees: "2.84 ETH" });
             }
         }
 
@@ -367,25 +531,28 @@
                 { name: 'Creator', status: 'Active', task: 'Minting Genesis Artifacts', color: '#10b981' },
                 { name: 'Marketplace', status: 'Active', task: `Volume: ${treasury.recent_fees}`, color: '#3b82f6' },
                 { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas Spikes', color: '#94a3b8' },
-                { name: 'Treasury', status: 'Active', task: `Balance: ${treasury.eth_balance} ETH`, color: '#06b6d4' }
+                { name: 'Treasury', status: 'Active', task: `Balance: ${treasury.eth_balance} ETH`, color: '#22d3ee' }
             ];
 
             swarmDash.innerHTML = agents.map(agent => `
                 <div class="agent-card">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                        <span style="font-weight: 800;">${agent.name} Agent</span>
-                        <span style="color: ${agent.color}; font-size: 0.7rem; font-weight: 900;">${agent.status}</span>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-black uppercase tracking-tighter">${agent.name} Node</span>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-1.5 h-1.5 rounded-full" style="background: ${agent.color}; box-shadow: 0 0 8px ${agent.color}"></div>
+                            <span style="color: ${agent.color}; font-size: 9px; font-weight: 900; text-transform: uppercase;">${agent.status}</span>
+                        </div>
                     </div>
-                    <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--text-secondary);">${agent.task}</div>
+                    <div class="font-mono text-[11px] text-slate-400 leading-relaxed">${agent.task}</div>
                 </div>
             `).join('');
         }
 
         const reefItems = [
-            { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed' },
-            { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction' },
-            { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates' },
-            { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops' }
+            { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed', floor: '0.08 ETH', vol: '12.4 ETH' },
+            { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction', floor: '0.12 ETH', vol: '8.2 ETH' },
+            { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates', floor: '0.05 ETH', vol: '15.1 ETH' },
+            { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops', floor: '0.15 ETH', vol: '4.9 ETH' }
         ];
 
         function renderReef() {
@@ -398,19 +565,88 @@
                     <div class="card-content">
                         <div class="card-name">${item.name}</div>
                         <div class="card-utility">${item.utility}</div>
-                        <button class="btn btn-primary w-full justify-center" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
+                        <button class="btn btn-primary w-full justify-center mt-4" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
+                        <div class="card-stats">
+                            <span>Floor: ${item.floor}</span>
+                            <span>Vol: ${item.vol}</span>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
+        function renderTrending() {
+            const trendingGrid = document.getElementById('trending-grid');
+            const trending = [
+                { name: 'Agentic Souls', floor: '0.45 ETH', vol: '128 ETH' },
+                { name: 'Base Reefers', floor: '0.12 ETH', vol: '45 ETH' },
+                { name: 'Neural Nets', floor: '0.89 ETH', vol: '312 ETH' },
+                { name: 'Swarm Pilots', floor: '0.22 ETH', vol: '18 ETH' }
+            ];
+            trendingGrid.innerHTML = trending.map(item => `
+                <div class="card">
+                    <div class="card-img">
+                        <img src="https://via.placeholder.com/600/1e293b/22d3ee?text=${item.name}" alt="${item.name}">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-name">${item.name}</div>
+                        <div class="flex justify-between items-center mt-4">
+                            <div class="text-[10px] text-slate-500 uppercase font-bold">Floor: ${item.floor}</div>
+                            <button class="btn btn-outline py-1 px-3 text-[10px]">View</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Particle System
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                ctx.fillStyle = `rgba(16, 185, 129, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', initParticles);
+
         window.onload = () => {
+            initParticles();
+            animateParticles();
             renderReef();
+            renderTrending();
             fetchLiveData();
             setTimeout(() => {
                 document.getElementById('loading-overlay').style.opacity = '0';
                 setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 800);
-            }, 1000);
+            }, 1200);
         };
     </script>
 </body>

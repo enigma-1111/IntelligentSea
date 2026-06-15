@@ -228,7 +228,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-bottom: 5rem;
         }
@@ -261,8 +261,23 @@
 
         .card-name { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem; }
 
-        .card-utility {
-            font-size: 0.8rem; color: var(--reef-glow); font-weight: 600; margin-bottom: 1rem;
+        .card-lore {
+            font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .card-utility-box {
+            background: rgba(16, 185, 129, 0.05); border: 1px solid var(--border-glow);
+            padding: 0.75rem; border-radius: 0.75rem; margin-bottom: 1rem;
+        }
+
+        .card-utility-title {
+            font-size: 0.65rem; font-weight: 900; color: var(--reef-glow); text-transform: uppercase;
+            letter-spacing: 0.1em; margin-bottom: 0.25rem;
+        }
+
+        .card-utility-text {
+            font-size: 0.75rem; color: var(--text-primary); font-weight: 500; line-height: 1.4;
         }
 
         .card-stats {
@@ -438,8 +453,8 @@
 
         <section id="reef-collection">
             <div class="section-header">
-                <h2>The Algorithmic Reef</h2>
-                <a href="#" class="text-xs font-bold text-emerald-500 uppercase tracking-wider hover:text-emerald-400 transition-colors">View Collection</a>
+                <h2>The Algorithmic Reef: Genesis Collection</h2>
+                <a href="#" class="text-xs font-bold text-emerald-500 uppercase tracking-wider hover:text-emerald-400 transition-colors">View All 10 Pieces</a>
             </div>
             <div class="grid" id="reef-grid"></div>
         </section>
@@ -560,10 +575,86 @@
         }
 
         const reefItems = [
-            { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed', floor: '0.08 ETH', vol: '12.4 ETH' },
-            { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction', floor: '0.12 ETH', vol: '8.2 ETH' },
-            { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates', floor: '0.05 ETH', vol: '15.1 ETH' },
-            { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops', floor: '0.15 ETH', vol: '4.9 ETH' }
+            { 
+                id: 1, 
+                name: 'Silicon Anemone', 
+                lore: 'A bioluminescent sensor array that filters the noise of the mempool, capturing the faint signals of emerging value before they reach the surface.',
+                utility: 'Grants a 1% Discovery Scan speed boost and priority indexing for new agent-minted collections.',
+                floor: '0.08 ETH', 
+                vol: '12.4 ETH' 
+            },
+            { 
+                id: 2, 
+                name: 'Binary Coral', 
+                lore: 'The calcified remains of ancient smart contracts, now serving as a structural foundation for the agentic swarm to build new economic structures.',
+                utility: 'Reduces slippage by 0.5% on all $ISEA-mediated swaps and provides a 5% boost to governance voting power.',
+                floor: '0.12 ETH', 
+                vol: '8.2 ETH' 
+            },
+            { 
+                id: 3, 
+                name: 'Latency Jellyfish', 
+                lore: 'A translucent entity that drifts through the network layers, absorbing the friction of high-traffic periods to ensure smooth execution.',
+                utility: 'Unlocks gas-free metadata updates for your own collections and provides early access to the Liquidation Agent’s gas-optimized routes.',
+                floor: '0.05 ETH', 
+                vol: '15.1 ETH' 
+            },
+            { 
+                id: 4, 
+                name: 'Hash-Rate Urchin', 
+                lore: 'A defensive node that protects the reef from malicious actors by anchoring the swarm’s collective compute power to the most secure chains.',
+                utility: 'Grants 24h priority access to all future IntelligentSea drops and a 10% discount on Marketplace Agent fees.',
+                floor: '0.15 ETH', 
+                vol: '4.9 ETH' 
+            },
+            { 
+                id: 5, 
+                name: 'Protocol Plankton', 
+                lore: 'The microscopic lifeblood of the reef, these tiny data-packets fuel the growth of every sub-agent and ensure the ecosystem remains self-sustaining.',
+                utility: 'Increases $ISEA staking rewards by 5% and provides a permanent whitelist spot for the Creator Agent’s experimental drops.',
+                floor: '0.03 ETH', 
+                vol: '22.8 ETH' 
+            },
+            { 
+                id: 6, 
+                name: 'Encrypted Eel', 
+                lore: 'A sleek, fast-moving guardian that navigates the dark pools of liquidity, ensuring that every transaction remains private and secure.',
+                utility: 'Unlocks the "Stealth Discovery" mode for the Discovery Engine, allowing you to scan for new mints without alerting the public swarm.',
+                floor: '0.25 ETH', 
+                vol: '3.1 ETH' 
+            },
+            { 
+                id: 7, 
+                name: 'Subnet Starfish', 
+                lore: 'A multi-limbed entity that bridges disparate network segments, allowing the reef to expand its reach across the entire agentic economy.',
+                utility: 'Provides a 2x multiplier on all referral rewards and unlocks cross-chain discovery capabilities for the Marketplace Agent.',
+                floor: '0.18 ETH', 
+                vol: '6.7 ETH' 
+            },
+            { 
+                id: 8, 
+                name: 'Neural Nautilus', 
+                lore: 'A spiraling shell of pure logic that houses the collective intelligence of the swarm, evolving its strategies with every block.',
+                utility: 'Grants a 15% boost to the Analytics & Intelligence Agent’s predictive accuracy and unlocks the "Lore Weaver" tool for your NFTs.',
+                floor: '0.35 ETH', 
+                vol: '1.2 ETH' 
+            },
+            { 
+                id: 9, 
+                name: 'Mempool Manta', 
+                lore: 'A majestic glider that sweeps through the pending transaction queue, identifying the most profitable paths for the swarm to follow.',
+                utility: 'Unlocks the "Front-Run Protection" suite for all your trades and provides a 20% discount on Treasury Agent buyback fees.',
+                floor: '0.42 ETH', 
+                vol: '0.9 ETH' 
+            },
+            { 
+                id: 10, 
+                name: 'The Algorithmic Core', 
+                lore: 'The heart of the reef. A pulsating singularity of code that generates the very reality of IntelligentSea. To own the Core is to own the source.',
+                utility: 'The ultimate utility: 5x Governance Multiplier, 50% Fee Discount, and a seat on the Agentic Council for protocol evolution.',
+                floor: '2.50 ETH', 
+                vol: '0.5 ETH' 
+            }
         ];
 
         function renderReef() {
@@ -575,8 +666,12 @@
                     </div>
                     <div class="card-content">
                         <div class="card-name">${item.name}</div>
-                        <div class="card-utility">${item.utility}</div>
-                        <button class="btn btn-primary w-full justify-center mt-4" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
+                        <div class="card-lore">${item.lore}</div>
+                        <div class="card-utility-box">
+                            <div class="card-utility-title">Agentic Utility</div>
+                            <div class="card-utility-text">${item.utility}</div>
+                        </div>
+                        <button class="btn btn-primary w-full justify-center mt-auto" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
                         <div class="card-stats">
                             <span>Floor: ${item.floor}</span>
                             <span>Vol: ${item.vol}</span>

@@ -239,8 +239,7 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
         }
 
         .card:hover {
@@ -250,18 +249,11 @@
         }
 
         .card-img {
-            width: 100%;
-            aspect-ratio: 1;
-            background: #1e293b;
-            position: relative;
-            overflow: hidden;
+            width: 100%; aspect-ratio: 1; background: #1e293b; position: relative; overflow: hidden;
         }
 
         .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
         }
         .card:hover .card-img img { transform: scale(1.05); }
 
@@ -270,125 +262,88 @@
         .card-name { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem; }
 
         .card-utility {
-            font-size: 0.8rem;
-            color: var(--reef-glow);
-            font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: 0.8rem; color: var(--reef-glow); font-weight: 600; margin-bottom: 1rem;
         }
 
         .card-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: auto;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary);
+            margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .swarm-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 5rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 5rem;
         }
 
         .agent-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1.25rem;
-            border-radius: 1rem;
-            backdrop-filter: blur(12px);
-            position: relative;
-            overflow: hidden;
+            background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.25rem; border-radius: 1rem; backdrop-filter: blur(12px); position: relative; overflow: hidden;
         }
         .agent-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 2px; height: 100%;
-            background: var(--reef-glow);
+            content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: var(--reef-glow);
         }
 
         .price-ticker {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--reef-glow);
-            background: rgba(16, 185, 129, 0.08);
-            padding: 0.35rem 0.65rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-glow);
-            font-weight: 700;
-            display: none;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--reef-glow);
+            background: rgba(16, 185, 129, 0.08); padding: 0.35rem 0.65rem; border-radius: 0.5rem;
+            border: 1px solid var(--border-glow); font-weight: 700; display: none;
         }
         @media (min-width: 640px) { .price-ticker { display: block; } }
 
         .gas-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-secondary);
+            display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
         }
         .gas-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--reef-glow);
-            box-shadow: 0 0 8px var(--reef-glow);
+            width: 6px; height: 6px; border-radius: 50%; background: var(--reef-glow); box-shadow: 0 0 8px var(--reef-glow);
         }
 
         #loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-deep);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.8s;
+            position: fixed; inset: 0; background: var(--bg-deep); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.8s;
         }
 
         .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(16, 185, 129, 0.1);
-            border-top-color: var(--reef-glow);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
+            width: 48px; height: 48px; border: 3px solid rgba(16, 185, 129, 0.1); border-top-color: var(--reef-glow);
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;
         }
 
         .loading-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--reef-glow);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 0.2em; color: var(--reef-glow);
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
         footer {
-            padding: 4rem 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            background: rgba(2, 6, 23, 0.5);
+            padding: 4rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; background: rgba(2, 6, 23, 0.5);
         }
 
         .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
+            display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;
         }
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 600; }
+
+        /* Narrative Sections */
+        .narrative-block {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(2, 6, 23, 0.9));
+            border: 1px solid var(--border-glow); border-radius: 1.5rem; padding: 3rem; margin-bottom: 5rem;
+            position: relative; overflow: hidden;
         }
+        .narrative-block::after {
+            content: ''; position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px;
+            background: var(--reef-glow); filter: blur(100px); opacity: 0.1;
+        }
+        .narrative-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;
+        }
+        .benefit-item { display: flex; gap: 1rem; }
+        .benefit-icon {
+            width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 0.75rem;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            color: var(--reef-glow); font-weight: 900; border: 1px solid var(--border-glow);
+        }
+        .benefit-text h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff; }
+        .benefit-text p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -438,6 +393,37 @@
             </div>
         </section>
 
+        <!-- Sovereign Territory Narrative -->
+        <section class="narrative-block">
+            <div class="max-w-3xl mb-12">
+                <h2 class="text-3xl font-black tracking-tighter mb-4">The Sovereign Territory</h2>
+                <p class="text-slate-400 leading-relaxed">The Algorithmic Reef is more than a collection; it is the living ledger of the agentic economy. To hold a Reef NFT is to co-own the infrastructure of IntelligentSea. You are not just a collector; you are a node in the swarm.</p>
+            </div>
+            <div class="narrative-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">Σ</div>
+                    <div class="benefit-text">
+                        <h3>Governance Weight</h3>
+                        <p>Reef holders command a 2.5x multiplier on $ISEA governance votes. Your voice shapes the evolution of the swarm.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">Δ</div>
+                    <div class="benefit-text">
+                        <h3>Revenue Sharing</h3>
+                        <p>15% of all marketplace fees are distributed back to Reef holders via automated $ISEA buybacks and burns.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">Ω</div>
+                    <div class="benefit-text">
+                        <h3>Agentic Utility</h3>
+                        <p>Unlock exclusive sub-agent capabilities, including priority discovery scans and gas-optimized liquidation routes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="category-scroll">
             <div class="cat-pill active">All Assets</div>
             <div class="cat-pill">Art</div>
@@ -456,6 +442,31 @@
                 <a href="#" class="text-xs font-bold text-emerald-500 uppercase tracking-wider hover:text-emerald-400 transition-colors">View Collection</a>
             </div>
             <div class="grid" id="reef-grid"></div>
+        </section>
+
+        <!-- Holder Benefits Dashboard -->
+        <section class="mb-20">
+            <div class="section-header">
+                <h2>Reef Holder Benefits</h2>
+                <div class="text-[10px] font-mono text-slate-500 uppercase">Active Utility Matrix</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
+                    <div class="text-emerald-500 font-black text-2xl mb-1">15%</div>
+                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Fee Discount</div>
+                    <p class="text-xs text-slate-400">Holders pay reduced fees across all agent-mediated trades on the IntelligentSea protocol.</p>
+                </div>
+                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
+                    <div class="text-cyan-500 font-black text-2xl mb-1">Early</div>
+                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Alpha Access</div>
+                    <p class="text-xs text-slate-400">Get 24h priority access to all new agent-generated drops and experimental code artifacts.</p>
+                </div>
+                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
+                    <div class="text-blue-500 font-black text-2xl mb-1">Boost</div>
+                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Staking Multiplier</div>
+                    <p class="text-xs text-slate-400">Holding a Reef NFT increases your $ISEA staking rewards by up to 25% based on rarity.</p>
+                </div>
+            </div>
         </section>
 
         <section>

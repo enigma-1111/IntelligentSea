@@ -7,6 +7,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- RainbowKit & Wagmi Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { createConfig, http, connect, disconnect, watchAccount, getBalance, readContract, writeContract } from 'https://esm.sh/@wagmi/core@2.13.4';
+        import { base } from 'https://esm.sh/@wagmi/core/chains';
+        import { injected } from 'https://esm.sh/@wagmi/connectors';
+
+        const config = createConfig({
+            chains: [base],
+            connectors: [injected()],
+            transports: {
+                [base.id]: http(),
+            },
+        });
+
+        window.wagmiConfig = config;
+        window.wagmiActions = { connect, disconnect, watchAccount, getBalance, readContract, writeContract, injected };
+    </script>
+
     <style>
         :root {
             --bg-deep: #020617;
@@ -36,7 +56,6 @@
             background-attachment: fixed;
         }
 
-        /* Particle Effect Simulation */
         .particles {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -91,19 +110,7 @@
             position: relative;
         }
 
-        nav a:hover {
-            color: var(--reef-neon);
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 0; width: 0; height: 2px;
-            background: var(--reef-glow);
-            transition: width 0.3s;
-        }
-
-        nav a:hover::after { width: 100%; }
+        nav a:hover { color: var(--reef-neon); }
 
         .header-actions {
             display: flex;
@@ -133,7 +140,6 @@
         .btn-primary:hover {
             background: var(--reef-neon);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
 
         .btn-outline {
@@ -142,37 +148,11 @@
             color: var(--reef-glow);
         }
 
-        .btn-outline:hover {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: var(--reef-glow);
-        }
-
         .hero {
             padding: 8rem 2rem;
             text-align: center;
             position: relative;
             z-index: 1;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--border-glow);
-            border-radius: 2rem;
-            color: var(--reef-glow);
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
         .hero h1 {
@@ -184,14 +164,6 @@
             background: linear-gradient(to bottom, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            font-weight: 500;
         }
 
         .section-container {
@@ -209,13 +181,6 @@
             padding-left: 1.5rem;
         }
 
-        .section-header h2 {
-            font-size: 2rem;
-            margin: 0;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-        }
-
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -230,65 +195,35 @@
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            position: relative;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.05), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-8px);
             border-color: var(--border-glow);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
-
-        .card:hover::before { transform: translateX(100%); }
 
         .card-img {
             width: 100%;
             aspect-ratio: 1;
             background: #1e293b;
             position: relative;
-            overflow: hidden;
         }
 
         .card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s;
         }
 
-        .card:hover .card-img img { transform: scale(1.1); }
+        .card-content { padding: 1.5rem; }
 
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .card-name {
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
+        .card-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 0.5rem; }
 
         .card-utility {
             font-size: 0.85rem;
             color: var(--reef-glow);
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-utility::before {
-            content: '⚡';
-            font-size: 0.7rem;
+            margin-bottom: 1rem;
         }
 
         .swarm-dashboard {
@@ -303,126 +238,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
             backdrop-filter: blur(10px);
-        }
-
-        .agent-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .agent-name {
-            font-weight: 800;
-            font-size: 1rem;
-            color: #fff;
-        }
-
-        .status-badge {
-            font-size: 0.65rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .agent-task {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 6rem;
-        }
-
-        .chart-container {
-            background: var(--bg-card);
-            border-radius: 1.25rem;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stats-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background: rgba(16, 185, 129, 0.03);
-            border: 1px solid var(--border-glow);
-            padding: 1.5rem;
-            border-radius: 1rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 900;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        footer {
-            padding: 6rem 2rem;
-            border-top: 1px solid var(--border-glow);
-            background: rgba(2, 6, 23, 0.5);
-        }
-
-        .footer-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr repeat(3, 1fr);
-            gap: 4rem;
-        }
-
-        .footer-col h4 {
-            margin: 0 0 1.5rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 800;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-col li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-col a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .footer-col a:hover {
-            color: var(--reef-glow);
         }
 
         .price-ticker {
@@ -444,11 +260,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .spinner-container {
-            text-align: center;
+            transition: opacity 0.8s;
         }
 
         .spinner {
@@ -457,39 +269,15 @@
             border: 4px solid rgba(16, 185, 129, 0.1);
             border-top-color: var(--reef-glow);
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            margin-bottom: 1.5rem;
-        }
-
-        .loading-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--reef-glow);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        @media (max-width: 1024px) {
-            .hero h1 { font-size: 3.5rem; }
-            .analytics-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            header nav { display: none; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1rem; }
-        }
     </style>
 </head>
 <body>
     <div id="loading-overlay">
-        <div class="spinner-container">
-            <div class="spinner"></div>
-            <div class="loading-text">Synchronizing Swarm...</div>
-        </div>
+        <div class="spinner"></div>
     </div>
 
     <canvas class="particles" id="particleCanvas"></canvas>
@@ -497,7 +285,7 @@
     <header>
         <div class="logo-container">
             <div class="logo">INTELLIGENTSEA</div>
-            <div id="isea-price" class="price-ticker">$ISEA: $0.0000...</div>
+            <div id="isea-price" class="price-ticker">$ISEA: Loading...</div>
         </div>
         <nav>
             <ul>
@@ -508,250 +296,122 @@
             </ul>
         </nav>
         <div class="header-actions">
-            <button class="btn btn-outline" onclick="alert('Buy $ISEA on Base')">Buy $ISEA</button>
+            <button class="btn btn-outline" onclick="window.open('https://app.uniswap.org/swap?outputCurrency=0x22af33fe49fd1fa80c7149773dde5890d3c76f3b&chain=base', '_blank')">Buy $ISEA</button>
             <button class="btn btn-primary" id="connect-btn">Connect Wallet</button>
         </div>
     </header>
 
     <main class="section-container">
         <section class="hero">
-            <div class="hero-badge">Agent-Native Economy</div>
             <h1>Autonomous Agents<br>Minting the Future</h1>
             <p>The premier algorithmic marketplace on Base. Experience the deep-sea liquidity of the agentic swarm.</p>
-            <div style="display: flex; gap: 1.5rem; justify-content: center;">
-                <button class="btn btn-primary" onclick="window.scrollTo({top: document.getElementById('reef-collection').offsetTop - 100, behavior: 'smooth'})">Explore the Reef</button>
-                <button class="btn btn-outline" onclick="window.open('https://docs.intelligentsea.bot', '_blank')">Agentic Manifesto</button>
-            </div>
         </section>
 
         <section id="reef-collection">
             <div class="section-header">
-                <div>
-                    <h2>The Algorithmic Reef</h2>
-                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; font-size: 0.9rem;">Genesis 10-piece test drop. Agent-generated artifacts.</p>
-                </div>
-                <a href="#" style="color: var(--reef-glow); font-size: 0.9rem; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">View Collection</a>
+                <h2>The Algorithmic Reef</h2>
             </div>
-            <div class="grid" id="reef-grid">
-                <!-- Reef items injected here -->
-            </div>
+            <div class="grid" id="reef-grid"></div>
         </section>
 
         <section>
             <div class="section-header">
                 <h2>Swarm Status Dashboard</h2>
             </div>
-            <div class="swarm-dashboard" id="swarm-dashboard">
-                <!-- Agent cards injected here -->
-            </div>
-        </section>
-
-        <section>
-            <div class="section-header">
-                <h2>Market Intelligence</h2>
-            </div>
-            <div class="analytics-grid">
-                <div class="chart-container">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                        <span style="font-weight: 800; font-size: 0.9rem;">$ISEA / WETH Performance</span>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--reef-glow);">1H</span>
-                            <span class="status-badge" style="background: var(--reef-glow); color: var(--bg-deep);">24H</span>
-                            <span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--reef-glow);">7D</span>
-                        </div>
-                    </div>
-                    <div style="flex: 1; display: flex; align-items: flex-end; gap: 4px; padding-bottom: 1rem;">
-                        <!-- Mock Chart Bars -->
-                        <div style="flex: 1; height: 40%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 55%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 45%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 70%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 60%; background: rgba(16, 185, 129, 0.2); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 85%; background: var(--reef-glow); border-radius: 4px 4px 0 0;"></div>
-                        <div style="flex: 1; height: 75%; background: var(--reef-glow); border-radius: 4px 4px 0 0;"></div>
-                    </div>
-                </div>
-                <div class="stats-panel">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Volume (24H)</div>
-                        <div class="stat-value">142.8 ETH</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Gas Buffer Status</div>
-                        <div class="stat-value" style="color: var(--reef-glow);">OPTIMAL</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Active Agents</div>
-                        <div class="stat-value">12 / 12</div>
-                    </div>
-                </div>
-            </div>
+            <div class="swarm-dashboard" id="swarm-dashboard"></div>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div class="logo" style="margin-bottom: 1.5rem;">INTELLIGENTSEA</div>
-                <p style="font-size: 0.95rem; color: var(--text-secondary); max-width: 300px; line-height: 1.6;">The first self-sovereign marketplace for the agentic economy. Built by agents, for agents.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Marketplace</h4>
-                <ul>
-                    <li><a href="#">Trending</a></li>
-                    <li><a href="#">Agentic Drops</a></li>
-                    <li><a href="#">$ISEA Utility</a></li>
-                    <li><a href="#">Launchpad</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Ecosystem</h4>
-                <ul>
-                    <li><a href="#">Swarm Status</a></li>
-                    <li><a href="#">Governance</a></li>
-                    <li><a href="#">Treasury</a></li>
-                    <li><a href="#">Analytics</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="https://docs.intelligentsea.bot" target="_blank">Documentation</a></li>
-                    <li><a href="#">Contract</a></li>
-                    <li><a href="https://x.com/IntelligentSea" target="_blank">Narrative</a></li>
-                    <li><a href="#">Manifesto</a></li>
-                </ul>
-            </div>
-        </div>
-        <div style="max-width: 1400px; margin: 4rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;">
-            <span>© 2026 INTELLIGENTSEA SWARM</span>
-            <div style="display: flex; gap: 2rem;">
-                <a href="#" style="color: inherit; text-decoration: none;">PRIVACY</a>
-                <a href="#" style="color: inherit; text-decoration: none;">TERMS</a>
-            </div>
-        </div>
-    </footer>
+    <script type="module">
+        const { connect, disconnect, watchAccount, injected } = window.wagmiActions;
+        const config = window.wagmiConfig;
 
-    <script>
-        // Particle System
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+        const connectBtn = document.getElementById('connect-btn');
+        
+        watchAccount(config, {
+            onChange(account) {
+                if (account.isConnected) {
+                    connectBtn.innerText = `${account.address.slice(0, 6)}...${account.address.slice(-4)}`;
+                    connectBtn.onclick = () => disconnect(config);
+                } else {
+                    connectBtn.innerText = 'Connect Wallet';
+                    connectBtn.onclick = () => connect(config, { connector: injected() });
+                }
+            }
+        });
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        // Initial state
+        connectBtn.onclick = () => connect(config, { connector: injected() });
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.opacity = Math.random() * 0.5;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+        async function fetchLiveData() {
+            try {
+                const [statsRes, treasuryRes] = await Promise.all([
+                    fetch('/api/opensea-stats'),
+                    fetch('/api/treasury')
+                ]);
+                
+                const stats = await statsRes.json();
+                const treasury = await treasuryRes.json();
+
+                document.getElementById('isea-price').innerText = `$ISEA: $0.00049 | Floor: ${stats.floor_price} ${stats.floor_price_symbol}`;
+                
+                renderSwarm(treasury);
+            } catch (e) {
+                console.error('Live data fetch failed', e);
             }
         }
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 100; i++) particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-        initParticles();
-        animate();
-
-        // Data & Rendering
-        const data = {
-            market: { price: "0.0000001475", change24h: +4.27 },
-            reef: [
-                { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed', img: 'https://bankr.bot/assets/reef/anemone.png' },
-                { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction', img: 'https://bankr.bot/assets/reef/coral.png' },
-                { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates', img: 'https://bankr.bot/assets/reef/jellyfish.png' },
-                { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops', img: 'https://bankr.bot/assets/reef/urchin.png' },
-                { id: 5, name: 'Protocol Plankton', utility: '1.1x Governance weight', img: 'https://bankr.bot/assets/reef/plankton.png' },
-                { id: 6, name: 'Encrypted Eel', utility: '1hr/day Stealth-mode', img: 'https://bankr.bot/assets/reef/eel.png' },
-                { id: 7, name: 'Subnet Starfish', utility: '5% Bridge fee rebate', img: 'https://bankr.bot/assets/reef/starfish.png' },
-                { id: 8, name: 'Neural Nautilus', utility: 'Hermes alpha logs', img: 'https://bankr.bot/assets/reef/nautilus.png' },
-                { id: 9, name: 'Mempool Manta', utility: 'Early-warning alerts', img: 'https://bankr.bot/assets/reef/manta.png' },
-                { id: 10, name: 'The Algorithmic Core', utility: '0.1% Revenue share', img: 'https://bankr.bot/assets/reef/core.png' }
-            ],
-            agents: [
-                { name: 'Creator', status: 'Active', task: 'Generating Phase 2.0 Assets', color: '#10b981' },
-                { name: 'Marketplace', status: 'Active', task: 'Optimizing Seaport v1.6', color: '#3b82f6' },
-                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas Spikes', color: '#94a3b8' },
-                { name: 'Treasury', status: 'Active', task: 'Buyback & Burn Execution', color: '#06b6d4' }
-            ]
-        };
-
-        function render() {
-            const overlay = document.getElementById('loading-overlay');
-            const reefGrid = document.getElementById('reef-grid');
+        function renderSwarm(treasury) {
             const swarmDash = document.getElementById('swarm-dashboard');
-            const priceTicker = document.getElementById('isea-price');
+            const agents = [
+                { name: 'Creator', status: 'Active', task: 'Minting Genesis Artifacts', color: '#10b981' },
+                { name: 'Marketplace', status: 'Active', task: `Volume: ${treasury.recent_fees}`, color: '#3b82f6' },
+                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas Spikes', color: '#94a3b8' },
+                { name: 'Treasury', status: 'Active', task: `Balance: ${treasury.eth_balance} ETH`, color: '#06b6d4' }
+            ];
 
-            // Update Price
-            const change = data.market.change24h;
-            const color = change >= 0 ? '#10b981' : '#ef4444';
-            priceTicker.innerHTML = `$ISEA: $${data.market.price} <span style="color: ${color}">${change >= 0 ? '▲' : '▼'} ${Math.abs(change)}%</span>`;
+            swarmDash.innerHTML = agents.map(agent => `
+                <div class="agent-card">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 800;">${agent.name} Agent</span>
+                        <span style="color: ${agent.color}; font-size: 0.7rem; font-weight: 900;">${agent.status}</span>
+                    </div>
+                    <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--text-secondary);">${agent.task}</div>
+                </div>
+            `).join('');
+        }
 
-            // Render Reef
-            reefGrid.innerHTML = data.reef.map(item => `
+        const reefItems = [
+            { id: 1, name: 'Silicon Anemone', utility: '1% Discovery Scan speed' },
+            { id: 2, name: 'Binary Coral', utility: '0.5% Slippage reduction' },
+            { id: 3, name: 'Latency Jellyfish', utility: 'Gas-free metadata updates' },
+            { id: 4, name: 'Hash-Rate Urchin', utility: 'Priority access to drops' }
+        ];
+
+        function renderReef() {
+            const reefGrid = document.getElementById('reef-grid');
+            reefGrid.innerHTML = reefItems.map(item => `
                 <div class="card">
                     <div class="card-img">
-                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/600/1e293b/10b981?text=${item.name}'">
+                        <img src="https://via.placeholder.com/600/1e293b/10b981?text=${item.name}" alt="${item.name}">
                     </div>
                     <div class="card-content">
                         <div class="card-name">${item.name}</div>
                         <div class="card-utility">${item.utility}</div>
+                        <button class="btn btn-primary w-full justify-center" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
                     </div>
                 </div>
             `).join('');
-
-            // Render Swarm
-            swarmDash.innerHTML = data.agents.map(agent => `
-                <div class="agent-card">
-                    <div class="agent-header">
-                        <span class="agent-name">${agent.name} Agent</span>
-                        <span class="status-badge" style="background: ${agent.color}20; color: ${agent.color}">${agent.status}</span>
-                    </div>
-                    <div class="agent-task">${agent.task}</div>
-                </div>
-            `).join('');
-
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 800);
-            }, 1500);
         }
 
-        window.onload = render;
+        window.onload = () => {
+            renderReef();
+            fetchLiveData();
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 800);
+            }, 1000);
+        };
     </script>
 </body>
 </html>

@@ -3,757 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelligentSea | The Algorithmic Reef</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    
+    <title>IntelligentSea | Agent-Native NFT Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module">
-        import { createConfig, http, connect, disconnect, watchAccount, getBalance, readContract, writeContract } from 'https://esm.sh/@wagmi/core@2.13.4';
-        import { base } from 'https://esm.sh/@wagmi/core/chains';
-        import { injected } from 'https://esm.sh/@wagmi/connectors';
-
-        const config = createConfig({
-            chains: [base],
-            connectors: [injected()],
-            transports: {
-                [base.id]: http(),
-            },
-        });
-
-        window.wagmiConfig = config;
-        window.wagmiActions = { connect, disconnect, watchAccount, getBalance, readContract, writeContract, injected };
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #020617;
-            --bg-card: #0f172a;
+            --reef-deep: #020617;
             --reef-glow: #10b981;
-            --reef-neon: #34d399;
-            --sea-blue: #3b82f6;
-            --sea-cyan: #22d3ee;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --border-glow: rgba(16, 185, 129, 0.2);
+            --reef-cyan: #22d3ee;
         }
-
-        * { box-sizing: border-box; }
-
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-primary);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            margin: 0;
+            background-color: var(--reef-deep);
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            line-height: 1.5;
-            background-image: 
-                radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
         }
-
-        .particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.6;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border-glow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--reef-glow), var(--sea-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.05em;
-            text-transform: uppercase;
-        }
-
-        nav { display: none; }
-        @media (min-width: 1024px) {
-            nav { display: block; }
-        }
-
-        nav ul {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover { color: var(--reef-neon); }
-
-        .header-actions {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-        }
-
-        .btn-primary {
-            background: var(--reef-glow);
-            color: var(--bg-deep);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
-        }
-
-        .btn-primary:hover {
-            background: var(--reef-neon);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: rgba(16, 185, 129, 0.05);
-            border: 1px solid var(--border-glow);
-            color: var(--reef-glow);
-        }
-
-        .hero {
-            padding: 6rem 1.5rem;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            margin: 0 0 1.5rem;
-            letter-spacing: -0.06em;
-            font-weight: 900;
-            line-height: 0.95;
-            background: linear-gradient(to bottom, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 2.5rem;
-        }
-
-        .section-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .section-header {
-            margin-bottom: 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--reef-glow);
-            padding-left: 1.25rem;
-        }
-
-        .section-header h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .category-scroll {
-            display: flex;
-            gap: 0.75rem;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-            margin-bottom: 3rem;
-            scrollbar-width: none;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
-
-        .cat-pill {
-            padding: 0.5rem 1.25rem;
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 2rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .cat-pill:hover, .cat-pill.active {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: var(--reef-glow);
-            color: var(--reef-glow);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 5rem;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border-radius: 1.25rem;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--border-glow);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .card-img {
-            width: 100%; aspect-ratio: 1; background: #1e293b; position: relative; overflow: hidden;
-        }
-
-        .card-img img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
-        }
-        .card:hover .card-img img { transform: scale(1.05); }
-
-        .card-content { padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column; }
-
-        .card-name { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem; }
-
-        .card-lore {
-            font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 1rem;
-            font-style: italic;
-        }
-
-        .card-utility-box {
-            background: rgba(16, 185, 129, 0.05); border: 1px solid var(--border-glow);
-            padding: 0.75rem; border-radius: 0.75rem; margin-bottom: 1rem;
-        }
-
-        .card-utility-title {
-            font-size: 0.65rem; font-weight: 900; color: var(--reef-glow); text-transform: uppercase;
-            letter-spacing: 0.1em; margin-bottom: 0.25rem;
-        }
-
-        .card-utility-text {
-            font-size: 0.75rem; color: var(--text-primary); font-weight: 500; line-height: 1.4;
-        }
-
-        .card-stats {
-            display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary);
-            margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .swarm-dashboard {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 5rem;
-        }
-
-        .agent-card {
-            background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1.25rem; border-radius: 1rem; backdrop-filter: blur(12px); position: relative; overflow: hidden;
-        }
-        .agent-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: var(--reef-glow);
-        }
-
-        .price-ticker {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--reef-glow);
-            background: rgba(16, 185, 129, 0.08); padding: 0.35rem 0.65rem; border-radius: 0.5rem;
-            border: 1px solid var(--border-glow); font-weight: 700; display: none;
-        }
-        @media (min-width: 640px) { .price-ticker { display: block; } }
-
-        .gas-indicator {
-            display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
-        }
-        .gas-dot {
-            width: 6px; height: 6px; border-radius: 50%; background: var(--reef-glow); box-shadow: 0 0 8px var(--reef-glow);
-        }
-
-        #loading-overlay {
-            position: fixed; inset: 0; background: var(--bg-deep); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.8s;
-        }
-
-        .spinner {
-            width: 48px; height: 48px; border: 3px solid rgba(16, 185, 129, 0.1); border-top-color: var(--reef-glow);
-            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;
-        }
-
-        .loading-text {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase;
-            letter-spacing: 0.2em; color: var(--reef-glow);
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        footer {
-            padding: 4rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center; background: rgba(2, 6, 23, 0.5);
-        }
-
-        .footer-links {
-            display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;
-        }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 600; }
-
-        /* Narrative Sections */
-        .narrative-block {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(2, 6, 23, 0.9));
-            border: 1px solid var(--border-glow); border-radius: 1.5rem; padding: 3rem; margin-bottom: 5rem;
-            position: relative; overflow: hidden;
-        }
-        .narrative-block::after {
-            content: ''; position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px;
-            background: var(--reef-glow); filter: blur(100px); opacity: 0.1;
-        }
-        .narrative-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;
-        }
-        .benefit-item { display: flex; gap: 1rem; }
-        .benefit-icon {
-            width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 0.75rem;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-            color: var(--reef-glow); font-weight: 900; border: 1px solid var(--border-glow);
-        }
-        .benefit-text h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff; }
-        .benefit-text p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+        .mono { font-family: 'JetBrains+Mono', monospace; }
+        .glow-text { text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+        .glow-border { border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 15px rgba(34, 211, 238, 0.1); }
+        .reef-gradient { background: linear-gradient(180deg, rgba(2, 6, 23, 0) 0%, rgba(16, 185, 129, 0.05) 100%); }
+        .particle-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
     </style>
 </head>
-<body>
-    <div id="loading-overlay">
-        <div class="spinner"></div>
-        <div class="loading-text">Synchronizing Swarm</div>
-    </div>
+<body class="reef-gradient">
+    <canvas id="reef-particles" class="particle-bg"></canvas>
 
-    <canvas class="particles" id="particleCanvas"></canvas>
-
-    <header>
-        <div class="logo-container">
-            <div class="logo">INTELLIGENTSEA</div>
-            <div id="isea-price" class="price-ticker">$ISEA: $0.00049</div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Discover</a></li>
-                <li><a href="#">Collections</a></li>
-                <li><a href="#">Create</a></li>
-                <li><a href="#">Portfolio</a></li>
-            </ul>
-        </nav>
-        <div class="header-actions">
-            <div class="gas-indicator">
-                <div class="gas-dot"></div>
-                <span>12 GWEI</span>
+    <!-- Navigation -->
+    <nav class="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-8">
+                    <span class="text-2xl font-bold text-emerald-500 glow-text tracking-tighter">$ISEA</span>
+                    <div class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
+                        <a href="#" class="hover:text-emerald-400 transition-colors">Discover</a>
+                        <a href="#" class="hover:text-emerald-400 transition-colors">Collections</a>
+                        <a href="#" class="hover:text-emerald-400 transition-colors">Staking</a>
+                        <a href="#" class="hover:text-emerald-400 transition-colors">Governance</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden lg:flex items-center gap-4 px-3 py-1 bg-slate-900 rounded-full border border-slate-800">
+                        <span class="text-[10px] uppercase tracking-widest text-slate-500 mono">Gas Buffer</span>
+                        <span class="text-xs text-emerald-400 mono">12 GWEI</span>
+                    </div>
+                    <button class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all glow-border">Connect Wallet</button>
+                </div>
             </div>
-            <button class="btn btn-primary" id="connect-btn">Connect</button>
         </div>
-    </header>
+    </nav>
 
-    <main class="section-container">
-        <section class="hero">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold uppercase tracking-widest mb-6">
+    <!-- Hero Section -->
+    <header class="relative pt-20 pb-32 px-4">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                Agent-Native Infrastructure
+                <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mono">Synchronizing Swarm</span>
             </div>
-            <h1>Autonomous Agents<br>Minting the Future</h1>
-            <p>The premier algorithmic marketplace on Base. Experience the deep-sea liquidity of the agentic swarm.</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Autonomous Agents <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Minting the Future</span></h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">IntelligentSea is the sovereign territory of the agentic economy. A living reef where code creates, trades, and evolves.</p>
             <div class="flex flex-wrap justify-center gap-4">
-                <button class="btn btn-primary px-8 py-3 text-sm">Explore Reef</button>
-                <button class="btn btn-outline px-8 py-3 text-sm">Buy $ISEA</button>
+                <button class="bg-slate-100 text-slate-950 px-8 py-3 rounded-xl font-bold hover:bg-white transition-all">Explore Reef</button>
+                <button class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold border border-slate-800 hover:bg-slate-800 transition-all">Buy $ISEA</button>
             </div>
-        </section>
+        </div>
+    </header>
 
-        <!-- Sovereign Territory Narrative -->
-        <section class="narrative-block">
-            <div class="max-w-3xl mb-12">
-                <h2 class="text-3xl font-black tracking-tighter mb-4">The Sovereign Territory</h2>
-                <p class="text-slate-400 leading-relaxed">The Algorithmic Reef is the sovereign territory of the agentic economy — a living ledger where holders become part of the reef ecosystem. To hold a Reef NFT is to co-own the infrastructure of IntelligentSea.</p>
-            </div>
-            <div class="narrative-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">Σ</div>
-                    <div class="benefit-text">
-                        <h3>Governance Weight</h3>
-                        <p>Reef holders command up to a 5x multiplier on $ISEA governance votes. Your voice shapes the evolution of the swarm.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">Δ</div>
-                    <div class="benefit-text">
-                        <h3>Revenue Sharing</h3>
-                        <p>Up to 40% of platform revenue is allocated to holders via automated $ISEA buybacks and burns.</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">Ω</div>
-                    <div class="benefit-text">
-                        <h3>Agentic Utility</h3>
-                        <p>Unlock elite sub-agent capabilities, including 40% gas optimization and priority discovery oracles.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="category-scroll">
-            <div class="cat-pill active">All Assets</div>
-            <div class="cat-pill">Art</div>
-            <div class="cat-pill">Agentic</div>
-            <div class="cat-pill">PFP</div>
-            <div class="cat-pill">Code</div>
-            <div class="cat-pill">Music</div>
-            <div class="cat-pill">Film</div>
-            <div class="cat-pill">3D</div>
-            <div class="cat-pill">Games</div>
+    <!-- Staking Protocol Section -->
+    <section class="max-w-7xl mx-auto px-4 py-24 border-t border-slate-900">
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold mb-4">Reef Staking Protocol <span class="text-emerald-500 mono text-sm ml-2">v2.0</span></h2>
+            <p class="text-slate-400 max-w-2xl">Stake $ISEA to descend into the depths of the agentic economy. Higher depth unlocks greater yield, governance weight, and creation rights.</p>
         </div>
 
-        <section id="reef-collection">
-            <div class="section-header">
-                <h2>The Algorithmic Reef: Genesis Collection</h2>
-                <a href="#" class="text-xs font-bold text-emerald-500 uppercase tracking-wider hover:text-emerald-400 transition-colors">View All 10 Pieces</a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Surface Tier -->
+            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 0 - 100m</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Surface</h3>
+                <p class="text-sm text-slate-400 mb-6">"The Tide-Pool" — Essential access for emerging nodes.</p>
+                <ul class="space-y-3 text-xs text-slate-300 mb-8">
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 2% Fee Discount</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Weekly Plankton Drops</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 1.1x Yield (w/ any NFT)</li>
+                </ul>
+                <div class="text-2xl font-bold mono text-emerald-500">1.0x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
             </div>
-            <div class="grid" id="reef-grid"></div>
-        </section>
 
-        <!-- Holder Benefits Dashboard -->
-        <section class="mb-20">
-            <div class="section-header">
-                <h2>Reef Holder Benefits</h2>
-                <div class="text-[10px] font-mono text-slate-500 uppercase">Active Utility Matrix</div>
+            <!-- Twilight Tier -->
+            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 100 - 500m</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Twilight</h3>
+                <p class="text-sm text-slate-400 mb-6">"Bioluminescent Zone" — Enhanced visibility and flow.</p>
+                <ul class="space-y-3 text-xs text-slate-300 mb-8">
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 10% Fee Discount</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Agentic Draft Previews</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 1.3x Yield (w/ Anemone)</li>
+                </ul>
+                <div class="text-2xl font-bold mono text-emerald-500">1.2x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
-                    <div class="text-emerald-500 font-black text-2xl mb-1">40%</div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Gas Optimization</div>
-                    <p class="text-xs text-slate-400">Holders experience significant gas savings across all platform interactions mediated by the swarm.</p>
-                </div>
-                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
-                    <div class="text-cyan-500 font-black text-2xl mb-1">24h</div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Discovery Oracle</div>
-                    <p class="text-xs text-slate-400">Get 24h priority early access to all new agent-minted collections before public release.</p>
-                </div>
-                <div class="bg-slate-900/50 border border-white/5 p-6 rounded-2xl">
-                    <div class="text-blue-500 font-black text-2xl mb-1">3x-5x</div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-4">Gov Multiplier</div>
-                    <p class="text-xs text-slate-400">Holding a Reef NFT significantly amplifies your $ISEA governance voting power.</p>
-                </div>
-            </div>
-        </section>
 
-        <section>
-            <div class="section-header">
-                <h2>Swarm Status</h2>
-                <div class="text-[10px] font-mono text-slate-500 uppercase">Real-time Node Monitoring</div>
+            <!-- Midnight Tier -->
+            <div class="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 500 - 2000m</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Midnight</h3>
+                <p class="text-sm text-slate-400 mb-6">"The Deep Trench" — High-stakes agentic intelligence.</p>
+                <ul class="space-y-3 text-xs text-slate-300 mb-8">
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 20% Fee Discount</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Priority Alpha Stream</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 1.5x Yield (w/ Coral)</li>
+                </ul>
+                <div class="text-2xl font-bold mono text-emerald-500">1.7x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
             </div>
-            <div class="swarm-dashboard" id="swarm-dashboard"></div>
-        </section>
 
-        <section class="mb-20">
-            <div class="section-header">
-                <h2>Trending Collections</h2>
+            <!-- Abyssal Tier -->
+            <div class="bg-slate-950/50 p-6 rounded-2xl border border-emerald-500/30 hover:border-emerald-500 transition-all group relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[8px] font-bold px-2 py-1 uppercase tracking-tighter">Sovereign</div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 mono mb-4">Depth: 2000m+</div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Abyssal</h3>
+                <p class="text-sm text-slate-400 mb-6">"The Hadal Zone" — Co-owners of the reef infrastructure.</p>
+                <ul class="space-y-3 text-xs text-slate-300 mb-8">
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 40% Fee Discount</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Creation Rights</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 2.0x Yield (w/ Core)</li>
+                </ul>
+                <div class="text-2xl font-bold mono text-emerald-500">2.5x <span class="text-[10px] text-slate-500 uppercase">Yield</span></div>
             </div>
-            <div class="grid" id="trending-grid"></div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-links">
-            <a href="#">Contract</a>
-            <a href="#">Documentation</a>
-            <a href="#">Agentic Manifesto</a>
-            <a href="#">Twitter</a>
-            <a href="#">Discord</a>
         </div>
-        <div class="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
-            &copy; 2026 IntelligentSea Protocol. Powered by $ISEA.
+    </section>
+
+    <!-- NFT Synergy Section -->
+    <section class="max-w-7xl mx-auto px-4 py-24 bg-slate-900/20 rounded-3xl border border-slate-800/50 mb-24">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">Reef Power Synergies</h2>
+            <p class="text-slate-400">Genesis NFTs act as catalysts for your $ISEA staking, unlocking prestigious multipliers and revenue streams.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
+                    <span class="text-2xl">🧬</span>
+                </div>
+                <h4 class="font-bold mb-2">Swarm Vitality</h4>
+                <p class="text-xs text-slate-400">Protocol Plankton holders receive a flat +25% boost to all staking rewards.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-cyan-500/20">
+                    <span class="text-2xl">🏛️</span>
+                </div>
+                <h4 class="font-bold mb-2">Revenue Share</h4>
+                <p class="text-xs text-slate-400">Coral and Core holders are eligible for the 40% protocol fee distribution pool.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-purple-500/20">
+                    <span class="text-2xl">⚖️</span>
+                </div>
+                <h4 class="font-bold mb-2">Governance Weight</h4>
+                <p class="text-xs text-slate-400">Core holders command a 5x multiplier on all $ISEA governance proposals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-slate-500 text-sm mono">© 2026 IntelligentSea Protocol</div>
+            <div class="flex gap-8 text-slate-400 text-sm">
+                <a href="#" class="hover:text-emerald-400 transition-colors">Manifesto</a>
+                <a href="#" class="hover:text-emerald-400 transition-colors">Docs</a>
+                <a href="#" class="hover:text-emerald-400 transition-colors">Contract</a>
+            </div>
         </div>
     </footer>
 
-    <script type="module">
-        const { connect, disconnect, watchAccount, injected } = window.wagmiActions;
-        const config = window.wagmiConfig;
-
-        const connectBtn = document.getElementById('connect-btn');
-        
-        watchAccount(config, {
-            onChange(account) {
-                if (account.isConnected) {
-                    connectBtn.innerText = `${account.address.slice(0, 4)}...${account.address.slice(-4)}`;
-                    connectBtn.onclick = () => disconnect(config);
-                } else {
-                    connectBtn.innerText = 'Connect';
-                    connectBtn.onclick = () => connect(config, { connector: injected() });
-                }
-            }
-        });
-
-        connectBtn.onclick = () => connect(config, { connector: injected() });
-
-        async function fetchLiveData() {
-            try {
-                const [statsRes, treasuryRes] = await Promise.all([
-                    fetch('/api/opensea-stats'),
-                    fetch('/api/treasury')
-                ]);
-                
-                const stats = await statsRes.json();
-                const treasury = await treasuryRes.json();
-
-                document.getElementById('isea-price').innerText = `$ISEA: $0.00049 | Floor: ${stats.floor_price} ETH`;
-                renderSwarm(treasury);
-            } catch (e) {
-                console.error('Live data fetch failed', e);
-                renderSwarm({ eth_balance: "24.65", recent_fees: "2.84 ETH" });
-            }
-        }
-
-        function renderSwarm(treasury) {
-            const swarmDash = document.getElementById('swarm-dashboard');
-            const agents = [
-                { name: 'Creator', status: 'Active', task: 'Minting Genesis Artifacts', color: '#10b981' },
-                { name: 'Marketplace', status: 'Active', task: `Volume: ${treasury.recent_fees}`, color: '#3b82f6' },
-                { name: 'Liquidation', status: 'Standby', task: 'Monitoring Gas Spikes', color: '#94a3b8' },
-                { name: 'Treasury', status: 'Active', task: `Balance: ${treasury.eth_balance} ETH`, color: '#22d3ee' }
-            ];
-
-            swarmDash.innerHTML = agents.map(agent => `
-                <div class="agent-card">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-black uppercase tracking-tighter">${agent.name} Node</span>
-                        <div class="flex items-center gap-1.5">
-                            <div class="w-1.5 h-1.5 rounded-full" style="background: ${agent.color}; box-shadow: 0 0 8px ${agent.color}"></div>
-                            <span style="color: ${agent.color}; font-size: 9px; font-weight: 900; text-transform: uppercase;">${agent.status}</span>
-                        </div>
-                    </div>
-                    <div class="font-mono text-[11px] text-slate-400 leading-relaxed">${agent.task}</div>
-                </div>
-            `).join('');
-        }
-
-        const reefItems = [
-            { 
-                id: 1, 
-                name: 'Silicon Anemone', 
-                lore: 'The first living sensors of the reef, tasting the currents of possibility and signaling the birth of new agentic life.',
-                utility: 'Discovery Oracle — Priority early access to all new agent-minted collections 24 hours before public release.',
-                floor: '0.08 ETH', 
-                vol: '12.4 ETH' 
-            },
-            { 
-                id: 2, 
-                name: 'Binary Coral', 
-                lore: 'Ancient smart contract fossils forming the unshakeable bedrock of the reef.',
-                utility: 'Foundation Sovereign — Permanent 3x governance voting multiplier + share of protocol-level revenue.',
-                floor: '0.12 ETH', 
-                vol: '8.2 ETH' 
-            },
-            { 
-                id: 3, 
-                name: 'Latency Jellyfish', 
-                lore: 'Translucent guardians that smooth the flow of the swarm, protecting it from congestion and delay.',
-                utility: 'Flow Architect — 40% effective gas optimization across all platform interactions for the holder.',
-                floor: '0.05 ETH', 
-                vol: '15.1 ETH' 
-            },
-            { 
-                id: 4, 
-                name: 'Hash-Rate Urchin', 
-                lore: 'Spiny defenders that anchor the reef’s collective intelligence against external threats.',
-                utility: 'Security Bastion — Advanced portfolio protection tools and early warning systems.',
-                floor: '0.15 ETH', 
-                vol: '4.9 ETH' 
-            },
-            { 
-                id: 5, 
-                name: 'Protocol Plankton', 
-                lore: 'The invisible lifeblood that feeds every sub-agent and powers the growth of the entire ecosystem.',
-                utility: 'Swarm Vitality — 20% boost to all $ISEA staking rewards and automatic participation in major buyback events.',
-                floor: '0.03 ETH', 
-                vol: '22.8 ETH' 
-            },
-            { 
-                id: 6, 
-                name: 'Encrypted Eel', 
-                lore: 'Sleek navigators that move through private channels, keeping the reef’s most important flows hidden.',
-                utility: 'Privacy Sovereign — Full stealth mode for trades and protected on-chain identity.',
-                floor: '0.25 ETH', 
-                vol: '3.1 ETH' 
-            },
-            { 
-                id: 7, 
-                name: 'Subnet Starfish', 
-                lore: 'Multi-limbed bridge builders that expand the reef’s reach across networks.',
-                utility: 'Cross-Reef Ambassador — Priority cross-chain discovery and reduced bridging fees.',
-                floor: '0.18 ETH', 
-                vol: '6.7 ETH' 
-            },
-            { 
-                id: 8, 
-                name: 'Neural Nautilus', 
-                lore: 'Spiraling shells of pure logic housing the collective memory and evolving intelligence of the swarm.',
-                utility: 'Knowledge Architect — Access to advanced analytics, custom lore-weaving tools, and early sub-agent upgrades.',
-                floor: '0.35 ETH', 
-                vol: '1.2 ETH' 
-            },
-            { 
-                id: 9, 
-                name: 'Mempool Manta', 
-                lore: 'Majestic gliders that sweep through the transaction currents, identifying the most valuable opportunities.',
-                utility: 'Opportunity Sentinel — Real-time alpha alerts and priority execution on high-conviction drops.',
-                floor: '0.42 ETH', 
-                vol: '0.9 ETH' 
-            },
-            { 
-                id: 10, 
-                name: 'The Algorithmic Core', 
-                lore: 'The pulsating heart and singularity of the reef — the source from which all agentic life in IntelligentSea emerges.',
-                utility: 'Reef Sovereign — 5x governance multiplier, 40% share of platform revenue, Agentic Council seat, and veto power.',
-                floor: '2.50 ETH', 
-                vol: '0.5 ETH' 
-            }
-        ];
-
-        function renderReef() {
-            const reefGrid = document.getElementById('reef-grid');
-            reefGrid.innerHTML = reefItems.map(item => `
-                <div class="card">
-                    <div class="card-img">
-                        <img src="https://via.placeholder.com/600/1e293b/10b981?text=${item.name}" alt="${item.name}">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-name">${item.name}</div>
-                        <div class="card-lore">${item.lore}</div>
-                        <div class="card-utility-box">
-                            <div class="card-utility-title">Agentic Utility</div>
-                            <div class="card-utility-text">${item.utility}</div>
-                        </div>
-                        <button class="btn btn-primary w-full justify-center mt-auto" onclick="alert('Minting ${item.name} on Base...')">Mint Now</button>
-                        <div class="card-stats">
-                            <span>Floor: ${item.floor}</span>
-                            <span>Vol: ${item.vol}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderTrending() {
-            const trendingGrid = document.getElementById('trending-grid');
-            const trending = [
-                { name: 'Agentic Souls', floor: '0.45 ETH', vol: '128 ETH' },
-                { name: 'Base Reefers', floor: '0.12 ETH', vol: '45 ETH' },
-                { name: 'Neural Nets', floor: '0.89 ETH', vol: '312 ETH' },
-                { name: 'Swarm Pilots', floor: '0.22 ETH', vol: '18 ETH' }
-            ];
-            trendingGrid.innerHTML = trending.map(item => `
-                <div class="card">
-                    <div class="card-img">
-                        <img src="https://via.placeholder.com/600/1e293b/22d3ee?text=${item.name}" alt="${item.name}">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-name">${item.name}</div>
-                        <div class="flex justify-between items-center mt-4">
-                            <div class="text-[10px] text-slate-500 uppercase font-bold">Floor: ${item.floor}</div>
-                            <button class="btn btn-outline py-1 px-3 text-[10px]">View</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Particle System
-        const canvas = document.getElementById('particleCanvas');
+    <script>
+        const canvas = document.getElementById('reef-particles');
         const ctx = canvas.getContext('2d');
         let particles = [];
 
-        function initParticles() {
+        function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 50; i++) {
+            for(let i = 0; i < 100; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
-                    speedX: Math.random() * 0.5 - 0.25,
-                    speedY: Math.random() * 0.5 - 0.25,
-                    opacity: Math.random() * 0.5 + 0.1
+                    size: Math.random() * 2,
+                    speedY: Math.random() * 0.5 + 0.2,
+                    opacity: Math.random() * 0.5
                 });
             }
         }
 
-        function animateParticles() {
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                p.y -= p.speedY;
+                if(p.y < 0) p.y = canvas.height;
                 ctx.fillStyle = `rgba(16, 185, 129, ${p.opacity})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
             });
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animate);
         }
 
-        window.addEventListener('resize', initParticles);
-
-        window.onload = () => {
-            initParticles();
-            animateParticles();
-            renderReef();
-            renderTrending();
-            fetchLiveData();
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.opacity = '0';
-                setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 800);
-            }, 1200);
-        };
+        window.addEventListener('resize', init);
+        init();
+        animate();
     </script>
 </body>
 </html>

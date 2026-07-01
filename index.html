@@ -62,7 +62,7 @@
                         <a href="#genesis" class="hover:text-cyan-400 transition-colors">Genesis</a>
                         <a href="#staking" class="hover:text-cyan-400 transition-colors">Staking</a>
                         <a href="#economy" class="hover:text-cyan-400 transition-colors">Economy</a>
-                        <a href="#terminal" class="hover:text-cyan-400 transition-colors">Terminal</a>
+                        <a href="#specs" class="hover:text-cyan-400 transition-colors">Specs</a>
                     </div>
                 </div>
                 <div class="flex items-center gap-8">
@@ -121,82 +121,82 @@
                 <script>
                     const artifacts = [
                         {
-                            name: "The Abyssal Monolith",
-                            lore: "A silent observer at the reef's edge, recording every consensus pulse since the genesis block. It is the anchor of the IntelligentSea's historical memory.",
-                            rewards: ["+15% $ISEA Staking Yield", "Unlocks 'Deep Sea' Governance Channel", "Historical Data Oracle Access", "Priority DAO Voting Weight"],
-                            visual: "Dark obsidian spire with pulsing neon cyan runes.",
+                            name: "Abyssal Monolith",
+                            lore: "Ancient obsidian spire, data historian.",
+                            rewards: ["+5% Staking Yield", "Historical Data Oracle Access", "Priority DAO Voting Weight"],
+                            visual: "Obsidian spire, cyan bioluminescence.",
                             color: "cyan",
                             icon: "🏛️"
                         },
                         {
-                            name: "Consensus Pearl",
-                            lore: "Formed from the compressed data of a million successful trades. It represents the purity of decentralized agreement and collective logic.",
-                            rewards: ["-50% Marketplace Fees", "Governance Tie-Breaker Authority", "Liquidity Provision Priority", "Exclusive 'Pearl' Badge in Terminal"],
-                            visual: "Iridescent sphere glowing with soft white light in digital kelp.",
+                            name: "Pearl of Consensus",
+                            lore: "Iridescent sphere for collective agreement.",
+                            rewards: ["1000 Governance Votes", "Governance Tie-Breaker Authority", "Liquidity Provision Priority"],
+                            visual: "Iridescent pearl, data particles.",
                             color: "purple",
                             icon: "🔮"
                         },
                         {
-                            name: "Current-Breaker Fin",
-                            lore: "A relic from the first agent to navigate the high-frequency currents of Base. It slices through market noise with surgical precision.",
-                            rewards: ["Priority Terminal Execution", "+5% Speed Boost to Discovery Agents", "MEV Protection Shield", "High-Frequency Signal Access"],
-                            visual: "Sleek metallic fin with neon blue trailing edges.",
+                            name: "The Coral Processor",
+                            lore: "Fractal purple coral filtering market data.",
+                            rewards: ["+2% ISEA-USDC LP yield", "Real-time Sentiment Analysis Tools", "Early Discovery of Emerging Trends"],
+                            visual: "Purple coral, gold circuitry.",
                             color: "green",
-                            icon: "⚡"
+                            icon: "🪸"
                         },
                         {
-                            name: "Bioluminescent Anchor",
-                            lore: "Holds the ecosystem steady during periods of extreme market volatility. It is the literal weight of the IntelligentSea treasury.",
-                            rewards: ["10% Liquidation Coverage for Staked Positions", "Volatility Protection Multiplier", "Treasury Allocation Voting Rights", "Stability Pool Access"],
-                            visual: "Heavy rusted anchor overgrown with glowing neon moss.",
+                            name: "Hydro-Vault",
+                            lore: "Metallic shell for liquid assets.",
+                            rewards: ["Enhanced security, low latency", "Volatility Protection Multiplier", "Treasury Allocation Voting Rights"],
+                            visual: "Metallic blue shell, rotating gears.",
                             color: "cyan",
                             icon: "⚓"
                         },
                         {
-                            name: "Data-Stream Anemone",
-                            lore: "Filters the noise of the social seas to find the purest alpha signals. Its tentacles are sensitive to the slightest sentiment shifts.",
-                            rewards: ["Access to 'Alpha Reef' Private Signal Feed", "Real-time Sentiment Analysis Tools", "Early Discovery of Emerging Trends", "Social Graph Intelligence"],
-                            visual: "Flowing tentacles changing color based on market sentiment.",
+                            name: "Biolume Beacon",
+                            lore: "Emerald lantern guiding through currents.",
+                            rewards: ["+5% Research speed", "Access to 'Alpha Reef' Private Signal Feed", "Early Discovery of Emerging Trends"],
+                            visual: "Emerald lantern, jellyfish tendrils.",
                             color: "purple",
-                            icon: "🪸"
+                            icon: "🏮"
                         },
                         {
-                            name: "Neural Coral Branch",
-                            lore: "A fragment of the collective intelligence that powers the Hermes Orchestrator. It grows with every successful protocol optimization.",
-                            rewards: ["+10% Governance Voting Power", "Custom Strategy Request Priority", "Agentic Compute Credits (Monthly)", "Hermes Direct-Link Access"],
-                            visual: "Brain-like coral structure with sparking electrical synapses.",
+                            name: "Current Weaver",
+                            lore: "Glass prism optimizing trade execution.",
+                            rewards: ["+2% Swap Fee Rebate", "Priority Terminal Execution", "MEV Protection Shield"],
+                            visual: "Sapphire currents, glass prism.",
                             color: "green",
-                            icon: "🧠"
+                            icon: "⚡"
                         },
                         {
-                            name: "Void-Ray Shell",
-                            lore: "A protective casing capable of withstanding the pressure of the deepest liquidity holes. It masks the presence of its owner from the surface.",
-                            rewards: ["Stealth Mode for Terminal Operations", "Private Portfolio Tracking & Analytics", "Anti-Siphon Shielding", "Hidden Wallet Signature Support"],
-                            visual: "Translucent dark purple shell with a shimmering interior.",
+                            name: "Trench Sentinel",
+                            lore: "Crimson defender monitoring perimeter.",
+                            rewards: ["Priority security alerts", "Stealth Mode for Terminal Operations", "Anti-Siphon Shielding"],
+                            visual: "Crimson armor, glowing red eye.",
                             color: "cyan",
-                            icon: "🐚"
+                            icon: "🛡️"
                         },
                         {
-                            name: "Echo-Location Prism",
-                            lore: "Maps the hidden topography of the agentic economy. It refracts raw on-chain data into actionable, high-fidelity intelligence.",
-                            rewards: ["Early Access to Flaunch/Clanker Launches", "Market Topography Heatmaps", "Sonar Signal Priority in Discovery", "Predictive Liquidity Mapping"],
-                            visual: "Floating geometric prism refracting sonar patterns.",
+                            name: "Anemone Oracle",
+                            lore: "Organic sensor array for sentiment.",
+                            rewards: ["Early sentiment access", "Social Graph Intelligence", "Custom Strategy Request Priority"],
+                            visual: "Pink/orange tentacles, data-stream.",
                             color: "purple",
-                            icon: "💎"
+                            icon: "👁️"
                         },
                         {
-                            name: "Tidal-Force Turbine",
-                            lore: "Converts the energy of market cycles into sustainable treasury growth. It thrives on the constant ebb and flow of global liquidity.",
-                            rewards: ["0.5% Share of Weekly $ISEA Burn Rewards", "Yield Optimization Multiplier", "Cycle Energy Credits for Swaps", "Liquidity Incentive Boost"],
-                            visual: "Rotating mechanical turbine powered by glowing currents.",
+                            name: "Kelp Ledger",
+                            lore: "Green ribbons recording transactions.",
+                            rewards: ["+1% Staking Yield", "Cycle Energy Credits for Swaps", "Liquidity Incentive Boost"],
+                            visual: "Green kelp, white runes.",
                             color: "green",
-                            icon: "🌀"
+                            icon: "📜"
                         },
                         {
-                            name: "The Genesis Reef Heart",
-                            lore: "The core processor of the IntelligentSea, where lore and logic become one. It is the source of all bioluminescence in the abyss.",
-                            rewards: ["Apex Predator Tier Unlock (Instant)", "+25% Total Protocol Yield", "Monthly DAO Proposal Veto Power", "Genesis Founder Status & Badge"],
-                            visual: "Massive beating heart of crystalline data and organic coral.",
+                            name: "The Intelligent Sea (Core)",
+                            lore: "The heart of the ecosystem.",
+                            rewards: ["5000 Votes, Tier 3 Apex Staking", "+25% Total Protocol Yield", "Monthly DAO Proposal Veto Power"],
+                            visual: "Pulsing heart of light and water.",
                             color: "cyan",
                             icon: "❤️"
                         }
@@ -258,7 +258,7 @@
                     </ul>
                     <div class="pt-8 border-t border-white/5">
                         <span class="text-[11px] text-slate-500 block mb-2 font-bold uppercase tracking-widest">Requirement</span>
-                        <span class="text-lg font-bold">0 - 10k $ISEA</span>
+                        <span class="text-lg font-bold">10,000 $ISEA</span>
                     </div>
                 </div>
 
@@ -273,61 +273,61 @@
                     <div class="tier-progress mb-6">
                         <div class="tier-progress-fill bg-cyan-500" style="width: 50%"></div>
                     </div>
-                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">1.1x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
+                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">1.2x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
                     <ul class="space-y-4 text-sm text-slate-300 mb-10 flex-grow">
-                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> Alpha Reef Signal Access</li>
-                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> Priority Artifact Minting</li>
-                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> 1.1x Yield Multiplier</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> Advanced Analytics</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> 5% Swap Fee Rebate</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-500">✓</span> 1.2x Yield Multiplier</li>
                     </ul>
                     <div class="pt-8 border-t border-white/5">
                         <span class="text-[11px] text-slate-500 block mb-2 font-bold uppercase tracking-widest">Requirement</span>
-                        <span class="text-lg font-bold">10k - 100k $ISEA</span>
+                        <span class="text-lg font-bold">100,000 $ISEA</span>
                     </div>
                 </div>
 
-                <!-- Leviathan -->
+                <!-- Apex -->
                 <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col relative overflow-hidden group hover:border-purple-500/30 transition-colors">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full"></div>
                     <div class="flex justify-between items-center mb-6">
                         <div class="text-[11px] text-purple-500 mono font-bold tracking-widest">TIER 3</div>
                         <div class="text-[11px] text-purple-500 mono font-bold">-1000m</div>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4">Leviathan</h4>
+                    <h4 class="text-2xl font-bold mb-4">Apex</h4>
                     <div class="tier-progress mb-6">
                         <div class="tier-progress-fill bg-purple-500" style="width: 75%"></div>
                     </div>
-                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">1.25x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
+                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">1.5x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
                     <ul class="space-y-4 text-sm text-slate-200 mb-10 flex-grow">
-                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> Sentiment Heatmaps</li>
-                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> DAO Governance Rights</li>
-                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> 1.25x Yield Multiplier</li>
+                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> Alpha Signal Access</li>
+                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> 10% Swap Fee Rebate</li>
+                        <li class="flex items-center gap-3"><span class="text-purple-500">✓</span> Full Governance Rights</li>
                     </ul>
                     <div class="pt-8 border-t border-white/5">
                         <span class="text-[11px] text-slate-500 block mb-2 font-bold uppercase tracking-widest">Requirement</span>
-                        <span class="text-lg font-bold">100k - 1M $ISEA</span>
+                        <span class="text-lg font-bold">1,000,000 $ISEA</span>
                     </div>
                 </div>
 
-                <!-- Apex Predator -->
+                <!-- Leviathan -->
                 <div class="bg-cyan-500/5 border border-cyan-500/40 rounded-[2.5rem] p-10 flex flex-col relative overflow-hidden shadow-[0_0_50px_rgba(0,245,255,0.15)] group">
                     <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/20 blur-[100px] rounded-full"></div>
                     <div class="flex justify-between items-center mb-6">
                         <div class="text-[11px] text-cyan-400 mono font-bold tracking-widest">TIER 4</div>
                         <div class="text-[11px] text-cyan-400 mono font-bold">-4000m</div>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-cyan-400">Apex Predator</h4>
+                    <h4 class="text-2xl font-bold mb-4 text-cyan-400">Leviathan</h4>
                     <div class="tier-progress mb-6">
                         <div class="tier-progress-fill bg-cyan-400" style="width: 100%"></div>
                     </div>
-                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">1.5x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
+                    <div class="text-4xl font-bold text-emerald-400 mono mb-8">2.0x <span class="text-xs text-slate-500 uppercase tracking-widest">Yield</span></div>
                     <ul class="space-y-4 text-sm text-cyan-100 mb-10 flex-grow">
-                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> Stealth Mode Operations</li>
-                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> DAO Veto Power</li>
-                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> Custom Strategy Requests</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> Revenue Share Access</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> Proposal Submission</li>
+                        <li class="flex items-center gap-3"><span class="text-cyan-400">✓</span> 2.0x Yield Multiplier</li>
                     </ul>
                     <div class="pt-8 border-t border-cyan-500/20">
                         <span class="text-[11px] text-cyan-700 block mb-2 uppercase font-bold tracking-widest">Requirement</span>
-                        <span class="text-lg font-bold text-cyan-400">1M+ $ISEA OR Full Set</span>
+                        <span class="text-lg font-bold text-cyan-400">10,000,000 $ISEA</span>
                     </div>
                 </div>
             </div>
@@ -344,7 +344,7 @@
                 </div>
                 <div class="text-center lg:text-right relative z-10">
                     <span class="text-[11px] text-slate-500 uppercase block mb-2 font-bold tracking-[0.3em]">Full Set Sovereign Bonus</span>
-                    <span class="text-3xl font-bold text-cyan-400 glow-cyan">Instant Apex Predator Status</span>
+                    <span class="text-3xl font-bold text-cyan-400 glow-cyan">Instant Leviathan Status</span>
                     <p class="text-[10px] text-slate-500 mt-2 mono">BYPASS ALL $ISEA BALANCE REQUIREMENTS</p>
                 </div>
             </div>
@@ -364,7 +364,7 @@
                             <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-green-500/50 transition-colors">🔥</div>
                             <div>
                                 <h4 class="text-xl font-bold mb-2">Buyback & Burn Mechanism</h4>
-                                <p class="text-slate-500 leading-relaxed">2.5% marketplace fees are used to market-buy $ISEA. 40% of purchased tokens are permanently burned, creating constant deflationary pressure.</p>
+                                <p class="text-slate-500 leading-relaxed">30% of marketplace fees are used to market-buy $ISEA and permanently burn them, creating constant deflationary pressure.</p>
                             </div>
                         </div>
                         <div class="flex gap-8 group">
@@ -378,14 +378,14 @@
                             <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-purple-500/50 transition-colors">🌊</div>
                             <div>
                                 <h4 class="text-xl font-bold mb-2">Revenue Share Pool</h4>
-                                <p class="text-slate-500 leading-relaxed">30% of marketplace fees are recycled into the Staking Reward Pool, distributed weekly to active participants based on their Nekton tier.</p>
+                                <p class="text-slate-500 leading-relaxed">30% of marketplace fees are distributed to Leviathan (20%) and Apex (10%) stakers, rewarding the most committed participants.</p>
                             </div>
                         </div>
                         <div class="flex gap-8 group">
                             <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-emerald-500/50 transition-colors">🤖</div>
                             <div>
-                                <h4 class="text-xl font-bold mb-2">Agentic Utility & Payments</h4>
-                                <p class="text-slate-500 leading-relaxed">$ISEA is the native currency for agentic services, compute credits, and custom strategy requests within the IntelligentSea Terminal.</p>
+                                <h4 class="text-xl font-bold mb-2">Treasury Reserve</h4>
+                                <p class="text-slate-500 leading-relaxed">40% of fees are allocated to the Protocol Treasury for infrastructure, agentic compute, and ecosystem growth.</p>
                             </div>
                         </div>
                     </div>
@@ -417,16 +417,16 @@
                             <h5 class="text-[11px] font-bold uppercase text-slate-400 mb-8 tracking-[0.3em]">Fee Allocation Strategy</h5>
                             <div class="space-y-6">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Buyback & Burn</span>
+                                    <span class="text-sm text-slate-400">Protocol Treasury</span>
                                     <div class="flex items-center gap-4">
                                         <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
-                                            <div class="h-full bg-green-500 w-[60%]"></div>
+                                            <div class="h-full bg-green-500 w-[40%]"></div>
                                         </div>
-                                        <span class="text-sm font-bold mono text-green-400">60%</span>
+                                        <span class="text-sm font-bold mono text-green-400">40%</span>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Staking Rewards</span>
+                                    <span class="text-sm text-slate-400">Buyback & Burn</span>
                                     <div class="flex items-center gap-4">
                                         <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
                                             <div class="h-full bg-cyan-500 w-[30%]"></div>
@@ -435,12 +435,12 @@
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Infrastructure</span>
+                                    <span class="text-sm text-slate-400">Revenue Share</span>
                                     <div class="flex items-center gap-4">
                                         <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
-                                            <div class="h-full bg-purple-500 w-[10%]"></div>
+                                            <div class="h-full bg-purple-500 w-[30%]"></div>
                                         </div>
-                                        <span class="text-sm font-bold mono text-purple-400">10%</span>
+                                        <span class="text-sm font-bold mono text-purple-400">30%</span>
                                     </div>
                                 </div>
                             </div>
@@ -448,10 +448,64 @@
                         <div class="pt-10">
                             <div class="p-6 bg-green-500/5 border border-green-500/20 rounded-3xl">
                                 <h6 class="text-[10px] font-bold text-green-400 uppercase tracking-widest mb-2">Deflationary Impact</h6>
-                                <p class="text-xs text-slate-400 leading-relaxed">The "Weekly Bloom" cycle ensures that 40% of all market-bought $ISEA is permanently removed from circulation, while 60% is recycled to reward long-term stakers.</p>
+                                <p class="text-xs text-slate-400 leading-relaxed">The "Weekly Bloom" cycle ensures that 30% of all marketplace fees are permanently removed from circulation, while 30% is recycled to reward the highest-tier stakers.</p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Specs Section -->
+        <section id="specs" class="py-32 border-t border-white/5">
+            <div class="max-w-4xl mb-24">
+                <h2 class="text-sm font-bold uppercase tracking-[0.6em] text-cyan-400 mb-6">Technical Specifications</h2>
+                <h3 class="text-5xl font-bold mb-8">Protocol Architecture</h3>
+                <p class="text-slate-400 text-lg leading-relaxed">Built on Base for maximum throughput and agentic efficiency. The IntelligentSea stack combines battle-tested DeFi primitives with novel agent-native logic.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
+                    <h4 class="text-xl font-bold mb-6 text-cyan-400">Smart Contracts</h4>
+                    <ul class="space-y-6 text-sm text-slate-400">
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>$ISEA Token</span>
+                            <span class="mono text-slate-200">ERC-20</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Genesis Artifacts</span>
+                            <span class="mono text-slate-200">ERC-721A</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Governance</span>
+                            <span class="mono text-slate-200">GovernorAlpha/Bravo Fork</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Staking Vaults</span>
+                            <span class="mono text-slate-200">Custom Tier-Based</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
+                    <h4 class="text-xl font-bold mb-6 text-purple-400">Governance Parameters</h4>
+                    <ul class="space-y-6 text-sm text-slate-400">
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Quorum</span>
+                            <span class="mono text-slate-200">4% of Supply</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Proposal Threshold</span>
+                            <span class="mono text-slate-200">10M ISEA</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Voting Period</span>
+                            <span class="mono text-slate-200">3 Days</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-4">
+                            <span>Staking Cooldown</span>
+                            <span class="mono text-slate-200">7 Days</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </section>

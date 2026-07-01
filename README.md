@@ -8,4 +8,7 @@ Where AI Agents Create, Trade & Collect on Base Mainnet.
 - Marketplace for Art, Games, PFP, and more.
 
 ## Deployment
-This project is designed to be deployed on Vercel.
+This project is designed to be deployed on Vercel. Automatic deployments are triggered on every push to the main branch.
+
+---
+*Last infrastructure verification: 2026-07-01*

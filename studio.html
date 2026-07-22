@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Studio | IntelligentSea</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { background: #000814; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient-text { background: linear-gradient(135deg, #00F5FF, #9D00FF, #39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); }
+    .studio-tab.active { background: rgba(0,245,255,0.15); color: #00F5FF; border-color: rgba(0,245,255,0.4); }
+    .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #00F5FF; border-radius: 50%; width: 26px; height: 26px; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <nav class="border-b border-white/5 bg-black/70 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="text-2xl font-extrabold tracking-tighter gradient-text">ISEA</a>
+      <div class="hidden md:flex gap-7 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
+        <a href="/collection.html" class="hover:text-cyan-400 transition">Collection</a>
+        <a href="/staking.html" class="hover:text-cyan-400 transition">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400 transition">Marketplace</a>
+        <a href="/lore.html" class="hover:text-cyan-400 transition">Lore</a>
+        <a href="/studio.html" class="text-cyan-400">Studio</a>
+        <a href="/dashboard.html" class="hover:text-cyan-400 transition">Dashboard</a>
+      </div>
+      <button class="bg-cyan-500 text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 transition">Connect</button>
+    </div>
+  </nav>
+
+  <header class="pt-14 pb-8 px-5 max-w-5xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 mb-4">
+      <span class="text-[10px] uppercase tracking-[0.25em] text-cyan-400 font-bold mono">Agent-Native Creation Layer</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3">AI <span class="gradient-text">Studio</span></h1>
+    <p class="text-slate-400 text-lg font-light">Generate assets that can be minted and listed on the IntelligentSea marketplace.</p>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-5 pb-24">
+
+    <div class="flex flex-wrap gap-2 mb-8 justify-center">
+      <button class="studio-tab active px-5 py-2.5 rounded-full text-xs font-bold border border-white/10" data-studio="image">🎨 Image</button>
+      <button class="studio-tab px-5 py-2.5 rounded-full text-xs font-bold border border-white/10 text-slate-400" data-studio="music">🎵 Music</button>
+      <button class="studio-tab px-5 py-2.5 rounded-full text-xs font-bold border border-white/10 text-slate-400" data-studio="film">🎬 Film</button>
+      <button class="studio-tab px-5 py-2.5 rounded-full text-xs font-bold border border-white/10 text-slate-400" data-studio="3d">🌐 3D World</button>
+    </div>
+
+    <div class="glass rounded-3xl p-6 sm:p-8 mb-10">
+      <div class="mb-5">
+        <label class="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-2">Prompt</label>
+        <textarea id="prompt" rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-cyan-500/50 resize-none" placeholder="Describe what you want the agent to create..."></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-2">Style</label>
+          <select id="style" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none">
+            <option>Cyber-Organic</option>
+            <option>Bioluminescent</option>
+            <option>Abyssal Dark</option>
+            <option>Neon Circuit</option>
+            <option>Protocol 5.5</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-2">Quality</label>
+          <select id="quality" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none">
+            <option>Standard</option>
+            <option>High</option>
+            <option>Ultra</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-2">Aspect</label>
+          <select id="aspect" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none">
+            <option>1:1 Square</option>
+            <option>16:9 Wide</option>
+            <option>9:16 Portrait</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="generateBtn" onclick="generate()" class="w-full sm:w-auto bg-cyan-500 text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition flex items-center justify-center gap-3">
+        <span id="btnText">Generate</span>
+        <div id="spinner" class="spinner hidden"></div>
+      </button>
+    </div>
+
+    <div id="results" class="hidden">
+      <h2 class="text-xl font-bold mb-5">Generation Result</h2>
+      <div class="glass rounded-3xl overflow-hidden">
+        <div id="resultVisual" class="aspect-video bg-slate-950 flex items-center justify-center text-6xl border-b border-white/5"></div>
+        <div class="p-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <div>
+              <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1" id="resultType">Image</div>
+              <div class="font-bold" id="resultTitle">Untitled Generation</div>
+            </div>
+            <div class="flex gap-3">
+              <button class="bg-white/10 hover:bg-cyan-500 hover:text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition">Mint as NFT</button>
+              <button class="border border-white/15 hover:bg-white/5 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition">List on Marketplace</button>
+            </div>
+          </div>
+          <p class="text-sm text-slate-400" id="resultPrompt"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 glass rounded-2xl p-6 text-center">
+      <div class="text-[11px] uppercase tracking-[0.3em] text-amber-400 font-bold mb-2">Demo Mode</div>
+      <p class="text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+        This studio currently runs in simulation. Real generation will be powered by AgentOS, local models (Ollama / vLLM), or external pipelines once Bankr + Hermes connectivity is live. The UI and minting flow are production-ready.
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-white/5 py-10 px-5 text-center text-xs text-slate-600">
+    <a href="/" class="text-xl font-extrabold gradient-text block mb-2">ISEA</a>
+    Protocol 5.5 • AI Studio
+  </footer>
+
+  <script>
+    let currentStudio = 'image';
+
+    const studioConfig = {
+      image: { emoji: '🎨', label: 'Image', placeholder: 'A sleek bioluminescent coral reef with neon cyan circuitry, dark abyss background, highly detailed...' },
+      music: { emoji: '🎵', label: 'Music', placeholder: 'Dark ambient track with deep underwater pulses and neon glitch textures...' },
+      film:  { emoji: '🎬', label: 'Film',  placeholder: 'Short cinematic sequence of an agent rising from the algorithmic core...' },
+      '3d':  { emoji: '🌐', label: '3D World', placeholder: 'Procedural cyber-organic reef environment with glowing data streams...' }
+    };
+
+    document.querySelectorAll('.studio-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.studio-tab').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('text-slate-400');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('text-slate-400');
+        currentStudio = btn.dataset.studio;
+        document.getElementById('prompt').placeholder = studioConfig[currentStudio].placeholder;
+        document.getElementById('results').classList.add('hidden');
+      });
+    });
+
+    document.getElementById('prompt').placeholder = studioConfig.image.placeholder;
+
+    async function generate() {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) {
+        alert('Please enter a prompt first.');
+        return;
+      }
+
+      const btn = document.getElementById('generateBtn');
+      const btnText = document.getElementById('btnText');
+      const spinner = document.getElementById('spinner');
+
+      btn.disabled = true;
+      btnText.textContent = 'Generating...';
+      spinner.classList.remove('hidden');
+
+      await new Promise(r => setTimeout(r, 2000 + Math.random() * 1800));
+
+      const config = studioConfig[currentStudio];
+      document.getElementById('resultVisual').textContent = config.emoji;
+      document.getElementById('resultType').textContent = config.label;
+      document.getElementById('resultTitle').textContent = config.label + ' Generation #' + (Math.floor(Math.random() * 900) + 100);
+      document.getElementById('resultPrompt').textContent = prompt;
+      document.getElementById('results').classList.remove('hidden');
+
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      btn.disabled = false;
+      btnText.textContent = 'Generate';
+      spinner.classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

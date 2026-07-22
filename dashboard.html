@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | IntelligentSea</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { background: #000814; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient-text { background: linear-gradient(135deg, #00F5FF, #9D00FF, #39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); }
+  </style>
+</head>
+<body>
+
+  <nav class="border-b border-white/5 bg-black/70 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="text-2xl font-extrabold tracking-tighter gradient-text">ISEA</a>
+      <div class="hidden md:flex gap-7 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
+        <a href="/collection.html" class="hover:text-cyan-400 transition">Collection</a>
+        <a href="/staking.html" class="hover:text-cyan-400 transition">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400 transition">Marketplace</a>
+        <a href="/lore.html" class="hover:text-cyan-400 transition">Lore</a>
+        <a href="/studio.html" class="hover:text-cyan-400 transition">Studio</a>
+        <a href="/dashboard.html" class="text-cyan-400">Dashboard</a>
+      </div>
+      <button id="navConnect" onclick="connectWallet()" class="bg-cyan-500 text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 transition">Connect</button>
+    </div>
+  </nav>
+
+  <header class="pt-14 pb-8 px-5 max-w-6xl mx-auto">
+    <h1 class="text-4xl font-extrabold tracking-tight mb-2">Dashboard</h1>
+    <p class="text-slate-400">Portfolio • Holdings • Staking • Sovereign Status</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 pb-24">
+
+    <!-- Not Connected State -->
+    <div id="disconnected" class="glass rounded-3xl p-12 text-center">
+      <div class="text-5xl mb-5">🔗</div>
+      <h2 class="text-2xl font-bold mb-3">Connect Your Wallet</h2>
+      <p class="text-slate-400 text-sm max-w-md mx-auto mb-8">
+        Connect a Base wallet to view your full portfolio: $ISEA balance, Genesis NFT holdings, staking position, yield, and Sovereign progress.
+      </p>
+      <button onclick="connectWallet()" class="bg-cyan-500 text-black px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition">
+        Connect Wallet
+      </button>
+      <p class="text-[11px] text-slate-600 mt-6 mono">Demo mode uses simulated data. Real on-chain reads coming with Bankr + Hermes.</p>
+    </div>
+
+    <!-- Connected Portfolio -->
+    <div id="connected" class="hidden space-y-8">
+
+      <!-- Top Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass rounded-2xl p-5">
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">$ISEA Balance</div>
+          <div class="text-2xl font-bold mono text-cyan-400" id="iseaBalance">12,480.00</div>
+        </div>
+        <div class="glass rounded-2xl p-5">
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Genesis NFTs</div>
+          <div class="text-2xl font-bold mono text-purple-400" id="nftCount">7</div>
+        </div>
+        <div class="glass rounded-2xl p-5">
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Staked $ISEA</div>
+          <div class="text-2xl font-bold mono text-emerald-400" id="stakedAmount">8,200.00</div>
+        </div>
+        <div class="glass rounded-2xl p-5">
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Total Yield</div>
+          <div class="text-2xl font-bold mono text-yellow-400" id="totalYield">3.7x</div>
+        </div>
+      </div>
+
+      <!-- Wallet + Sovereign -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6 lg:col-span-1">
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-3">Wallet</div>
+          <div class="mono text-sm text-cyan-400 mb-1" id="walletAddress">0x7a3f...9c2e</div>
+          <div class="text-xs text-slate-500 mb-4">Base Mainnet</div>
+          <button onclick="disconnectWallet()" class="text-xs text-slate-400 hover:text-red-400 transition">Disconnect</button>
+        </div>
+
+        <div class="glass rounded-2xl p-6 lg:col-span-2">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Reef Sovereign Status</div>
+              <div class="text-xl font-bold" id="sovereignStatus">In Progress</div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold mono text-cyan-400" id="sovereignProgress">7/10</div>
+              <div class="text-[10px] text-slate-500 uppercase">Themes Collected</div>
+            </div>
+          </div>
+          <div class="w-full bg-white/5 rounded-full h-2 mb-3">
+            <div class="bg-cyan-500 h-2 rounded-full" style="width: 70%" id="progressBar"></div>
+          </div>
+          <p class="text-xs text-slate-400">Collect all 10 Genesis Themes to unlock +2.0x Sovereign Bonus, elevated governance, and revenue share.</p>
+        </div>
+      </div>
+
+      <!-- NFT Holdings -->
+      <div class="glass rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-lg font-bold">Genesis NFT Holdings</h2>
+          <a href="/collection.html" class="text-xs text-cyan-400 hover:text-cyan-300">View Collection →</a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3" id="nftHoldings">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <!-- Staking Position -->
+      <div class="glass rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-lg font-bold">Staking Position</h2>
+          <a href="/staking.html" class="text-xs text-cyan-400 hover:text-cyan-300">Manage Staking →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white/5 rounded-xl p-4">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Base Tier</div>
+            <div class="text-xl font-bold mono text-emerald-400">Apex (1.5x)</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-4">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">NFT Multipliers</div>
+            <div class="text-xl font-bold mono text-purple-400">+2.2x</div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-4">
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Sovereign Bonus</div>
+            <div class="text-xl font-bold mono text-slate-400">+0.0x</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-lg font-bold mb-5">Recent Activity</h2>
+        <div class="space-y-3 text-sm" id="activityFeed">
+          <div class="flex justify-between items-center py-2 border-b border-white/5">
+            <div><span class="text-emerald-400">+ Yield</span> <span class="text-slate-400">claimed from staking</span></div>
+            <div class="mono text-xs text-slate-500">2h ago</div>
+          </div>
+          <div class="flex justify-between items-center py-2 border-b border-white/5">
+            <div><span class="text-cyan-400">Minted</span> <span class="text-slate-400">Encrypted Eel #184</span></div>
+            <div class="mono text-xs text-slate-500">1d ago</div>
+          </div>
+          <div class="flex justify-between items-center py-2 border-b border-white/5">
+            <div><span class="text-purple-400">Staked</span> <span class="text-slate-400">2,000 $ISEA</span></div>
+            <div class="mono text-xs text-slate-500">3d ago</div>
+          </div>
+          <div class="flex justify-between items-center py-2">
+            <div><span class="text-yellow-400">Acquired</span> <span class="text-slate-400">Neural Nautilus #041</span></div>
+            <div class="mono text-xs text-slate-500">5d ago</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-white/5 py-10 px-5 text-center text-xs text-slate-600">
+    <a href="/" class="text-xl font-extrabold gradient-text block mb-2">ISEA</a>
+    Protocol 5.5 • Dashboard
+  </footer>
+
+  <script>
+    // Simulated portfolio data
+    const portfolio = {
+      address: "0x7a3f...9c2e",
+      iseaBalance: "12,480.00",
+      staked: "8,200.00",
+      yield: "3.7x",
+      nfts: [
+        { name: "Algorithmic Core", icon: "⚛️", tier: "God" },
+        { name: "Neural Nautilus", icon: "🐚", tier: "Legendary" },
+        { name: "Mempool Manta", icon: "🐟", tier: "Legendary" },
+        { name: "Hash-Rate Urchin", icon: "🦔", tier: "Epic" },
+        { name: "Encrypted Eel", icon: "🐍", tier: "Epic" },
+        { name: "Subnet Starfish", icon: "⭐", tier: "Rare" },
+        { name: "Binary Coral", icon: "🪸", tier: "Uncommon" }
+      ]
+    };
+
+    function connectWallet() {
+      localStorage.setItem('isea_connected', 'true');
+      showPortfolio();
+    }
+
+    function disconnectWallet() {
+      localStorage.removeItem('isea_connected');
+      document.getElementById('disconnected').classList.remove('hidden');
+      document.getElementById('connected').classList.add('hidden');
+      document.getElementById('navConnect').textContent = 'Connect';
+    }
+
+    function showPortfolio() {
+      document.getElementById('disconnected').classList.add('hidden');
+      document.getElementById('connected').classList.remove('hidden');
+      document.getElementById('navConnect').textContent = '0x7a3f...9c2e';
+
+      // Populate NFT holdings
+      const container = document.getElementById('nftHoldings');
+      container.innerHTML = portfolio.nfts.map(nft => `
+        <div class="bg-white/5 rounded-xl p-3 text-center">
+          <div class="text-2xl mb-1">${nft.icon}</div>
+          <div class="text-[10px] font-bold truncate">${nft.name}</div>
+          <div class="text-[9px] text-slate-500 uppercase">${nft.tier}</div>
+        </div>
+      `).join('');
+    }
+
+    // Auto-connect if previously connected
+    if (localStorage.getItem('isea_connected') === 'true') {
+      showPortfolio();
+    }
+  </script>
+
+</body>
+</html>

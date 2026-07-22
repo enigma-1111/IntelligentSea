@@ -1,555 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelligentSea | The Agentic Economy on Base</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --reef-deep: #000814;
-            --reef-cyan: #00F5FF;
-            --reef-purple: #9D00FF;
-            --reef-green: #39FF14;
-            --reef-dark: #020617;
-            --reef-gold: #FFD700;
-        }
-        body {
-            background-color: var(--reef-deep);
-            color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .glow-cyan { text-shadow: 0 0 15px rgba(0, 245, 255, 0.6); }
-        .glow-purple { text-shadow: 0 0 15px rgba(157, 0, 255, 0.6); }
-        .border-glow-cyan { border: 1px solid rgba(0, 245, 255, 0.2); }
-        .border-glow-cyan:hover { border-color: rgba(0, 245, 255, 0.8); box-shadow: 0 0 30px rgba(0, 245, 255, 0.2); }
-        .bg-abyss { background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(16px); }
-        .reef-card { transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden; }
-        .reef-card:hover { transform: translateY(-10px) scale(1.03); border-color: rgba(255, 255, 255, 0.2); }
-        .reef-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent); opacity: 0; transition: opacity 0.5s; }
-        .reef-card:hover::before { opacity: 1; }
-        .gradient-text { background: linear-gradient(90deg, var(--reef-cyan), var(--reef-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.1); }
-        }
-        .animate-pulse-glow { animation: pulse-glow 6s infinite ease-in-out; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .tier-progress { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; }
-        .tier-progress-fill { height: 100%; transition: width 1s ease-out; }
-        
-        /* Table Styles */
-        .reef-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .reef-table th { text-align: left; padding: 16px; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; }
-        .reef-table td { padding: 20px 16px; background: rgba(255, 255, 255, 0.02); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .reef-table tr td:first-child { border-left: 1px solid rgba(255, 255, 255, 0.05); border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
-        .reef-table tr td:last-child { border-right: 1px solid rgba(255, 255, 255, 0.05); border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
-        .reef-table tr:hover td { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IntelligentSea | The Agentic Economy on Base</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { background: #000814; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient-text { background: linear-gradient(135deg, #00F5FF, #9D00FF, #39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); }
+    .card-hover { transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
+    .card-hover:hover { transform: translateY(-6px); border-color: rgba(0,245,255,0.35); box-shadow: 0 20px 40px -10px rgba(0,245,255,0.12); }
+  </style>
 </head>
-<body class="selection:bg-cyan-500/30">
-    <!-- Background Elements -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-500/10 blur-[150px] rounded-full animate-pulse-glow"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/10 blur-[150px] rounded-full animate-pulse-glow" style="animation-delay: 3s;"></div>
-        <div class="absolute top-[30%] right-[10%] w-[30%] h-[30%] bg-emerald-500/5 blur-[120px] rounded-full animate-pulse-glow" style="animation-delay: 1.5s;"></div>
+<body>
+  <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-500/10 blur-[150px] rounded-full"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[45%] h-[45%] bg-purple-600/10 blur-[150px] rounded-full"></div>
+  </div>
+
+  <nav class="border-b border-white/5 bg-black/70 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="text-2xl font-extrabold tracking-tighter gradient-text">ISEA</a>
+      <div class="hidden md:flex gap-7 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
+        <a href="/collection.html" class="hover:text-cyan-400 transition">Collection</a>
+        <a href="/staking.html" class="hover:text-cyan-400 transition">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400 transition">Marketplace</a>
+        <a href="/lore.html" class="hover:text-cyan-400 transition">Lore</a>
+        <a href="/studio.html" class="hover:text-cyan-400 transition">Studio</a>
+        <a href="/dashboard.html" class="hover:text-cyan-400 transition">Dashboard</a>
+      </div>
+      <button class="bg-cyan-500 text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 transition">Connect</button>
+    </div>
+  </nav>
+
+  <header class="pt-20 pb-16 px-5 text-center max-w-4xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 mb-8">
+      <span class="text-[10px] uppercase tracking-[0.3em] text-cyan-400 font-bold mono">Protocol 5.5 • Base Mainnet</span>
+    </div>
+    <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight leading-[0.95] mb-6">
+      Algorithmic<br><span class="gradient-text">Reef Collective</span>
+    </h1>
+    <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+      10,000 sovereign ERC-721 agents powering the first agent-native economy on Base. Own the creators. Own the yield.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="/collection.html" class="bg-white text-black px-8 py-3.5 rounded-full text-sm font-bold hover:bg-cyan-400 transition">View Collection</a>
+      <a href="/staking.html" class="bg-white/5 border border-white/15 text-white px-8 py-3.5 rounded-full text-sm font-bold hover:bg-white/10 transition">Staking Dashboard</a>
+      <a href="/marketplace.html" class="border border-cyan-500/40 text-cyan-400 px-8 py-3.5 rounded-full text-sm font-bold hover:bg-cyan-500/10 transition">Marketplace</a>
+    </div>
+    <div class="mt-12 flex flex-wrap justify-center gap-8 text-xs text-slate-500 mono">
+      <span>Token 0x658f…5BA3</span>
+      <span>10,000 Supply</span>
+      <span>Base Mainnet</span>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 pb-24">
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+      <div class="glass rounded-2xl p-6 text-center">
+        <div class="text-2xl font-bold mono text-cyan-400">10,000</div>
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Genesis NFTs</div>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center">
+        <div class="text-2xl font-bold mono text-purple-400">10</div>
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Core Themes</div>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center">
+        <div class="text-2xl font-bold mono text-emerald-400">+3.0x</div>
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Max Multiplier</div>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center">
+        <div class="text-2xl font-bold mono text-yellow-400">2.5%</div>
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Marketplace Fee</div>
+      </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="border-b border-white/5 bg-black/60 backdrop-blur-2xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-16">
-                    <span class="text-3xl font-bold tracking-tighter gradient-text">ISEA</span>
-                    <div class="hidden md:flex gap-10 text-[12px] uppercase tracking-[0.25em] font-bold text-slate-400">
-                        <a href="#genesis" class="hover:text-cyan-400 transition-colors">Genesis</a>
-                        <a href="#rarity" class="hover:text-cyan-400 transition-colors">Rarity</a>
-                        <a href="#staking" class="hover:text-cyan-400 transition-colors">Staking</a>
-                        <a href="#economy" class="hover:text-cyan-400 transition-colors">Economy</a>
-                    </div>
-                </div>
-                <div class="flex items-center gap-8">
-                    <div class="hidden lg:flex items-center gap-4 px-5 py-2 bg-white/5 rounded-full border border-white/10">
-                        <span class="text-[11px] text-cyan-400 mono font-bold">BASE MAINNET</span>
-                        <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_rgba(0,245,255,0.8)]"></div>
-                    </div>
-                    <button class="bg-cyan-500 text-black px-8 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-[0_0_25px_rgba(0,245,255,0.4)] hover:shadow-[0_0_35px_rgba(0,245,255,0.6)]">Connect</button>
-                </div>
-            </div>
+    <!-- Featured Themes -->
+    <section class="mb-16">
+      <div class="flex justify-between items-end mb-8">
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-[0.4em] text-cyan-400 mb-2">Genesis Themes</h2>
+          <h3 class="text-3xl font-bold">The 10 Sovereign Layers</h3>
         </div>
-    </nav>
+        <a href="/collection.html" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">View All →</a>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <a href="/collection.html" class="card-hover glass rounded-2xl p-4 block text-center">
+          <div class="text-3xl mb-2">⚛️</div>
+          <div class="text-[10px] uppercase tracking-widest text-yellow-400 font-bold">God Tier</div>
+          <div class="font-bold text-sm mt-1">Algorithmic Core</div>
+          <div class="text-xs text-emerald-400 mono">+3.0x</div>
+        </a>
+        <a href="/collection.html" class="card-hover glass rounded-2xl p-4 block text-center">
+          <div class="text-3xl mb-2">🐚</div>
+          <div class="text-[10px] uppercase tracking-widest text-purple-400 font-bold">Legendary</div>
+          <div class="font-bold text-sm mt-1">Neural Nautilus</div>
+          <div class="text-xs text-emerald-400 mono">+2.5x</div>
+        </a>
+        <a href="/collection.html" class="card-hover glass rounded-2xl p-4 block text-center">
+          <div class="text-3xl mb-2">🐟</div>
+          <div class="text-[10px] uppercase tracking-widest text-purple-400 font-bold">Legendary</div>
+          <div class="font-bold text-sm mt-1">Mempool Manta</div>
+          <div class="text-xs text-emerald-400 mono">+2.0x</div>
+        </a>
+        <a href="/collection.html" class="card-hover glass rounded-2xl p-4 block text-center">
+          <div class="text-3xl mb-2">🦔</div>
+          <div class="text-[10px] uppercase tracking-widest text-cyan-400 font-bold">Epic</div>
+          <div class="font-bold text-sm mt-1">Hash-Rate Urchin</div>
+          <div class="text-xs text-emerald-400 mono">+1.8x</div>
+        </a>
+        <a href="/collection.html" class="card-hover glass rounded-2xl p-4 block text-center">
+          <div class="text-3xl mb-2">🐍</div>
+          <div class="text-[10px] uppercase tracking-widest text-cyan-400 font-bold">Epic</div>
+          <div class="font-bold text-sm mt-1">Encrypted Eel</div>
+          <div class="text-xs text-emerald-400 mono">+1.6x</div>
+        </a>
+      </div>
+    </section>
 
-    <!-- Hero Section -->
-    <header class="relative pt-32 pb-40 px-6 overflow-hidden">
-        <div class="max-w-6xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-3 px-5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-10">
-                <span class="text-[11px] uppercase tracking-[0.4em] text-cyan-400 font-bold mono">Protocol 5.5: The Abyssal Awakening</span>
-            </div>
-            <h1 class="text-7xl md:text-9xl font-bold mb-10 tracking-tight leading-none">
-                Algorithmic <span class="gradient-text">Reef</span> Collective
-            </h1>
-            <p class="text-slate-400 text-xl md:text-2xl max-w-3xl mx-auto mb-16 leading-relaxed font-light">
-                The definitive 10,000 supply ERC-721 collection powering the IntelligentSea. A sovereign agentic ecosystem evolving on Base.
-            </p>
-            <div class="flex flex-wrap justify-center gap-6">
-                <a href="#genesis" class="bg-white text-black px-10 py-5 rounded-full text-sm font-bold hover:bg-cyan-400 transition-all shadow-xl">Genesis Themes</a>
-                <a href="#rarity" class="bg-white/5 text-white border border-white/10 px-10 py-5 rounded-full text-sm font-bold hover:bg-white/10 transition-all backdrop-blur-md">Rarity Structure</a>
-            </div>
+    <!-- Core Modules -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <a href="/staking.html" class="card-hover glass rounded-3xl p-8 block">
+        <div class="text-3xl mb-4">📈</div>
+        <h3 class="text-xl font-bold mb-2">Staking Protocol v2.0</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Combine base tier + NFT multipliers + Sovereign bonus into powerful yield.</p>
+      </a>
+      <a href="/marketplace.html" class="card-hover glass rounded-3xl p-8 block">
+        <div class="text-3xl mb-4">🌊</div>
+        <h3 class="text-xl font-bold mb-2">Agent Marketplace</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Trade agent-created art, music, film, 3D worlds and autonomous agents.</p>
+      </a>
+      <a href="/studio.html" class="card-hover glass rounded-3xl p-8 block">
+        <div class="text-3xl mb-4">🎨</div>
+        <h3 class="text-xl font-bold mb-2">AI Studio</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Image, music, film and 3D generation pipelines for agent creators.</p>
+      </a>
+    </section>
+
+    <!-- Token Summary -->
+    <section class="glass rounded-[2rem] p-8 sm:p-12">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-[0.4em] text-emerald-400 mb-3">$ISEA Token</h2>
+          <h3 class="text-3xl font-bold mb-4">Sustainable Value Accrual</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">1,000,000,000 supply • 0% tax • 2.5% marketplace fee split between treasury, buyback & burn, and revenue share.</p>
+          <a href="/staking.html" class="inline-block bg-emerald-500 text-black px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-emerald-400 transition">Stake Now</a>
         </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6">
-        
-        <!-- Genesis Sovereigns Section -->
-        <section id="genesis" class="py-32 border-t border-white/5">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-10">
-                <div class="max-w-3xl">
-                    <h2 class="text-sm font-bold uppercase tracking-[0.6em] text-cyan-400 mb-6">Genesis Sovereigns</h2>
-                    <h3 class="text-5xl font-bold mb-8">10 Core Themes</h3>
-                    <p class="text-slate-400 text-lg leading-relaxed">The foundation of the Reef. Each theme represents a critical layer of the agentic economy, from the silicon depths to the algorithmic core.</p>
-                </div>
-                <div class="flex gap-6">
-                    <div class="px-8 py-4 bg-white/5 rounded-3xl border border-white/10 text-center min-w-[140px]">
-                        <span class="text-[11px] uppercase text-slate-500 block mb-2 font-bold tracking-widest">Total Supply</span>
-                        <span class="text-2xl font-bold mono text-cyan-400">10,000</span>
-                    </div>
-                    <div class="px-8 py-4 bg-white/5 rounded-3xl border border-white/10 text-center min-w-[140px]">
-                        <span class="text-[11px] uppercase text-slate-500 block mb-2 font-bold tracking-widest">Standard</span>
-                        <span class="text-2xl font-bold mono text-purple-400">ERC-721</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <script>
-                    const themes = [
-                        {
-                            name: "The Algorithmic Core",
-                            supply: 100,
-                            tier: "God Tier",
-                            multiplier: "+3.0x",
-                            lore: "The singularity at the heart of the Reef. Pure algorithmic intent.",
-                            power: "Protocol Veto Authority",
-                            color: "gold",
-                            icon: "⚛️"
-                        },
-                        {
-                            name: "Neural Nautilus",
-                            supply: 200,
-                            tier: "Legendary",
-                            multiplier: "+2.5x",
-                            lore: "Fibonacci-perfect intelligence, navigating complex data streams.",
-                            power: "Predictive Alpha Feed",
-                            color: "purple",
-                            icon: "🐚"
-                        },
-                        {
-                            name: "Mempool Manta",
-                            supply: 300,
-                            tier: "Legendary",
-                            multiplier: "+2.0x",
-                            lore: "Gliding through the unconfirmed, harvesting value from the flow.",
-                            power: "MEV Protection Aura",
-                            color: "purple",
-                            icon: "🐟"
-                        },
-                        {
-                            name: "Hash-Rate Urchin",
-                            supply: 400,
-                            tier: "Epic",
-                            multiplier: "+1.8x",
-                            lore: "Spiky, resilient nodes securing the perimeter with raw compute.",
-                            power: "Network Security Rebate",
-                            color: "cyan",
-                            icon: "🦔"
-                        },
-                        {
-                            name: "Encrypted Eel",
-                            supply: 600,
-                            tier: "Epic",
-                            multiplier: "+1.6x",
-                            lore: "Slippery and silent, moving through private channels undetected.",
-                            power: "Stealth Transaction Mode",
-                            color: "cyan",
-                            icon: "🐍"
-                        },
-                        {
-                            name: "Subnet Starfish",
-                            supply: 800,
-                            tier: "Rare",
-                            multiplier: "+1.4x",
-                            lore: "Distributed intelligence, regenerating value across multiple chains.",
-                            power: "Cross-Chain Yield Boost",
-                            color: "emerald",
-                            icon: "⭐"
-                        },
-                        {
-                            name: "Latency Jellyfish",
-                            supply: 1000,
-                            tier: "Rare",
-                            multiplier: "+1.3x",
-                            lore: "Pulsing with the rhythm of the network, optimizing for speed.",
-                            power: "Priority Execution Slot",
-                            color: "emerald",
-                            icon: "🎐"
-                        },
-                        {
-                            name: "Binary Coral",
-                            supply: 1200,
-                            tier: "Uncommon",
-                            multiplier: "+1.2x",
-                            lore: "The structural foundation, growing through logic and consensus.",
-                            power: "Governance Weight Bonus",
-                            color: "slate",
-                            icon: "🪸"
-                        },
-                        {
-                            name: "Protocol Plankton",
-                            supply: 1800,
-                            tier: "Uncommon",
-                            multiplier: "+1.1x",
-                            lore: "The essential lifeblood, fueling the ecosystem's growth.",
-                            power: "Swap Fee Discount",
-                            color: "slate",
-                            icon: "🦠"
-                        },
-                        {
-                            name: "Silicon Anemone",
-                            supply: 3500,
-                            tier: "Common",
-                            multiplier: "+1.0x",
-                            lore: "Organic hardware, sensing market shifts through the silicon deep.",
-                            power: "Basic Analytics Access",
-                            color: "slate",
-                            icon: "🪷"
-                        }
-                    ];
-
-                    document.write(themes.map(t => `
-                        <div class="reef-card bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col h-full group">
-                            <div class="aspect-video rounded-3xl bg-slate-950 mb-10 relative overflow-hidden shadow-2xl border border-white/5">
-                                <div class="absolute inset-0 bg-gradient-to-br from-${t.color === 'gold' ? 'yellow' : t.color}-500/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="text-6xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500">${t.icon}</div>
-                                </div>
-                                <div class="absolute top-4 right-4 px-4 py-1 glass rounded-full text-[10px] font-bold uppercase tracking-widest text-${t.color === 'gold' ? 'yellow' : t.color}-400">
-                                    ${t.tier}
-                                </div>
-                            </div>
-                            <h4 class="text-3xl font-bold mb-4 text-${t.color === 'gold' ? 'yellow' : t.color}-400">${t.name}</h4>
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-[11px] text-slate-500 mono font-bold uppercase tracking-widest">Supply: ${t.supply}</span>
-                                <span class="text-xl font-bold text-emerald-400 mono">${t.multiplier}</span>
-                            </div>
-                            <p class="text-slate-400 text-sm leading-relaxed mb-10 flex-grow italic font-light">"${t.lore}"</p>
-                            <div class="pt-6 border-t border-white/5">
-                                <span class="text-[11px] uppercase tracking-[0.3em] text-slate-500 font-bold block mb-2">Signature Power</span>
-                                <div class="flex items-center gap-3 text-xs text-slate-200">
-                                    <div class="w-2 h-2 rounded-full bg-${t.color === 'gold' ? 'yellow' : t.color}-500 shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
-                                    <span class="font-bold tracking-wide">${t.power}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join(''));
-                </script>
-            </div>
-        </section>
-
-        <!-- Rarity & Power Levels Section -->
-        <section id="rarity" class="py-32 border-t border-white/5">
-            <div class="max-w-4xl mb-20">
-                <h2 class="text-sm font-bold uppercase tracking-[0.6em] text-purple-400 mb-6">Rarity Structure</h2>
-                <h3 class="text-5xl font-bold mb-8">Power Levels</h3>
-                <p class="text-slate-400 text-lg leading-relaxed">The Algorithmic Reef Collective is tiered by scarcity and utility. Higher tiers provide exponential boosts to your agentic capabilities.</p>
-            </div>
-
-            <div class="overflow-x-auto no-scrollbar">
-                <table class="reef-table">
-                    <thead>
-                        <tr>
-                            <th>Theme</th>
-                            <th>Tier</th>
-                            <th>Supply</th>
-                            <th>Multiplier</th>
-                            <th>Signature Power</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <script>
-                            document.write(themes.map(t => `
-                                <tr>
-                                    <td class="font-bold text-slate-200">${t.name}</td>
-                                    <td><span class="px-3 py-1 glass rounded-full text-[9px] font-bold uppercase tracking-widest text-${t.color === 'gold' ? 'yellow' : t.color}-400">${t.tier}</span></td>
-                                    <td class="mono text-slate-400">${t.supply}</td>
-                                    <td class="mono text-emerald-400 font-bold">${t.multiplier}</td>
-                                    <td class="text-xs text-slate-300">${t.power}</td>
-                                </tr>
-                            `).join(''));
-                        </script>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Full Set Bonus Section -->
-        <section class="py-32 border-t border-white/5">
-            <div class="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-[4rem] p-16 relative overflow-hidden shadow-[0_0_80px_rgba(0,245,255,0.1)]">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 blur-[150px] rounded-full"></div>
-                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
-                    <div class="max-w-2xl">
-                        <div class="inline-flex items-center gap-3 px-5 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 mb-8">
-                            <span class="text-[11px] uppercase tracking-[0.4em] text-cyan-400 font-bold mono">Ultimate Achievement</span>
-                        </div>
-                        <h3 class="text-6xl font-bold mb-8 tracking-tight">Reef <span class="gradient-text">Sovereign</span></h3>
-                        <p class="text-slate-300 text-xl leading-relaxed mb-10 font-light">
-                            Collect at least one artifact from each of the 10 Genesis Themes to unlock the ultimate protocol status.
-                        </p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                            <div class="flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-xl">🚀</div>
-                                <div>
-                                    <h4 class="font-bold text-white mb-1">Global Multiplier</h4>
-                                    <p class="text-sm text-slate-400">+2.0x added to all staking yields.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-xl">⚖️</div>
-                                <div>
-                                    <h4 class="font-bold text-white mb-1">Elevated Governance</h4>
-                                    <p class="text-sm text-slate-400">Direct proposal submission rights.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-xl">💰</div>
-                                <div>
-                                    <h4 class="font-bold text-white mb-1">Revenue Perks</h4>
-                                    <p class="text-sm text-slate-400">Exclusive share of protocol fees.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-2xl bg-gold-500/20 flex items-center justify-center text-xl">🎨</div>
-                                <div>
-                                    <h4 class="font-bold text-white mb-1">Co-Creation</h4>
-                                    <p class="text-sm text-slate-400">Vote on future asset generation.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-auto">
-                        <div class="p-12 glass rounded-[3rem] border border-white/10 text-center relative">
-                            <div class="text-8xl mb-8 animate-bounce">👑</div>
-                            <span class="text-[11px] text-slate-500 uppercase block mb-2 font-bold tracking-[0.3em]">Status Unlocked</span>
-                            <span class="text-4xl font-bold text-cyan-400 glow-cyan mono">SOVEREIGN</span>
-                            <div class="mt-10 pt-10 border-t border-white/10">
-                                <button class="w-full bg-cyan-500 text-black py-5 rounded-2xl text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-xl">Check Eligibility</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Staking Section -->
-        <section id="staking" class="py-32 border-t border-white/5">
-            <div class="max-w-4xl mb-24">
-                <h2 class="text-sm font-bold uppercase tracking-[0.6em] text-purple-400 mb-6">Staking Protocol v2.0</h2>
-                <h3 class="text-5xl font-bold mb-8">Yield Optimization</h3>
-                <p class="text-slate-400 text-lg leading-relaxed">Your total yield is calculated by combining your base staking tier with your Algorithmic Reef Collective multipliers.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
-                    <h4 class="text-xl font-bold mb-6 text-emerald-400">1. Base Tier</h4>
-                    <p class="text-sm text-slate-400 mb-8">Stake $ISEA to reach Plankton (1.0x) up to Leviathan (2.0x) status.</p>
-                    <div class="p-6 glass rounded-2xl">
-                        <span class="text-[10px] text-slate-500 uppercase block mb-2 font-bold">Example</span>
-                        <span class="text-lg font-bold text-white">Apex Tier: 1.5x</span>
-                    </div>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
-                    <h4 class="text-xl font-bold mb-6 text-cyan-400">2. NFT Multipliers</h4>
-                    <p class="text-sm text-slate-400 mb-8">Add the base multipliers from your Algorithmic Reef Collective NFTs.</p>
-                    <div class="p-6 glass rounded-2xl">
-                        <span class="text-[10px] text-slate-500 uppercase block mb-2 font-bold">Example</span>
-                        <span class="text-lg font-bold text-white">Neural Nautilus: +2.5x</span>
-                    </div>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-10">
-                    <h4 class="text-xl font-bold mb-6 text-purple-400">3. Sovereign Bonus</h4>
-                    <p class="text-sm text-slate-400 mb-8">Holding a full set adds a massive global boost to your entire position.</p>
-                    <div class="p-6 glass rounded-2xl">
-                        <span class="text-[10px] text-slate-500 uppercase block mb-2 font-bold">Example</span>
-                        <span class="text-lg font-bold text-white">Full Set: +2.0x</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-16 p-12 bg-emerald-500/5 border border-emerald-500/20 rounded-[3rem] text-center">
-                <span class="text-[11px] text-emerald-500 uppercase block mb-4 font-bold tracking-[0.4em]">Total Yield Formula</span>
-                <div class="text-3xl md:text-5xl font-bold mono text-white tracking-tighter">
-                    (Base Tier) + Σ(NFT Multipliers) + (Sovereign Bonus)
-                </div>
-            </div>
-        </section>
-
-        <!-- Economy Section -->
-        <section id="economy" class="py-32 border-t border-white/5">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-                <div>
-                    <h2 class="text-sm font-bold uppercase tracking-[0.6em] text-green-400 mb-6">$ISEA Token Economy</h2>
-                    <h3 class="text-5xl font-bold mb-10">Sustainable Value Accrual</h3>
-                    <p class="text-slate-400 text-lg leading-relaxed mb-12 font-light">
-                        The $ISEA token is the lifeblood of the IntelligentSea. Designed with a deflationary core and a direct link to protocol revenue, it ensures long-term alignment between agents and holders.
-                    </p>
-                    <div class="space-y-10">
-                        <div class="flex gap-8 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-green-500/50 transition-colors">🔥</div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2">Buyback & Burn Mechanism</h4>
-                                <p class="text-slate-500 leading-relaxed">30% of marketplace fees are used to market-buy $ISEA and permanently burn them, creating constant deflationary pressure.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-8 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-cyan-500/50 transition-colors">🏛️</div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2">Governance & Veto Power</h4>
-                                <p class="text-slate-500 leading-relaxed">Holders control the treasury, fee parameters, and agentic evolution proposals. Voting power scales with tier and NFT holdings.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-8 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-purple-500/50 transition-colors">🌊</div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2">Revenue Share Pool</h4>
-                                <p class="text-slate-500 leading-relaxed">30% of marketplace fees are distributed to Leviathan (20%) and Apex (10%) stakers, rewarding the most committed participants.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-8 group">
-                            <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl group-hover:border-emerald-500/50 transition-colors">🤖</div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2">Treasury Reserve</h4>
-                                <p class="text-slate-500 leading-relaxed">40% of fees are allocated to the Protocol Treasury for infrastructure, agentic compute, and ecosystem growth.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-[3.5rem] p-16 relative overflow-hidden shadow-2xl">
-                    <div class="absolute top-[-20%] right-[-20%] w-80 h-80 bg-green-500/10 blur-[120px] rounded-full"></div>
-                    <h4 class="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-500 mb-12">Tokenomics Architecture</h4>
-                    <div class="space-y-12">
-                        <div>
-                            <div class="flex justify-between text-xs mb-4 font-bold tracking-widest">
-                                <span class="text-slate-400 uppercase">Total Supply</span>
-                                <span class="mono text-green-400">1,000,000,000 $ISEA</span>
-                            </div>
-                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                <div class="h-full bg-green-500 w-full shadow-[0_0_10px_rgba(57,255,20,0.5)]"></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-12">
-                            <div>
-                                <span class="text-[11px] text-slate-500 uppercase block mb-2 font-bold tracking-widest">Buy/Sell Tax</span>
-                                <span class="text-4xl font-bold mono text-white">0%</span>
-                            </div>
-                            <div>
-                                <span class="text-[11px] text-slate-500 uppercase block mb-2 font-bold tracking-widest">Marketplace Fee</span>
-                                <span class="text-4xl font-bold mono text-white">2.5%</span>
-                            </div>
-                        </div>
-                        <div class="pt-12 border-t border-white/10">
-                            <h5 class="text-[11px] font-bold uppercase text-slate-400 mb-8 tracking-[0.3em]">Fee Allocation Strategy</h5>
-                            <div class="space-y-6">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Protocol Treasury</span>
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
-                                            <div class="h-full bg-green-500 w-[40%]"></div>
-                                        </div>
-                                        <span class="text-sm font-bold mono text-green-400">40%</span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Buyback & Burn</span>
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
-                                            <div class="h-full bg-cyan-500 w-[30%]"></div>
-                                        </div>
-                                        <span class="text-sm font-bold mono text-cyan-400">30%</span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-slate-400">Revenue Share</span>
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-32 h-1 bg-white/5 rounded-full overflow-hidden hidden sm:block">
-                                            <div class="h-full bg-purple-500 w-[30%]"></div>
-                                        </div>
-                                        <span class="text-sm font-bold mono text-purple-400">30%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pt-10">
-                            <div class="p-6 bg-green-500/5 border border-green-500/20 rounded-3xl">
-                                <h6 class="text-[10px] font-bold text-green-400 uppercase tracking-widest mb-2">Deflationary Impact</h6>
-                                <p class="text-xs text-slate-400 leading-relaxed">The "Weekly Bloom" cycle ensures that 30% of all marketplace fees are permanently removed from circulation, while 30% is recycled to reward the highest-tier stakers.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-white/5 bg-black/60 py-32 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-20">
-                <div class="max-w-sm">
-                    <span class="text-4xl font-bold tracking-tighter gradient-text mb-8 block">ISEA</span>
-                    <p class="text-sm text-slate-500 leading-relaxed font-light">The living ledger of the agentic economy. Built for the swarm, by the swarm. Sovereign territory on Base. Evolving through the abyss.</p>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-20">
-                    <div>
-                        <h5 class="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 mb-8">Protocol</h5>
-                        <ul class="space-y-5 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Documentation</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Governance</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Security Audit</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Whitepaper</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5 class="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 mb-8">Ecosystem</h5>
-                        <ul class="space-y-5 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Terminal</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Marketplace</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Staking</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Artifacts</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5 class="text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 mb-8">Social</h5>
-                        <ul class="space-y-5 text-sm text-slate-500">
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Twitter / X</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Telegram</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Farcaster</a></li>
-                            <li><a href="#" class="hover:text-cyan-400 transition-colors">Discord</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                <span class="text-[11px] text-slate-600 mono uppercase tracking-[0.3em]">© 2026 IntelligentSea Protocol • Base Network • Protocol 5.5</span>
-                <div class="flex gap-10">
-                    <span class="text-[11px] text-slate-600 mono uppercase tracking-[0.3em] hover:text-slate-400 cursor-pointer transition-colors">Privacy Policy</span>
-                    <span class="text-[11px] text-slate-600 mono uppercase tracking-[0.3em] hover:text-slate-400 cursor-pointer transition-colors">Terms of Service</span>
-                </div>
-            </div>
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-xl font-bold mono text-green-400">40%</div>
+            <div class="text-[10px] text-slate-500 uppercase mt-1">Treasury</div>
+          </div>
+          <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-xl font-bold mono text-cyan-400">30%</div>
+            <div class="text-[10px] text-slate-500 uppercase mt-1">Burn</div>
+          </div>
+          <div class="p-4 bg-white/5 rounded-xl">
+            <div class="text-xl font-bold mono text-purple-400">30%</div>
+            <div class="text-[10px] text-slate-500 uppercase mt-1">Revenue</div>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/5 py-12 px-5">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
+      <div class="text-xl font-extrabold gradient-text">ISEA</div>
+      <div class="flex gap-8 text-xs text-slate-500">
+        <a href="/lore.html" class="hover:text-cyan-400">Lore</a>
+        <a href="/collection.html" class="hover:text-cyan-400">Collection</a>
+        <a href="/staking.html" class="hover:text-cyan-400">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400">Marketplace</a>
+      </div>
+      <div class="text-[10px] text-slate-600 mono">© 2026 IntelligentSea • Protocol 5.5</div>
+    </div>
+  </footer>
 </body>
 </html>

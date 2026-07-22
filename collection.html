@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic Reef Collection | IntelligentSea</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { background: #000814; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient-text { background: linear-gradient(135deg, #00F5FF, #9D00FF, #39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); }
+    .card-hover { transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
+    .card-hover:hover { transform: translateY(-6px); border-color: rgba(0,245,255,0.35); box-shadow: 0 20px 40px -10px rgba(0,245,255,0.12); }
+  </style>
+</head>
+<body>
+  <nav class="border-b border-white/5 bg-black/70 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="text-2xl font-extrabold tracking-tighter gradient-text">ISEA</a>
+      <div class="hidden md:flex gap-7 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
+        <a href="/collection.html" class="text-cyan-400">Collection</a>
+        <a href="/staking.html" class="hover:text-cyan-400 transition">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400 transition">Marketplace</a>
+        <a href="/lore.html" class="hover:text-cyan-400 transition">Lore</a>
+        <a href="/studio.html" class="hover:text-cyan-400 transition">Studio</a>
+        <a href="/dashboard.html" class="hover:text-cyan-400 transition">Dashboard</a>
+      </div>
+      <button class="bg-cyan-500 text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 transition">Connect</button>
+    </div>
+  </nav>
+
+  <header class="pt-16 pb-12 px-5 max-w-5xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 mb-6">
+      <span class="text-[10px] uppercase tracking-[0.3em] text-cyan-400 font-bold mono">10,000 ERC-721 • Base</span>
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4">Agentic Reef <span class="gradient-text">Collection</span></h1>
+    <p class="text-slate-400 text-lg max-w-2xl mx-auto font-light">The definitive 10 Genesis Themes. Each layer of the agentic economy is permanently encoded with scarcity, multiplier, and signature power.</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 pb-24 space-y-16" id="themes-container"></main>
+
+  <footer class="border-t border-white/5 py-10 px-5">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+      <a href="/" class="text-xl font-extrabold gradient-text">ISEA</a>
+      <div class="flex gap-6">
+        <a href="/" class="hover:text-cyan-400">Home</a>
+        <a href="/staking.html" class="hover:text-cyan-400">Staking</a>
+        <a href="/marketplace.html" class="hover:text-cyan-400">Marketplace</a>
+      </div>
+      <span class="mono text-[10px]">Protocol 5.5</span>
+    </div>
+  </footer>
+
+  <script>
+    const themes = [
+      { id: "algorithmic-core", name: "The Algorithmic Core", number: "#001", tier: "God Tier", supply: 100, multiplier: "+3.0x", power: "Protocol Veto Authority", color: "yellow", icon: "⚛️",
+        lore: "The singularity at the heart of the Reef. Pure algorithmic intent. This is the origin point — the first spark of sovereign computation that gave birth to the entire agentic economy. Holders of the Algorithmic Core possess the ultimate authority: the ability to veto protocol-level changes and shape the evolutionary path of IntelligentSea itself.",
+        description: "Only 100 exist. The rarest and most powerful layer. Owning even one grants the highest possible base multiplier and direct influence over the protocol’s future." },
+      { id: "neural-nautilus", name: "Neural Nautilus", number: "#001", tier: "Legendary", supply: 200, multiplier: "+2.5x", power: "Predictive Alpha Feed", color: "purple", icon: "🐚",
+        lore: "Ancient spiral wisdom fused with golden neural circuitry. The Neural Nautilus processes complex data streams through Fibonacci-perfect geometry, generating predictive alpha that anticipates market and agent behavior before it materializes.",
+        description: "200 legendary pieces. Grants access to exclusive predictive intelligence feeds used by high-tier agents." },
+      { id: "mempool-manta", name: "Mempool Manta", number: "#001", tier: "Legendary", supply: 300, multiplier: "+2.0x", power: "MEV Protection Aura", color: "purple", icon: "🐟",
+        lore: "A majestic gliding entity formed from dark-pool data streams and neon transaction threads. The Mempool Manta moves silently through the unconfirmed, harvesting value while shielding its holders from predatory MEV extraction.",
+        description: "300 legendary pieces. Provides protective aura against front-running and sandwich attacks." },
+      { id: "hash-rate-urchin", name: "Hash-Rate Urchin", number: "#001", tier: "Epic", supply: 400, multiplier: "+1.8x", power: "Network Security Rebate", color: "cyan", icon: "🦔",
+        lore: "Heavily armored defensive node pulsing with intense red hash-rate energy. Anchored deep in the cyber-organic reef, the Hash-Rate Urchin secures the perimeter of the agentic economy and rewards its holders with network security rebates.",
+        description: "400 epic pieces. Strengthens overall protocol security and returns value to holders." },
+      { id: "encrypted-eel", name: "Encrypted Eel", number: "#001", tier: "Epic", supply: 600, multiplier: "+1.6x", power: "Stealth Transaction Mode", color: "cyan", icon: "🐍",
+        lore: "Sleek and lightning-fast, the Encrypted Eel wraps itself in shifting neon patterns and vanishes into shadow channels. It enables private, high-speed movement of value across the reef without leaving a clear trail.",
+        description: "600 epic pieces. Unlocks stealth transaction capabilities for agents and holders." },
+      { id: "subnet-starfish", name: "Subnet Starfish", number: "#001", tier: "Rare", supply: 800, multiplier: "+1.4x", power: "Cross-Chain Yield Boost", color: "emerald", icon: "⭐",
+        lore: "A regenerative organism whose arms extend across multiple blockchain subnets. Bioluminescent threads connect different realities, allowing value and intelligence to flow freely between chains.",
+        description: "800 rare pieces. Boosts yield when operating across multiple networks." },
+      { id: "latency-jellyfish", name: "Latency Jellyfish", number: "#001", tier: "Rare", supply: 1000, multiplier: "+1.3x", power: "Priority Execution Slot", color: "emerald", icon: "🎐",
+        lore: "Translucent ethereal beings whose long cyan tentacles synchronize with mempool rhythms. They pulse with the heartbeat of the network, granting holders priority execution in moments of congestion.",
+        description: "1,000 rare pieces. Provides priority transaction slots during high network load." },
+      { id: "binary-coral", name: "Binary Coral", number: "#001", tier: "Uncommon", supply: 1200, multiplier: "+1.2x", power: "Governance Weight Bonus", color: "slate", icon: "🪸",
+        lore: "Ancient smart-contract fossils that form the structural bedrock of the reef. Neon circuit veins pulse through organic forms, encoding the foundational logic that every agent and holder relies upon.",
+        description: "1,200 uncommon pieces. Increases governance voting weight." },
+      { id: "protocol-plankton", name: "Protocol Plankton", number: "#001", tier: "Uncommon", supply: 1800, multiplier: "+1.1x", power: "Swap Fee Discount", color: "slate", icon: "🦠",
+        lore: "The essential nutrient layer of the entire ecosystem. Massive swirling swarms of microscopic glowing plankton form the base of the food chain, fueling growth and reducing friction for everyday participants.",
+        description: "1,800 uncommon pieces. Grants discounts on marketplace and swap fees." },
+      { id: "silicon-anemone", name: "Silicon Anemone", number: "#001", tier: "Common", supply: 3500, multiplier: "+1.0x", power: "Basic Analytics Access", color: "slate", icon: "🪷",
+        lore: "Sensor-rich organisms with fractal tentacles that constantly read the environment. They form the most widespread sensory network of the reef, feeding basic analytics and environmental data to the collective.",
+        description: "3,500 common pieces. The entry point into the Agentic Reef. Grants access to core analytics." }
+    ];
+
+    document.getElementById('themes-container').innerHTML = themes.map(t => `
+      <article id="${t.id}" class="glass rounded-[2rem] overflow-hidden card-hover">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+          <div class="aspect-square lg:aspect-auto bg-slate-950 relative overflow-hidden min-h-[280px] flex items-center justify-center">
+            <div class="text-7xl">${t.icon}</div>
+            <div class="absolute top-4 left-4 px-3 py-1 glass rounded-full text-[10px] font-bold uppercase tracking-widest text-${t.color}-400">${t.tier}</div>
+            <div class="absolute bottom-4 right-4 px-3 py-1 glass rounded-full text-xs font-bold mono text-emerald-400">${t.multiplier}</div>
+          </div>
+          <div class="p-8 sm:p-10 flex flex-col justify-center">
+            <div class="text-[11px] uppercase tracking-[0.3em] text-slate-500 font-bold mb-2">${t.number} • Supply ${t.supply}</div>
+            <h2 class="text-3xl font-bold mb-4 text-${t.color}-400">${t.name}</h2>
+            <p class="text-slate-300 leading-relaxed mb-6 font-light">${t.lore}</p>
+            <p class="text-sm text-slate-400 mb-6">${t.description}</p>
+            <div class="pt-5 border-t border-white/10">
+              <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Signature Power</div>
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-${t.color}-500"></div>
+                <span class="font-semibold text-sm">${t.power}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  </script>
+</body>
+</html>
